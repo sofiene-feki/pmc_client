@@ -26,7 +26,7 @@ export default function Footer() {
                   href="tel:+21620234567"
                   className="hover:underline text-white  transition-colors"
                 >
-                  +216 27 417 641
+                  +35 12 34 56
                 </a>
               </p>
               <p>
@@ -35,7 +35,7 @@ export default function Footer() {
                   href="mailto:contact@clindoeilstore.com"
                   className="hover:underline text-white transition-colors"
                 >
-                  contact@clindoeilstore.com{" "}
+                  contact@pmc{" "}
                 </a>
               </p>
             </div>

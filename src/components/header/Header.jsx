@@ -146,10 +146,10 @@ export default function Header() {
                 {/* Bouton Navbar */}
                 <button
                   onClick={() => setIsOpen(true)}
-                  className="relative bg-[#eaac21] px-4 py-2 flex items-center gap-2 rounded-md text-white"
+                  className="relative bg-transparent md:bg-[#eaac21] px-0 md:px-4 py-0 md:py-2 flex items-center gap-2 rounded-md text-white"
                 >
                   <RiShoppingBasket2Line className="w-6 h-6" />
-                  <span className="font-medium">Basket</span>
+                  <span className="font-medium hidden md:bloc">Basket</span>
                 </button>
 
                 {/* Modal */}

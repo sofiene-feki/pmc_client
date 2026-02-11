@@ -4,7 +4,7 @@ export default function BrandStatement() {
   return (
     <section
       className={`
-        w-full py-12 
+        w-full py-8 md:py-12 
         transition-colors duration-1000 ease-out bg-white
       `}
     >
@@ -19,7 +19,7 @@ export default function BrandStatement() {
           <span
             className="
             block mb-6
-            text-5xl
+            text-2xl md:text-5xl
             font-bold
           "
           >
@@ -30,7 +30,7 @@ export default function BrandStatement() {
           <p
             className="
             leading-[1.9]
-            text-xl 
+           text-md md:text-xl 
           "
           >
             Commandez vos plaques d’immatriculation AUTO ST-1, moto, scooter et

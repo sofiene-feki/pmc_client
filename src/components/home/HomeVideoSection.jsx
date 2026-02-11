@@ -24,7 +24,7 @@ export default function HomeVideoSection({ title, subtitle, triggerRef }) {
 
         {/* TEXT RIGHT */}
         <div className="md:w-2/5 w-full bg-[#041836] text-white flex items-center justify-center">
-          <div className="flex flex-col items-center text-center px-4 md:px-8 ">
+          <div className="flex flex-col items-center text-center px-4 md:px-8 py-4 ">
             <h2 className="text-3xl md:text-4xl font-bold mb-4">
               Plaques d’immatriculation
             </h2>
