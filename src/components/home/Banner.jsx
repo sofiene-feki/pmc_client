@@ -26,7 +26,7 @@ export default function Banner() {
   const user = useSelector((state) => state.user.userInfo);
 
   // const API_BASE_URL_MEDIA = import.meta.env.VITE_API_BASE_URL_MEDIA;
-  const API_BASE_URL_MEDIA = "http://localhost:8000";
+  const API_BASE_URL_MEDIA = "https://pmc-server.onrender.com";
 
   const settings = {
     dots: true,
