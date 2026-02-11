@@ -197,7 +197,7 @@ export default function Banner() {
                   </div>
 
                   {/* CONTENT */}
-                  <div className="absolute inset-0 w-full flex flex-col items-center justify-center text-center p-4 gap-2">
+                  {/* <div className="absolute inset-0 w-full flex flex-col items-center justify-center text-center p-4 gap-2">
                     <h2
                       className=" text-white
     text-xl md:text-2xl
@@ -228,7 +228,7 @@ font-heading text-center
                         </span>
                       </div>
                     </div>
-                  </div>
+                  </div> */}
                 </div>
               ))}
         </Slider>
