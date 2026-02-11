@@ -162,7 +162,7 @@ export default function Banner() {
   /* 🦴 Skeleton Slide */
   const SkeletonSlide = () => (
     <div className="relative w-full overflow-hidden">
-      <div className="relative w-full h-[550px] overflow-hidden">
+      <div className="relative w-full h-[180px] overflow-hidden">
         <div className="w-full h-full bg-gray-200 animate-pulse" />
       </div>
 
