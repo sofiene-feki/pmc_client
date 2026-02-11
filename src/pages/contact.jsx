@@ -1,5 +1,5 @@
 import React from "react";
-import { Helmet } from "react-helmet-async";
+// import { Helmet } from "react-helmet-async";
 import {
   MapPinIcon,
   PhoneIcon,
@@ -11,7 +11,7 @@ export default function Contact() {
 
   return (
     <>
-      <Helmet>
+      {/* <Helmet>
         <title>Contact | Clin d’Oeil Store – Boutique Mode en Tunisie</title>
 
         <meta
@@ -20,7 +20,7 @@ export default function Contact() {
         />
 
         <link rel="canonical" href={`${SITE_URL}/contact`} />
-      </Helmet>
+      </Helmet> */}
 
       <section className="bg-white">
         {/* Hero Section */}

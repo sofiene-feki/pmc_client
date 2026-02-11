@@ -29,7 +29,7 @@ import { sendServerEvent } from "../functions/fbCapi";
 import { BsCartPlus } from "react-icons/bs";
 import { BsCartCheck } from "react-icons/bs";
 import { toast } from "react-toastify";
-import { Helmet } from "react-helmet-async";
+// import { Helmet } from "react-helmet-async";
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
@@ -496,70 +496,6 @@ export default function ProductDetails() {
 
   return (
     <div className="md:py-6 py-0">
-      {product && !loading && (
-        <Helmet>
-          <title>{product.Title} | Clin d'Oeil Store</title>
-          <meta
-            name="description"
-            content={product.Description.slice(0, 160)}
-          />
-
-          {/* Open Graph / Social sharing */}
-          <meta property="og:title" content={product.Title} />
-          <meta
-            property="og:description"
-            content={product.Description.slice(0, 160)}
-          />
-          <meta property="og:type" content="product" />
-          <meta
-            property="og:url"
-            content={`https://www.clindoeilstore.com/product/${slug}`}
-          />
-          <meta
-            property="og:image"
-            content={selectedMedia?.src || "/logo.png"}
-          />
-
-          {/* Twitter */}
-          <meta name="twitter:card" content="summary_large_image" />
-          <meta name="twitter:title" content={product.Title} />
-          <meta
-            name="twitter:description"
-            content={product.Description.slice(0, 160)}
-          />
-          <meta
-            name="twitter:image"
-            content={selectedMedia?.src || "/logo.png"}
-          />
-
-          {/* JSON-LD structured data */}
-          <script type="application/ld+json">
-            {JSON.stringify({
-              "@context": "https://schema.org/",
-              "@type": "Product",
-              name: product.Title,
-              image: product.media?.map((m) => m.src) || [],
-              description: product.Description,
-              sku: product._id,
-              brand: {
-                "@type": "Brand",
-                name: "Clin d'Oeil Store",
-              },
-              offers: {
-                "@type": "Offer",
-                url: `https://www.clindoeilstore.com/product/${slug}`,
-                priceCurrency: "TND",
-                price: discountedPrice,
-                availability:
-                  product.Quantity > 0
-                    ? "https://schema.org/InStock"
-                    : "https://schema.org/OutOfStock",
-              },
-            })}
-          </script>
-        </Helmet>
-      )}
-
       {user && (
         <div className="flex top-14 z-10 sticky bg-white max-w-6xl mx-auto items-center justify-between border-b border-gray-200 py-2 px-2 mb-0 md:mb-4 shadow-xl">
           {/* Center title */}

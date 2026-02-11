@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import { Helmet } from "react-helmet-async";
 import { useSelector, useDispatch } from "react-redux";
 import { setCurrentPage } from "../redux/shopFilters/pageOptions";
 import Filters from "../components/shop/filters";
