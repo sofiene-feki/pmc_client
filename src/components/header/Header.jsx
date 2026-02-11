@@ -62,10 +62,11 @@ export default function Header() {
       <HeaderTop />
 
       <nav
-        className={`fixed left-0 right-0 transition-all duration-500 ease-in-out px-6 ${isScrolled
-          ? "top-0 py-2 bg-pmc-blue/95 backdrop-blur-md border-b border-white/5 shadow-2xl"
-          : "md:top-9 py-5 bg-pmc-blue border-b border-white/10 shadow-xl"
-          }`}
+        className={`fixed left-0 right-0 transition-all duration-500 ease-in-out px-6 ${
+          isScrolled
+            ? "top-0 py-2 bg-pmc-blue/95 backdrop-blur-md border-b border-white/5 shadow-2xl"
+            : "md:top-9 py-5 bg-pmc-blue border-b border-white/10 shadow-xl"
+        }`}
       >
         <div className="max-w-7xl mx-auto flex items-center justify-between">
           {/* Logo Section */}
@@ -91,10 +92,9 @@ export default function Header() {
                 <li key={item.name} className="relative">
                   <Link
                     to={item.href}
-                    className={`relative text-xs font-black tracking-widest uppercase transition-all duration-300 group ${isActive
-                      ? "text-pmc-yellow"
-                      : "text-white/80 hover:text-white"
-                      }`}
+                    className={`relative text-xs font-black tracking-widest uppercase transition-all duration-300 group ${
+                      isActive ? "text-pmc-yellow" : "text-white"
+                    }`}
                   >
                     {item.name}
                     <span
@@ -144,10 +144,6 @@ export default function Header() {
               </span>
 
               {/* Notification Badge */}
-              <span className="flex h-2 w-2 relative">
-                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-pmc-yellow opacity-75"></span>
-                <span className="relative inline-flex rounded-full h-2 w-2 bg-pmc-yellow"></span>
-              </span>
             </button>
 
             {/* Mobile Menu Toggle */}
@@ -306,7 +302,11 @@ export default function Header() {
       </AnimatePresence>
       {/* Search Modal */}
       <Transition show={isSearchOpen} as={Fragment}>
-        <Dialog as="div" className="relative z-[300]" onClose={() => setIsSearchOpen(false)}>
+        <Dialog
+          as="div"
+          className="relative z-[300]"
+          onClose={() => setIsSearchOpen(false)}
+        >
           <Transition.Child
             as={Fragment}
             enter="ease-out duration-300"
@@ -334,7 +334,6 @@ export default function Header() {
           </div>
         </Dialog>
       </Transition>
-
     </header>
   );
 }
