@@ -14,7 +14,7 @@ export default function About() {
   return (
     <>
       <Helmet>
-        <title>À propos – Clin d’Oeil Store</title>
+        <title>À propos – pmc</title>
         <meta
           name="description"
           content="Clin d’Oeil Store : découvrez notre boutique de mode en Tunisie, notre mission, valeurs et collections tendance."
