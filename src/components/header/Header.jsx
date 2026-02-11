@@ -25,10 +25,19 @@ import { auth } from "../../service/firebase";
 import { Dialog, Transition } from "@headlessui/react";
 
 const navigation = [
-  { name: "Plaques d’immatriculation", href: "/" },
-  { name: "Signalisation", href: "/shop" },
-  { name: "Services immatriculation", href: "/about" },
-  { name: "Accessoires", href: "/contact" },
+  {
+    name: "Plaques d’immatriculation",
+    href: "/shop#!/Plaques-dimmatriculation/c/124206781",
+  },
+  {
+    name: "Signalisation",
+    href: "/shop#!/Plaques-dimmatriculation/c/124206781",
+  },
+  {
+    name: "Services immatriculation",
+    href: "/shop#!/Plaques-dimmatriculation/c/124206781",
+  },
+  { name: "Accessoires", href: "/shop#!/Plaques-dimmatriculation/c/124206781" },
 ];
 
 export default function Header() {
