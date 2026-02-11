@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 import { ChevronDoubleRightIcon, TrashIcon } from "@heroicons/react/24/outline";
 import { TbCameraPlus } from "react-icons/tb";
 import { useSelector } from "react-redux";
-
+import { motion, AnimatePresence } from "framer-motion";
 import CustomModal from "../ui/Modal";
 import { Input } from "../ui";
 import { createBanner, getBanners, removeBanner } from "../../functions/banner";
@@ -25,8 +25,7 @@ export default function Banner() {
 
   const user = useSelector((state) => state.user.userInfo);
 
-  // const API_BASE_URL_MEDIA = import.meta.env.VITE_API_BASE_URL_MEDIA;
-  const API_BASE_URL_MEDIA = "https://pmc-server.onrender.com";
+  const API_BASE_URL_MEDIA = import.meta.env.VITE_API_BASE_URL_MEDIA || "https://pmc-server.onrender.com";
 
   const settings = {
     dots: true,
@@ -179,58 +178,56 @@ export default function Banner() {
         <Slider {...settings}>
           {fetching
             ? Array.from({ length: 2 }).map((_, idx) => (
-                <SkeletonSlide key={idx} />
-              ))
+              <SkeletonSlide key={idx} />
+            ))
             : slides.map((slide, index) => (
-                <div key={index} className="relative w-full overflow-hidden">
-                  {/* IMAGE */}
-                  <div
-                    className="relative w-full overflow-hidden
+              <div key={index} className="relative w-full overflow-hidden">
+                {/* IMAGE */}
+                <div
+                  className="relative w-full overflow-hidden
                 h-auto"
-                  >
-                    <img
-                      src={slide.img}
-                      alt={slide.title}
-                      className="w-full h-full object-cover object-center cinematic-zoom"
-                    />
-                    <div className="absolute inset-0 bg-black/20" />
-                  </div>
+                >
+                  <img
+                    src={slide.img}
+                    alt={slide.title}
+                    className="w-full h-full object-cover object-center cinematic-zoom"
+                  />
+                  <div className="absolute inset-0 bg-black/20" />
+                </div>
 
-                  {/* CONTENT */}
-                  {/* <div className="absolute inset-0 w-full flex flex-col items-center justify-center text-center p-4 gap-2">
-                    <h2
-                      className=" text-white
-    text-xl md:text-2xl
-font-heading text-center
-    transition-all duration-700 ease-out tracking-wide drop-shadow-lg mb-2 px-2"
-                    >
+                {/* CONTENT */}
+                {/* <div className="absolute inset-0 w-full flex flex-col items-center justify-center text-center p-6 gap-6 z-10">
+                  <motion.div
+                    initial={{ opacity: 0, y: 30 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.8 }}
+                    className="max-w-3xl"
+                  >
+                    <h2 className="text-white text-3xl md:text-6xl font-black font-heading tracking-tight drop-shadow-2xl mb-4 italic">
                       {slide.title}
                     </h2>
 
-                    <div className="flex flex-col items-center">
+                    <div className="flex flex-col items-center gap-6">
                       <Link to={slide.link}>
-                        <button
-                          className="
-                            mt-1 flex items-center gap-2 px-6 py-4
-                            bg-white/10 
-                            border border-3 border-white/80 font-ar-heading 
-                            text-white tracking-wide text-xs
-                            hover:bg-white/30 transition
-                          "
+                        <motion.button
+                          whileHover={{ scale: 1.05 }}
+                          whileTap={{ scale: 0.95 }}
+                          className="px-10 py-4 bg-pmc-yellow text-pmc-blue font-black tracking-[0.2em] uppercase text-xs rounded-full shadow-2xl shadow-pmc-yellow/20 transition-all hover:bg-white active:bg-pmc-yellow"
                         >
-                          {slide.button}
-                        </button>
+                          {slide.button || "Découvrir"}
+                        </motion.button>
                       </Link>
 
-                      <div className="animate-scroll-push">
-                        <span className="text-white/70 text-xs tracking-widest uppercase">
-                          Scroll to see more ↓
+                      <div className="animate-bounce mt-4 hidden md:block">
+                        <span className="text-white/40 text-[10px] font-bold tracking-[0.3em] uppercase">
+                          Explorer PMC Luxembourg
                         </span>
                       </div>
                     </div>
-                  </div> */}
-                </div>
-              ))}
+                  </motion.div>
+                </div> */}
+              </div>
+            ))}
         </Slider>
 
         {/* ADMIN BUTTON */}
@@ -266,21 +263,21 @@ font-heading text-center
                     media={
                       newSlide.preview
                         ? [
-                            {
-                              src: newSlide.preview,
-                              type: "image",
-                              file: newSlide.file,
-                            },
-                          ]
+                          {
+                            src: newSlide.preview,
+                            type: "image",
+                            file: newSlide.file,
+                          },
+                        ]
                         : []
                     }
                     selectedMedia={
                       newSlide.preview
                         ? {
-                            src: newSlide.preview,
-                            type: "image",
-                            file: newSlide.file,
-                          }
+                          src: newSlide.preview,
+                          type: "image",
+                          file: newSlide.file,
+                        }
                         : null
                     }
                     onSelectMedia={(media) => {
@@ -370,7 +367,7 @@ font-heading text-center
                   <img
                     src={slide.img}
                     alt={slide.title}
-                    className="w-full h-70 object-cover"
+                    className="w-auto h-full object-cover"
                   />
                   <div className="p-2 flex justify-between">
                     <div>

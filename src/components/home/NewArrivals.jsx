@@ -61,12 +61,12 @@ export default function NewArrivals() {
   }, []);
 
   return (
-       <div className="w-full bg-white">
-  <div className="mx-auto md:mx-30 py-6 md:py-16 bg-white">
+    <div className="w-full bg-white">
+      <div className="mx-auto md:mx-30 py-6 md:py-16 bg-white">
 
-    {/* ===== SECTION TITLE ===== */}
-    <div className="text-center mb-4">
-      <h2 className="
+        {/* ===== SECTION TITLE ===== */}
+        <div className="text-center mb-4">
+          <h2 className="
         font-heading
         text-lg md:text-3xl
         tracking-[0.22em]
@@ -74,62 +74,62 @@ export default function NewArrivals() {
         text-neutral-900
         mb-3
       ">
-        New Collection 2026
-      </h2>
+            New Collection 2026
+          </h2>
 
-      <p className="
+          <p className="
         font-editorial
         text-sm md:text-base
         text-neutral-600
         leading-relaxed
         px-4
       ">
-        Pièces soigneusement sélectionnées pour une élégance intemporelle
-      </p>
+            Pièces soigneusement sélectionnées pour une élégance intemporelle
+          </p>
+        </div>
+
+        {/* ===== PRODUCTS GRID ===== */}
+        {loading ? (
+          <LoadingProduct length={isMobile ? 1 : 4} cols={4} />
+        ) : (
+          <div className="space-y-10">
+
+            <div className="grid grid-cols-1 md:grid-cols-4 gap-4 md:gap-6 px-6 md:px-8">
+              {products.map((product) => (
+                <Product
+                  key={product._id || product.slug}
+                  product={product}
+                />
+              ))}
+            </div>
+
+            {/* ===== DISCOVER LINK ===== */}
+            <div className="flex justify-center">
+              <Link
+                to="/shop"
+                className="
+              font-heading
+              text-xs md:text-[10px]
+              tracking-[0.3em]
+              uppercase
+              text-pmc-blue
+              font-black
+              border-b-2 border-pmc-yellow
+              pb-2
+              hover:bg-pmc-yellow hover:px-6
+              transition-all duration-500
+            "
+              >
+                Tout découvrir
+              </Link>
+            </div>
+
+          </div>
+        )}
+      </div>
     </div>
 
-    {/* ===== PRODUCTS GRID ===== */}
-    {loading ? (
-      <LoadingProduct length={isMobile ? 1 : 4} cols={4} />
-    ) : (
-      <div className="space-y-10">
-
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-4 md:gap-6 px-6 md:px-8">
-          {products.map((product) => (
-            <Product
-              key={product._id || product.slug}
-              product={product}
-            />
-          ))}
-        </div>
-
-        {/* ===== DISCOVER LINK ===== */}
-        <div className="flex justify-center">
-          <Link
-            to="/shop"
-            className="
-              font-heading
-              text-xs md:text-sm
-              tracking-[0.18em]
-              uppercase
-              text-neutral-900
-              border-b border-neutral-400
-              pb-1
-              hover:border-[#d4af37]
-              hover:text-[#d4af37]
-              transition-colors duration-300
-            "
-          >
-            Discover all
-          </Link>
-        </div>
-
-      </div>
-    )}
-  </div>
-</div>
 
 
-  
   );
 }

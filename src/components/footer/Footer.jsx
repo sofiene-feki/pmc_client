@@ -7,57 +7,46 @@ import { Link } from "react-router-dom";
 
 export default function Footer() {
   return (
-    <footer className="bg-[#001233] md:py-16 pt-6 print:hidden">
-      <div className="max-w-screen-xl mx-auto px-6 sm:px-8 lg:px-12">
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-10">
+    <footer className="bg-pmc-blue md:py-20 pt-12 pb-8 print:hidden">
+      <div className="max-w-7xl mx-auto px-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-12">
           {/* ===== Company Info ===== */}
-          <div>
-            <h4 className="text-lg text-[#eaac21] md:text-xl font-heading mb-5 tracking-[0.18em] uppercase ">
-              Contact
+          <div className="space-y-6">
+            <h4 className="text-[11px] font-black tracking-[0.25em] uppercase text-pmc-yellow">
+              Contact & Siège
             </h4>
-            <div className="font-body text-sm md:text-base text-white space-y-3 leading-relaxed">
-              <p>
-                <strong>Address:</strong> 23 Bis avenue de la liberté Manzah5
-                2037 Tunis
+            <div className="text-sm text-neutral-400 space-y-4 leading-relaxed font-light">
+              <p className="flex items-start gap-3 text-white/90">
+                <span className="font-bold text-pmc-yellow">Siège:</span>
+                30, rue Jos Kieffer<br />L-4146 Esch-sur-Alzette
               </p>
-              <p>
-                <strong>Phone:</strong>{" "}
-                <a
-                  href="tel:+21620234567"
-                  className="hover:underline text-white  transition-colors"
-                >
-                  +35 12 34 56
-                </a>
+              <p className="flex items-center gap-3">
+                <span className="font-bold text-pmc-yellow">Tel:</span>
+                <a href="tel:+35226561197" className="hover:text-pmc-yellow transition-colors">+352 26 56 11 97</a>
               </p>
-              <p>
-                <strong>Email:</strong>{" "}
-                <a
-                  href="mailto:contact@clindoeilstore.com"
-                  className="hover:underline text-white transition-colors"
-                >
-                  contact@pmc{" "}
-                </a>
+              <p className="flex items-center gap-3">
+                <span className="font-bold text-pmc-yellow">Email:</span>
+                <a href="mailto:info@pmc.lu" className="hover:text-pmc-yellow transition-colors">info@pmc.lu</a>
               </p>
             </div>
 
             {/* Socials */}
-            <div className="flex space-x-5 mt-4">
+            <div className="flex space-x-4 pt-4">
               {[
                 {
-                  href: "https://www.facebook.com/clindoeilstore",
+                  href: "https://www.facebook.com/pmcluxembourg",
                   label: "Facebook",
                   svg: <FaFacebook className="w-6 h-6" />,
                 },
                 {
-                  href: "https://www.tiktok.com/@clindoeilstore?_r=1&_t=ZS-9392uXMciLw",
-                  label: "Tiktok",
-                  svg: <FaTiktok className="w-6 h-6" />,
-                },
-
-                {
-                  href: "https://www.instagram.com/clin_doeil_store",
+                  href: "https://www.instagram.com/pmc.luxembourg",
                   label: "Instagram",
                   svg: <FaInstagram className="w-6 h-6" />,
+                },
+                {
+                  href: "#",
+                  label: "Tiktok",
+                  svg: <FaTiktok className="w-6 h-6" />,
                 },
               ].map(({ href, label, svg }) => (
                 <a
@@ -66,7 +55,7 @@ export default function Footer() {
                   target="_blank"
                   rel="noopener noreferrer"
                   aria-label={label}
-                  className="text-gray-600 hover:text-gray-900 transition transform hover:scale-110"
+                  className="w-10 h-10 flex items-center justify-center rounded-xl bg-white/5 text-pmc-yellow hover:bg-pmc-yellow hover:text-pmc-blue transition-all duration-300 transform hover:-translate-y-1"
                 >
                   {svg}
                 </a>
@@ -74,22 +63,47 @@ export default function Footer() {
             </div>
           </div>
 
-          {/* ===== Quick Links ===== */}
-          <div className="hidden md:block">
-            <h4 className="text-lg md:text-xl font-heading mb-5 text-[#eaac21] tracking-[0.18em] uppercase ">
-              Quick Links
+          {/* ===== Navigation ===== */}
+          <div className="space-y-6">
+            <h4 className="text-[11px] font-black tracking-[0.25em] uppercase text-pmc-yellow">
+              Navigation
             </h4>
-            <ul className="space-y-3 text-sm md:text-base font-editorial">
+            <ul className="space-y-3 text-sm font-light text-neutral-400">
               {[
-                { label: "Home", to: "/" },
-                { label: "Shop", to: "/Shop" },
-                { label: "About Us", to: "/About" },
-                { label: "Contact", to: "/Contact" },
+                { label: "Accueil", to: "/" },
+                { label: "Boutique", to: "/shop" },
+                { label: "Signalisation", to: "/categories/signalisation" },
+                { label: "Prestations", to: "/services" },
               ].map((item) => (
                 <li key={item.to}>
                   <Link
                     to={item.to}
-                    className="opacity-80 hover:opacity-100 transition-colors text-white duration-300"
+                    className="hover:text-white transition-colors duration-300 flex items-center gap-2 group"
+                  >
+                    <span className="w-0 h-px bg-pmc-yellow transition-all group-hover:w-4" />
+                    {item.label}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          {/* ===== Juridique ===== */}
+          <div className="space-y-6">
+            <h4 className="text-[11px] font-black tracking-[0.25em] uppercase text-pmc-yellow">
+              Information
+            </h4>
+            <ul className="space-y-3 text-sm font-light text-neutral-400">
+              {[
+                { label: "Nous contacter", to: "/contact" },
+                { label: "Mentions Légales", to: "/terms-of-service" },
+                { label: "Politique de Cookies", to: "/privacy-policy" },
+                { label: "Livraisons & Retours", to: "/returns-refunds" },
+              ].map((item) => (
+                <li key={item.to}>
+                  <Link
+                    to={item.to}
+                    className="hover:text-white transition-colors duration-300"
                   >
                     {item.label}
                   </Link>
@@ -98,49 +112,33 @@ export default function Footer() {
             </ul>
           </div>
 
-          {/* ===== Support ===== */}
-          <div>
-            <h4 className="text-lg md:text-xl font-heading text-[#eaac21] mb-5 tracking-[0.18em] uppercase">
-              Support
+          {/* ===== Newsletter / Trust ===== */}
+          <div className="space-y-6">
+            <h4 className="text-[11px] font-black tracking-[0.25em] uppercase text-pmc-yellow">
+              Notre Mission
             </h4>
-
-            <ul className="space-y-3 text-sm md:text-base text-white font-header">
-              {[
-                { label: "Help Center", to: "/contact" },
-                { label: "Terms of Service", to: "/terms-of-service" },
-                { label: "Privacy Policy", to: "/privacy-policy" },
-                { label: "Returns & Refunds", to: "/returns-refunds" },
-              ].map((item) => (
-                <li key={item.to}>
-                  <Link
-                    to={item.to}
-                    className="opacity-80 hover:opacity-100 transition-colors duration-300"
-                  >
-                    {item.label}
-                  </Link>
-                </li>
-              ))}
-            </ul>
+            <p className="text-sm text-neutral-400 font-light leading-relaxed">
+              Leader au Luxembourg pour la signalisation et les plaques d'immatriculation homologuées. Qualité certifiée depuis plus de 20 ans.
+            </p>
+            <div className="pt-4 border-t border-white/5">
+              <span className="text-[10px] text-neutral-500 uppercase tracking-widest font-bold">Paiement sécurisé</span>
+              <div className="flex gap-2 mt-2 opacity-50 grayscale hover:grayscale-0 transition-all">
+                {/* Payment Icons Placeholder */}
+                <div className="w-8 h-5 bg-white/20 rounded" />
+                <div className="w-8 h-5 bg-white/20 rounded" />
+                <div className="w-8 h-5 bg-white/20 rounded" />
+              </div>
+            </div>
           </div>
-
-          {/* ===== Map ===== */}
-          {/* <div>
-            <h4 className="text-lg md:text-xl font-heading mb-4 tracking-[0.18em] uppercase ">
-              Visit Us
-            </h4>
-            <iframe
-              className="w-full rounded-md border border-black/20 shadow-lg"
-src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3192.7386660123134!2d10.172790400000002!3d36.8487344!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x12fd34a7ca2dbef3%3A0xb3e26dc95a6b019e!2sClin%20d&#39;%C5%93il%20Store!5e0!3m2!1sfr!2stn!4v1767899710157!5m2!1sfr!2stn"              allowFullScreen
-              loading="lazy"
-              referrerPolicy="no-referrer-when-downgrade"
-              title="Skands Store Location"
-            />
-          </div> */}
         </div>
 
         {/* ===== COPYRIGHT ===== */}
-        <div className="mt-2 border-t border-white/20 pt-6 pb-2 text-xs  text-center /50 font-body select-none">
-          &copy; {new Date().getFullYear()} clin-doeil . All rights reserved.
+        <div className="mt-20 border-t border-white/5 pt-8 flex flex-col md:flex-row items-center justify-between gap-4 text-[10px] text-neutral-500 uppercase tracking-widest font-bold">
+          <div>&copy; {new Date().getFullYear()} PMC Luxembourg. TOUS DROITS RÉSERVÉS.</div>
+          <div className="flex items-center gap-6">
+            <span className="hover:text-pmc-yellow cursor-pointer">Luxembourg</span>
+            <span className="hover:text-pmc-yellow cursor-pointer">Français</span>
+          </div>
         </div>
       </div>
     </footer>

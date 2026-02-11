@@ -107,18 +107,18 @@ export default function BestSellers() {
                 to="/shop"
                 className="
                   font-heading
-                  text-xs md:text-sm
-                  tracking-[0.18em]
+                  text-xs md:text-[10px]
+                  tracking-[0.3em]
                   uppercase
-                  text-neutral-900
-                  border-b border-neutral-400
-                  pb-1
-                  hover:border-[#d4af37]
-                  hover:text-[#d4af37]
-                  transition-colors duration-300
+                  text-pmc-blue
+                  font-black
+                  border-b-2 border-pmc-yellow
+                  pb-2
+                  hover:bg-pmc-yellow hover:px-6
+                  transition-all duration-500
                 "
               >
-                Discover all
+                Tout découvrir
               </Link>
             </div>
           </div>

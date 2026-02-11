@@ -23,7 +23,7 @@ export default function SpecialOfferCard() {
   useEffect(() => {
     function updateCountdown() {
       const now = new Date();
-      const distance = new Date("2025-09-31T23:59:59") - now;
+      const distance = new Date("2026-12-31T23:59:59") - now;
 
       if (distance <= 0) {
         setTimeLeft({ days: 0, hours: 0, minutes: 0, seconds: 0 });
@@ -133,11 +133,10 @@ export default function SpecialOfferCard() {
     <div className="h-auto mx-auto md:mx-10 bg-white border border-gray-200 shadow-xl overflow-hidden flex flex-col md:flex-row hover:shadow-2xl transition-shadow duration-300 relative">
       {/* ✅ Discount Ribbon - gold theme */}
       <div
-        className="absolute top-4 left-4 text-white text-xs md:text-sm font-bold py-1 px-3 rounded-md shadow-lg z-10
-       bg-gradient-to-r from-yellow-400 via-yellow-500 to-yellow-400 bg-[length:200%_200%] animate-gradientMove
-       hover:scale-105 hover:shadow-xl hover:-translate-y-1 transition-all duration-300"
+        className="absolute top-4 left-4 text-pmc-blue text-xs md:text-sm font-black py-1.5 px-4 rounded-full shadow-lg z-10
+       bg-pmc-yellow hover:scale-105 hover:shadow-xl hover:-translate-y-1 transition-all duration-300 tracking-widest uppercase"
       >
-        - {promotion}%
+        Offre Spéciale -{promotion}%
       </div>
 
       {/* Left Image Section */}
@@ -228,7 +227,7 @@ export default function SpecialOfferCard() {
           <div className="flex justify-between items-start">
             {/* Title + Price */}
             <div className="relative space-y-1 md:space-y-2 my-2 md:my-0">
-              <h2 className="text-[#c5a23e] font-extrabold text-2xl md:text-4xl tracking-tight">
+              <h2 className="text-pmc-yellow font-black text-2xl md:text-4xl tracking-tight uppercase italic">
                 Promotion
               </h2>
 
@@ -238,34 +237,33 @@ export default function SpecialOfferCard() {
               ) : (
                 <div className="flex items-end gap-2">
                   <div className="relative flex items-start">
-                    <h3 className="text-2xl md:text-4xl font-bold text-[#87a736] leading-none">
+                    <h3 className="text-2xl md:text-4xl font-black text-pmc-blue leading-none">
                       {discountedPrice}{" "}
                     </h3>
-                    <span className="absolute -top-1 right-0 translate-x-full text-sm font-semibold text-gray-700">
-                      DT
+                    <span className="absolute -top-1 right-0 translate-x-full text-sm font-bold text-pmc-blue">
+                      €
                     </span>
                   </div>
 
-                  <span className="line-through text-gray-400 text-xl md:ml-0 ml-3 mt-1">
+                  <span className="line-through text-neutral-300 text-xl md:ml-0 ml-3 mt-1">
                     {originalPrice}{" "}
                   </span>
-                  <span className="text-xs text-[#c5a23e] font-semibold">
-                    Économisez {savings} DT
+                  <span className="text-xs text-pmc-yellow font-bold uppercase tracking-widest ml-2">
+                    Économisez {savings} €
                   </span>
                 </div>
               )}
             </div>
 
-            {/* Countdown */}
-            <div className="bg-white text-gray-800 px-3 py-2 text-center shadow-lg border border-[#c5a23e]/40 rounded-md">
-              <p className="text-xs md:text-base font-medium">
-                Reste:{" "}
-                <span className="font-semibold">{timeLeft.days} jours</span>
+            <div className="bg-white text-pmc-blue px-4 py-3 text-center shadow-xl border border-neutral-100 rounded-3xl">
+              <p className="text-[10px] font-black uppercase tracking-widest mb-2 opacity-50">
+                L’offre se termine dans :
               </p>
-              <div className="flex items-center gap-1 mt-1">
-                <ClockSquare value={timeLeft.hours} />
-                <ClockSquare value={timeLeft.minutes} />
-                <ClockSquare value={timeLeft.seconds} />
+              <div className="flex items-center gap-2">
+                <ClockSquare label="J" value={timeLeft.days} />
+                <ClockSquare label="H" value={timeLeft.hours} />
+                <ClockSquare label="M" value={timeLeft.minutes} />
+                <ClockSquare label="S" value={timeLeft.seconds} />
               </div>
             </div>
           </div>
@@ -283,18 +281,17 @@ export default function SpecialOfferCard() {
           ) : (
             <div>
               <p
-                className={`text-gray-600 whitespace-pre-wrap ${
-                  expanded ? "" : "line-clamp-3 md:line-clamp-6"
-                }`}
+                className={`text-gray-600 whitespace-pre-wrap ${expanded ? "" : "line-clamp-3 md:line-clamp-6"
+                  }`}
                 dangerouslySetInnerHTML={{
                   __html: FormatDescription(product?.Description || ""),
                 }}
               />
               <button
                 onClick={() => setExpanded(!expanded)}
-                className="text-[#c5a23e] font-semibold hover:underline"
+                className="text-pmc-yellow font-bold hover:underline py-2 uppercase text-[10px] tracking-widest"
               >
-                {expanded ? "Afficher moins" : "Afficher plus ..."}
+                {expanded ? "Afficher moins" : "En savoir plus ..."}
               </button>
             </div>
           )}
@@ -317,14 +314,14 @@ export default function SpecialOfferCard() {
             ))}
           </select>
         ) : (
-          <Link to={`product/${product?.slug}`} className="block w-full">
+          <Link to={`/product/${product?.slug}`} className="block w-full">
             <button
-              className="w-full flex items-center justify-center gap-3 md:mt-0 mt-2 px-6 py-2 text-white text-lg font-bold rounded-lg shadow-lg 
-          bg-gradient-to-r from-[#87a736] to-[#6d8f2e]
-          hover:scale-105 hover:shadow-xl hover:-translate-y-1 transition-all duration-300 focus:ring-4 focus:ring-[#c5a23e]/50"
-              aria-label="Acheter Medico Pillow"
+              className="w-full flex items-center justify-center gap-3 md:mt-0 mt-2 px-8 py-4 text-white text-sm font-black rounded-full shadow-xl 
+          bg-pmc-blue hover:bg-pmc-yellow hover:text-pmc-blue
+          hover:scale-105 transition-all duration-300 uppercase tracking-[0.2em]"
+              aria-label="Acheter maintenant"
             >
-              <ShoppingCartIcon className="h-6 w-6" aria-hidden="true" />
+              <ShoppingCartIcon className="h-5 w-5" aria-hidden="true" />
               Acheter Maintenant
             </button>
           </Link>
@@ -338,10 +335,10 @@ function ClockSquare({ label, value }) {
   const paddedValue = String(value).padStart(2, "0");
   return (
     <div className="flex flex-col items-center">
-      <div className="w-6 h-6 md:h-8 md:w-8 bg-gray-800 shadow-lg text-white rounded-md flex items-center justify-center font-mono font-bold text-md md:text-lg select-none">
+      <div className="w-8 h-8 md:h-10 md:w-10 bg-pmc-blue shadow-lg text-white rounded-xl flex items-center justify-center font-mono font-black text-sm md:text-base select-none">
         {paddedValue}
       </div>
-      <span className="text-xs text-white">{label}</span>
+      <span className="text-[8px] font-bold text-pmc-blue mt-1 uppercase">{label}</span>
     </div>
   );
 }

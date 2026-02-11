@@ -106,6 +106,8 @@ button:focus-visible {
   --breakpoint-sm: 480px;
   --breakpoint-md: 768px;
   --breakpoint-lg: 976px;
+  --color-pmc-yellow: #f2b823;
+  --color-pmc-blue: #001233;
 }
 .font-category {
   font-family: var(--font-category);

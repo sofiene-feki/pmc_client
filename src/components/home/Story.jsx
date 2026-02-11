@@ -79,7 +79,7 @@ export default function Story() {
 
           if (entry.isIntersecting) {
             setActiveVideo(index);
-            video.play().catch(() => {});
+            video.play().catch(() => { });
           } else {
             video.pause();
           }
@@ -192,7 +192,7 @@ export default function Story() {
         mb-3
       "
           >
-            Clin d’Oeil Store Services{" "}
+            Services <span className="text-pmc-yellow">Exclusive</span> PMC{" "}
           </h2>
 
           <p
@@ -205,8 +205,8 @@ export default function Story() {
         text-center
       "
           >
-            Clin d’Oeil Store offers services including Client Advisor support,
-            signature gift wrapping, and exclusive personalization options.{" "}
+            PMC Luxembourg vous propose des services sur mesure : accompagnement expert,
+            personnalisation de vos plaques et solutions de signalisation professionnelles.{" "}
           </p>
         </div>
 
@@ -229,7 +229,7 @@ export default function Story() {
               <div className="absolute -bottom-6 w-12 h-12 rounded-full bg-white border border-gray-300 flex items-center justify-center shadow-md">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
-                  className="w-6 h-6 text-blue-600"
+                  className="w-6 h-6 text-pmc-blue"
                   fill="none"
                   viewBox="0 0 24 24"
                   stroke="currentColor"
@@ -265,10 +265,10 @@ export default function Story() {
                   playsInline
                   preload="metadata"
                   loop
-                  className="h-[350px] w-full object-cover border border-[#f99e9a]/10
-shadow-[0_12px_40px_rgba(249,158,154,0.18)]
+                  className="h-[350px] w-full object-cover border border-pmc-yellow/10
+shadow-[0_12px_40px_rgba(242,184,35,0.15)]
 transition-all duration-500 ease-out
-group-hover:shadow-[0_20px_60px_rgba(249,158,154,0.22)]
+group-hover:shadow-[0_20px_60px_rgba(242,184,35,0.22)]
  transition"
                 />
 
@@ -477,7 +477,7 @@ function FullscreenReels({ slides, startIndex, onClose }) {
   useEffect(() => {
     if (!videoRef.current) return;
     videoRef.current.currentTime = 0;
-    videoRef.current.play().catch(() => {});
+    videoRef.current.play().catch(() => { });
   }, [index]);
 
   /* ================= KEYBOARD (DESKTOP) ================= */
@@ -564,12 +564,11 @@ function FullscreenReels({ slides, startIndex, onClose }) {
           className={`
             absolute w-full h-full bg-black object-cover 
             transition-transform duration-50 ease-in-out
-            ${
-              animating
-                ? direction === 1
-                  ? "-translate-y-full"
-                  : "translate-y-full"
-                : "translate-y-0"
+            ${animating
+              ? direction === 1
+                ? "-translate-y-full"
+                : "translate-y-full"
+              : "translate-y-0"
             }
           `}
           onTransitionEnd={onAnimationEnd}

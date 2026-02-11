@@ -18,7 +18,7 @@ export default function Shop() {
         {loading && (
           <div className="flex items-center justify-center py-20">
             <div className="flex flex-col items-center gap-4">
-              <div className="h-10 w-10 border-4 border-gray-300 border-t-blue-600 rounded-full animate-spin"></div>
+              <div className="h-10 w-10 border-4 border-gray-300 border-t-pmc-yellow rounded-full animate-spin"></div>
               <p className="text-gray-600 font-medium">
                 Chargement de la boutique Ecwid…
               </p>
