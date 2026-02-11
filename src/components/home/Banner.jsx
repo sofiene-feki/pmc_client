@@ -173,7 +173,7 @@ export default function Banner() {
   );
 
   return (
-    <div className="h-full mx-auto bg-transparent">
+    <div className="h-full mx-auto bg-transparent mt-22">
       <div className="relative w-full">
         <Slider {...settings}>
           {fetching
@@ -183,44 +183,49 @@ export default function Banner() {
             : slides.map((slide, index) => (
               <div key={index} className="relative w-full overflow-hidden">
                 {/* IMAGE */}
-                <div
-                  className="relative w-full overflow-hidden
-                h-auto"
-                >
+                <div className="relative w-full aspect-[6/3] md:aspect-[21/7.5] overflow-hidden">
                   <img
                     src={slide.img}
                     alt={slide.title}
                     className="w-full h-full object-cover object-center cinematic-zoom"
                   />
-                  <div className="absolute inset-0 bg-black/20" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-pmc-blue/60 via-transparent to-black/20" />
                 </div>
 
                 {/* CONTENT */}
                 {/* <div className="absolute inset-0 w-full flex flex-col items-center justify-center text-center p-6 gap-6 z-10">
                   <motion.div
-                    initial={{ opacity: 0, y: 30 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.8 }}
-                    className="max-w-3xl"
+                    initial={{ opacity: 0, scale: 1.1 }}
+                    whileInView={{ opacity: 1, scale: 1 }}
+                    transition={{ duration: 1.2, ease: "easeOut" }}
+                    className="max-w-4xl px-4"
                   >
-                    <h2 className="text-white text-3xl md:text-6xl font-black font-heading tracking-tight drop-shadow-2xl mb-4 italic">
-                      {slide.title}
-                    </h2>
+                    <motion.div
+                      initial={{ opacity: 0, y: 20 }}
+                      whileInView={{ opacity: 1, y: 0 }}
+                      transition={{ delay: 0.3, duration: 0.8 }}
+                    >
+                      <h2 className="text-white text-4xl md:text-7xl font-black font-heading tracking-tighter drop-shadow-2xl mb-8 italic uppercase leading-none">
+                        {slide.title}
+                      </h2>
+                    </motion.div>
 
-                    <div className="flex flex-col items-center gap-6">
+                    <div className="flex flex-col items-center gap-8">
                       <Link to={slide.link}>
                         <motion.button
                           whileHover={{ scale: 1.05 }}
                           whileTap={{ scale: 0.95 }}
-                          className="px-10 py-4 bg-pmc-yellow text-pmc-blue font-black tracking-[0.2em] uppercase text-xs rounded-full shadow-2xl shadow-pmc-yellow/20 transition-all hover:bg-white active:bg-pmc-yellow"
+                          className="group relative px-12 py-5 bg-pmc-yellow text-pmc-blue font-black tracking-[0.3em] uppercase text-[10px] rounded-full shadow-[0_20px_50px_rgba(242,184,35,0.3)] transition-all hover:bg-white overflow-hidden"
                         >
-                          {slide.button || "Découvrir"}
+                          <span className="relative z-10">{slide.button || "Explorer la collection"}</span>
+                          <div className="absolute inset-0 bg-white translate-y-full group-hover:translate-y-0 transition-transform duration-500" />
                         </motion.button>
                       </Link>
 
-                      <div className="animate-bounce mt-4 hidden md:block">
-                        <span className="text-white/40 text-[10px] font-bold tracking-[0.3em] uppercase">
-                          Explorer PMC Luxembourg
+                      <div className="animate-bounce mt-6 hidden md:block opacity-50">
+                        <div className="w-px h-12 bg-gradient-to-b from-white to-transparent mx-auto mb-4" />
+                        <span className="text-white text-[9px] font-black tracking-[0.4em] uppercase">
+                          PMC Luxembourg Premium
                         </span>
                       </div>
                     </div>

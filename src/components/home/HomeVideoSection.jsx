@@ -4,7 +4,7 @@ import hero from "../../assets/hero.png";
 
 export default function HomeVideoSection({ title, subtitle, triggerRef }) {
   return (
-    <section className="relative w-full min-h-[80vh] flex flex-col md:flex-row overflow-hidden bg-neutral-900">
+    <section className="relative w-full min-h-[80vh] flex flex-col md:flex-row overflow-hidden bg-pmc-blue/95">
       {/* Visual Side */}
       <div className="relative md:w-3/5 w-full h-[40vh] md:h-auto overflow-hidden">
         <motion.img
@@ -50,18 +50,23 @@ export default function HomeVideoSection({ title, subtitle, triggerRef }) {
             <button className="flex-1 bg-pmc-yellow hover:bg-pmc-blue hover:text-white text-neutral-900 font-bold py-4 px-8 rounded-full transition-all duration-300 transform hover:scale-105 active:scale-95 shadow-xl shadow-pmc-yellow/20">
               Commander
             </button>
-            <button className="flex-1 bg-white/5 hover:bg-white/10 text-white border border-white/10 font-semibold py-4 px-8 rounded-full transition-all duration-300 backdrop-blur-md">
+            {/* <button className="flex-1 bg-white/5 hover:bg-white/10 text-white border border-white/10 font-semibold py-4 px-8 rounded-full transition-all duration-300 backdrop-blur-md">
               En savoir plus
-            </button>
+            </button> */}
           </div>
 
-          <div className="mt-10 flex items-center space-x-4 grayscale opacity-50">
+          <div className="mt-10 flex items-center space-x-4 ">
             <div className="flex -space-x-2">
               {[1, 2, 3, 4].map(i => (
-                <div key={i} className="w-8 h-8 rounded-full border-2 border-neutral-900 bg-neutral-700" />
+                <img
+                  key={i}
+                  src={`https://randomuser.me/api/portraits/thumb/men/${i + 20}.jpg`}
+                  className="w-8 h-8 rounded-full border-2 border-neutral-300"
+                  alt="avatar"
+                />
               ))}
             </div>
-            <p className="text-xs text-neutral-500 font-medium">+10,000 clients satisfaits</p>
+            <p className="text-xs text-neutral-500 font-medium">+20,000 clients satisfaits</p>
           </div>
         </motion.div>
       </div>

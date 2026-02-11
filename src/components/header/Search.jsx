@@ -50,15 +50,15 @@ export default function Search({ onClose }) {
   }, [query]);
 
   return (
-    <div className="w-full max-w-2xl bg-white h-full p-8 flex flex-col font-ui shadow-2xl">
+    <div className="w-full bg-white p-8 md:p-12 flex flex-col font-ui min-h-[500px] max-h-[85vh]">
       {/* Search Input Box */}
-      <div className="relative group mb-10">
-        <label className="text-[10px] font-bold tracking-[0.3em] uppercase text-neutral-400 mb-4 block">Que recherchez-vous ?</label>
+      <div className="relative group mb-12">
+        <label className="text-[11px] font-black tracking-[0.4em] uppercase text-neutral-400 mb-6 block ml-2">Recherche PMC Luxembourg</label>
         <div className="relative flex items-center">
           <input
             autoFocus
             type="text"
-            placeholder="Plaques, Accessoires, Signalisation..."
+            placeholder="Que recherchez-vous ?"
             className="w-full bg-neutral-50 border-none border-b-2 border-neutral-100 py-6 text-2xl font-black text-pmc-blue placeholder:text-neutral-300 focus:ring-0 focus:border-pmc-yellow transition-all rounded-3xl px-8"
             value={query}
             onChange={(e) => setQuery(e.target.value)}

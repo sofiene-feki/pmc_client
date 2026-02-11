@@ -16,10 +16,14 @@ import { authLogout } from "../../redux/user/userSlice";
 import { auth } from "../../service/firebase";
 import { Dialog, Transition } from "@headlessui/react";
 import HeaderTop from "./HeaderTop";
+import Search from "./Search";
 import { useScroll, useSpring } from "framer-motion";
 
 const navigation = [
-  { name: "Plaques d’immatriculation", href: "/shop#!/Plaques-dimmatriculation/c/124206781" },
+  {
+    name: "Plaques d’immatriculation",
+    href: "/shop#!/Plaques-dimmatriculation/c/124206781",
+  },
   { name: "Signalisation", href: "/categories/signalisation" },
   { name: "Services", href: "/services" },
   { name: "Accessoires", href: "/shop#!/Accessoires/c/124206782" },
@@ -31,13 +35,14 @@ export default function Header() {
   const { userInfo, isAuthenticated } = useSelector((state) => state.user);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
+  const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
 
   const { scrollYProgress } = useScroll();
   const scaleX = useSpring(scrollYProgress, {
     stiffness: 100,
     damping: 30,
-    restDelta: 0.001
+    restDelta: 0.001,
   });
 
   useEffect(() => {
@@ -56,22 +61,24 @@ export default function Header() {
 
       <HeaderTop />
 
-      <nav className={`fixed left-0 right-0 transition-all duration-500 ease-in-out px-6 ${isScrolled
-        ? "top-0 py-2 bg-white/80 backdrop-blur-sm border-b border-neutral-100 shadow-[0_4px_20px_rgba(0,18,51,0.05)]"
-        : "md:top-9 py-5 bg-white border-b border-neutral-50 shadow-md"
-        }`}>
+      <nav
+        className={`fixed left-0 right-0 transition-all duration-500 ease-in-out px-6 ${isScrolled
+          ? "top-0 py-2 bg-pmc-blue/95 backdrop-blur-md border-b border-white/5 shadow-2xl"
+          : "md:top-9 py-5 bg-pmc-blue border-b border-white/10 shadow-xl"
+          }`}
+      >
         <div className="max-w-7xl mx-auto flex items-center justify-between">
           {/* Logo Section */}
           <Link to="/" className="group relative z-10">
             <motion.div
-              whileHover={{ scale: 1.02 }}
-              whileTap={{ scale: 0.98 }}
-              className="flex items-center"
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              className="flex items-center bg-white px-5 py-2 rounded-xl shadow-lg shadow-black/20 transition-all"
             >
               <img
                 src={logoBlack}
                 alt="PMC Logo"
-                className="h-10 md:h-12 w-auto object-contain brightness-100 group-hover:brightness-110 transition-all"
+                className="h-8 md:h-10 w-auto object-contain"
               />
             </motion.div>
           </Link>
@@ -84,11 +91,15 @@ export default function Header() {
                 <li key={item.name} className="relative">
                   <Link
                     to={item.href}
-                    className={`relative text-xs font-black tracking-widest uppercase transition-all duration-300 group ${isActive ? "text-pmc-blue" : "text-neutral-900 group-hover:text-pmc-yellow"
+                    className={`relative text-xs font-black tracking-widest uppercase transition-all duration-300 group ${isActive
+                      ? "text-pmc-yellow"
+                      : "text-white/80 hover:text-white"
                       }`}
                   >
                     {item.name}
-                    <span className={`absolute -bottom-2 left-0 h-0.5 bg-pmc-yellow transition-all duration-300 ${isActive ? "w-full" : "w-0 group-hover:w-full"}`} />
+                    <span
+                      className={`absolute -bottom-2 left-0 h-0.5 bg-pmc-yellow transition-all duration-300 ${isActive ? "w-full" : "w-0 group-hover:w-full"}`}
+                    />
                   </Link>
                 </li>
               );
@@ -98,18 +109,24 @@ export default function Header() {
           {/* Action Icons Section */}
           <div className="flex items-center gap-2 sm:gap-4 font-ui">
             {/* Search (Desktop) */}
-            <button className="hidden sm:flex p-2.5 text-pmc-blue/60 hover:text-pmc-blue hover:bg-neutral-50 rounded-full transition-all">
-              <CiGlobe className="w-6 h-6" />
+            <button
+              onClick={() => setIsSearchOpen(true)}
+              className="hidden sm:flex p-2.5 text-white/70 hover:text-pmc-yellow hover:bg-white/5 rounded-full transition-all"
+            >
+              <MagnifyingGlassIcon className="w-6 h-6" />
             </button>
 
             {/* User Profile / Login */}
             <div className="hidden sm:block">
               {isAuthenticated ? (
-                <button className="p-2 text-pmc-blue/60 hover:text-pmc-blue transition-colors">
+                <button className="p-2 text-white/70 hover:text-pmc-yellow transition-colors">
                   <UserIcon className="w-6 h-6" />
                 </button>
               ) : (
-                <Link to="/login" className="text-[10px] font-bold tracking-widest uppercase text-pmc-blue/60 hover:text-pmc-blue transition-colors px-4 py-2">
+                <Link
+                  to="/login"
+                  className="text-[10px] font-bold tracking-widest uppercase text-white/70 hover:text-pmc-yellow transition-colors px-4 py-2"
+                >
                   Connexion
                 </Link>
               )}
@@ -118,11 +135,13 @@ export default function Header() {
             {/* Premium Cart Button */}
             <button
               onClick={() => setIsOpen(true)}
-              className="group relative flex items-center gap-3 bg-pmc-blue px-6 py-3 rounded-2xl text-white overflow-hidden shadow-xl shadow-pmc-blue/20 transition-all hover:shadow-pmc-blue/40 active:scale-95"
+              className="group relative flex items-center gap-3 bg-white/10 hover:bg-white/20 border border-white/10 px-6 py-3 rounded-2xl text-white overflow-hidden shadow-xl transition-all active:scale-95"
             >
-              <div className="absolute inset-0 bg-gradient-to-tr from-white/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
-              <RiShoppingBasket2Line className="w-5 h-5 relative z-10" />
-              <span className="text-[10px] font-bold tracking-[0.2em] uppercase relative z-10 hidden md:block">Panier</span>
+              <div className="absolute inset-0 bg-gradient-to-tr from-pmc-yellow/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
+              <RiShoppingBasket2Line className="w-5 h-5 relative z-10 text-pmc-yellow" />
+              <span className="text-[10px] font-bold tracking-[0.2em] uppercase relative z-10 hidden md:block">
+                Panier
+              </span>
 
               {/* Notification Badge */}
               <span className="flex h-2 w-2 relative">
@@ -134,7 +153,7 @@ export default function Header() {
             {/* Mobile Menu Toggle */}
             <button
               onClick={() => setMobileMenuOpen(true)}
-              className="lg:hidden p-2 text-pmc-blue hover:bg-neutral-50 rounded-xl transition-colors"
+              className="lg:hidden p-2 text-white hover:bg-white/10 rounded-xl transition-colors"
             >
               <HiOutlineBars3BottomRight className="w-8 h-8" />
             </button>
@@ -144,7 +163,11 @@ export default function Header() {
 
       {/* Cart Modal Refined */}
       <Transition appear show={isOpen} as={Fragment}>
-        <Dialog as="div" className="relative z-[200]" onClose={() => setIsOpen(false)}>
+        <Dialog
+          as="div"
+          className="relative z-[200]"
+          onClose={() => setIsOpen(false)}
+        >
           <Transition.Child
             as={Fragment}
             enter="ease-out duration-500"
@@ -167,10 +190,17 @@ export default function Header() {
                 <Dialog.Panel className="w-full max-w-2xl transform overflow-hidden rounded-[40px] bg-white p-10 text-left align-middle shadow-[0_24px_80px_rgba(0,18,51,0.2)] transition-all border border-white/50">
                   <div className="flex items-center justify-between mb-10 border-b border-neutral-50 pb-6">
                     <div>
-                      <h3 className="text-3xl font-black tracking-tight text-pmc-blue font-heading italic">Votre Sélection</h3>
-                      <p className="text-xs font-medium text-neutral-400 uppercase tracking-widest mt-1">PMC Luxembourg Boutique</p>
+                      <h3 className="text-3xl font-black tracking-tight text-pmc-blue font-heading italic">
+                        Votre Sélection
+                      </h3>
+                      <p className="text-xs font-medium text-neutral-400 uppercase tracking-widest mt-1">
+                        PMC Luxembourg Boutique
+                      </p>
                     </div>
-                    <button onClick={() => setIsOpen(false)} className="p-3 bg-neutral-50 border border-neutral-100 rounded-2xl hover:bg-neutral-100 hover:border-pmc-yellow transition-all text-neutral-400 hover:text-pmc-blue">
+                    <button
+                      onClick={() => setIsOpen(false)}
+                      className="p-3 bg-neutral-50 border border-neutral-100 rounded-2xl hover:bg-neutral-100 hover:border-pmc-yellow transition-all text-neutral-400 hover:text-pmc-blue"
+                    >
                       <XMarkIcon className="w-6 h-6" />
                     </button>
                   </div>
@@ -211,12 +241,17 @@ export default function Header() {
               animate={{ x: 0 }}
               exit={{ x: "100%" }}
               transition={{ type: "spring", damping: 30, stiffness: 250 }}
-              className="fixed inset-y-0 right-0 w-full max-w-sm bg-white p-10 shadow-[0_0_100px_rgba(0,18,51,0.2)] flex flex-col"
+              className="fixed inset-y-0 right-0 w-full max-w-sm bg-pmc-blue p-10 shadow-[-20px_0_80px_rgba(0,0,0,0.3)] flex flex-col"
             >
               <div className="flex items-center justify-between mb-16">
-                <img src={logoBlack} className="h-10" alt="Logo" />
-                <button onClick={() => setMobileMenuOpen(false)} className="p-3 bg-neutral-50 rounded-2xl">
-                  <XMarkIcon className="w-8 h-8 text-pmc-blue" />
+                <div className="bg-white px-4 py-2 rounded-xl">
+                  <img src={logoBlack} className="h-8" alt="Logo" />
+                </div>
+                <button
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="p-3 bg-white/5 hover:bg-white/10 rounded-2xl transition-colors"
+                >
+                  <XMarkIcon className="w-8 h-8 text-white" />
                 </button>
               </div>
 
@@ -232,9 +267,11 @@ export default function Header() {
                       <Link
                         to={item.href}
                         onClick={() => setMobileMenuOpen(false)}
-                        className="group flex items-end gap-3 text-3xl font-black tracking-tight text-pmc-blue hover:text-pmc-yellow transition-all"
+                        className="group flex items-end gap-3 text-3xl font-black tracking-tight text-white/90 hover:text-pmc-yellow transition-all"
                       >
-                        <span className="text-4xl text-neutral-100 group-hover:text-pmc-yellow/20 transition-colors uppercase italic leading-none">0{idx + 1}</span>
+                        <span className="text-4xl text-white/5 group-hover:text-pmc-yellow/20 transition-colors uppercase italic leading-none">
+                          0{idx + 1}
+                        </span>
                         {item.name}
                       </Link>
                     </motion.li>
@@ -243,14 +280,22 @@ export default function Header() {
               </div>
 
               <div className="mt-auto pt-10 border-t border-neutral-100">
-                <p className="text-[10px] font-bold text-neutral-400 tracking-[0.3em] uppercase mb-6">Support & Conciergerie</p>
+                <p className="text-[10px] font-bold text-neutral-400 tracking-[0.3em] uppercase mb-6">
+                  Support & Conciergerie
+                </p>
                 <div className="space-y-4">
-                  <a href="tel:+35226561197" className="flex items-center gap-4 text-xl font-bold text-pmc-blue hover:text-pmc-yellow transition-colors leading-none italic font-heading">
+                  <a
+                    href="tel:+35226561197"
+                    className="flex items-center gap-4 text-xl font-bold text-white hover:text-pmc-yellow transition-colors leading-none italic font-heading"
+                  >
                     <span className="w-8 h-px bg-pmc-yellow" />
                     +352 26 56 11 97
                   </a>
-                  <a href="mailto:info@pmc.lu" className="flex items-center gap-4 text-lg font-medium text-neutral-500 hover:text-pmc-blue transition-colors">
-                    <span className="w-8 h-px bg-neutral-200" />
+                  <a
+                    href="mailto:info@pmc.lu"
+                    className="flex items-center gap-4 text-lg font-medium text-white/60 hover:text-pmc-yellow transition-colors"
+                  >
+                    <span className="w-8 h-px bg-white/10" />
                     info@pmc.lu
                   </a>
                 </div>
@@ -259,7 +304,37 @@ export default function Header() {
           </Dialog>
         )}
       </AnimatePresence>
+      {/* Search Modal */}
+      <Transition show={isSearchOpen} as={Fragment}>
+        <Dialog as="div" className="relative z-[300]" onClose={() => setIsSearchOpen(false)}>
+          <Transition.Child
+            as={Fragment}
+            enter="ease-out duration-300"
+            enterFrom="opacity-0"
+            enterTo="opacity-100"
+            leave="ease-in duration-200"
+          >
+            <div className="fixed inset-0 bg-pmc-blue/90 backdrop-blur-xl" />
+          </Transition.Child>
+
+          <div className="fixed inset-0 overflow-y-auto">
+            <div className="flex min-h-full items-start justify-center pt-20 px-6">
+              <Transition.Child
+                as={Fragment}
+                enter="ease-out duration-500"
+                enterFrom="opacity-0 scale-95 -translate-y-20"
+                enterTo="opacity-100 scale-100 translate-y-0"
+                leave="ease-in duration-300"
+              >
+                <Dialog.Panel className="w-full max-w-4xl transform overflow-hidden rounded-[40px] shadow-[0_24px_100px_rgba(0,0,0,0.5)] transition-all">
+                  <Search onClose={() => setIsSearchOpen(false)} />
+                </Dialog.Panel>
+              </Transition.Child>
+            </div>
+          </div>
+        </Dialog>
+      </Transition>
+
     </header>
   );
 }
-
