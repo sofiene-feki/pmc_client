@@ -2,8 +2,8 @@ import React, { useEffect, useState } from "react";
 import { PauseIcon, PlayIcon } from "@heroicons/react/24/outline";
 
 const MESSAGES = [
-  "Livraison GRATUITE sur tous les produits",
-  "-10 % sur Chic Girl — stocks limités !",
+  "Encore 04h42 pour être livré le 12/02.",
+  "info@pmc.lu — +352 26 56 11 97",
 ];
 
 const DURATION = 4500; // loader duration
