@@ -55,46 +55,32 @@ export default function AddressCards() {
     <section className="py-24 bg-white">
       <div className="max-w-7xl mx-auto px-6">
         <div className="text-center mb-16 space-y-4">
-          <motion.h2
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            className="text-4xl font-black text-neutral-900 tracking-tight"
-          >
+          <h2 className="text-4xl font-black text-neutral-900 tracking-tight">
             Nos <span className="text-pmc-yellow">Points de Retrait</span>
-          </motion.h2>
-          <motion.p
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ delay: 0.1 }}
-            className="text-lg text-neutral-500 max-w-2xl mx-auto font-light"
-          >
-            Retrait gratuit dans toutes nos boutiques au Luxembourg. Choisissez le point le plus proche de chez vous.
-          </motion.p>
+          </h2>
+          <p className="text-lg text-neutral-500 max-w-2xl mx-auto font-light">
+            Retrait gratuit dans toutes nos boutiques au Luxembourg. Choisissez
+            le point le plus proche de chez vous.
+          </p>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
           {addresses.map((addr, index) => (
-            <motion.div
+            <div
               key={index}
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: index * 0.1 }}
-              className="group flex flex-col bg-white rounded-3xl border border-neutral-100 shadow-sm hover:shadow-2xl transition-all duration-500 overflow-hidden"
+              className="group flex flex-col bg-white rounded-md border border-neutral-100 shadow-sm hover:shadow-2xl transition-all duration-500 overflow-hidden"
             >
               {/* IMAGE CONTAINER */}
-              <div className="relative h-56 overflow-hidden">
+              <div className="relative h-auto overflow-hidden bg-neutral-50">
                 <img
                   src={addr.image}
                   alt={addr.title}
-                  className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                  className="w-full h-full object-contain transition-transform duration-700 group-hover:scale-110"
                 />
                 <div className="absolute inset-0 bg-black/20 group-hover:bg-black/10 transition-colors" />
 
                 {/* MAP OVERLAY */}
-                <div className="absolute bottom-4 right-4 w-32 h-20 rounded-xl overflow-hidden shadow-2xl border-2 border-white translate-y-2 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-500">
+                <div className="absolute bottom-4 right-4 w-32 h-20 rounded-md overflow-hidden shadow-2xl border-2 border-white opacity-0 group-hover:opacity-100 transition-all duration-500">
                   <iframe
                     title={`Map of ${addr.title}`}
                     src={addr.map}
@@ -128,17 +114,19 @@ export default function AddressCards() {
 
                   <div className="flex items-start text-sm text-neutral-600 space-x-3 pt-2">
                     <PiClockCountdownLight className="text-xl text-neutral-400 flex-shrink-0" />
-                    <span className="text-xs leading-relaxed">{addr.hours}</span>
+                    <span className="text-xs leading-relaxed">
+                      {addr.hours}
+                    </span>
                   </div>
                 </div>
 
-                <div className="mt-8 pt-6 border-t border-neutral-50 opacity-0 group-hover:opacity-100 transition-opacity">
-                  <button className="w-full py-3 text-xs font-bold tracking-widest uppercase bg-pmc-blue text-white rounded-xl hover:bg-pmc-yellow hover:text-pmc-blue transition-colors">
+                <div className="mt-8 pt-6 border-t border-neutral-50">
+                  <button className="w-full py-3 text-xs font-bold tracking-widest uppercase bg-pmc-blue text-white rounded-md hover:bg-pmc-yellow hover:text-pmc-blue transition-colors">
                     Itinéraire
                   </button>
                 </div>
               </div>
-            </motion.div>
+            </div>
           ))}
         </div>
       </div>

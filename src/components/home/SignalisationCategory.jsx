@@ -71,6 +71,7 @@ function CategoryCard({ cat, index }) {
   return (
     <motion.div
       ref={ref}
+      className="h-full"
       initial={{ opacity: 0, scale: 0.95 }}
       animate={inView ? { opacity: 1, scale: 1 } : {}}
       transition={{ duration: 0.5, delay: index * 0.05 }}
@@ -79,7 +80,7 @@ function CategoryCard({ cat, index }) {
     >
       <Link
         to={cat.link}
-        className="group relative flex flex-col items-center justify-center p-8 bg-white rounded-2xl border border-neutral-200 transition-all duration-300 hover:border-pmc-yellow hover:shadow-xl hover:-translate-y-1"
+        className="group relative flex flex-col items-center justify-center h-full min-h-[220px] p-8 bg-white rounded-2xl border border-neutral-200 transition-all duration-300 hover:border-pmc-yellow hover:shadow-xl hover:-translate-y-1"
       >
         <div className="mb-6 transition-transform duration-300 group-hover:scale-110">
           <cat.Icon
