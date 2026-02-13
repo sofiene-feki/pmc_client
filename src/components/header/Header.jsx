@@ -94,23 +94,23 @@ export default function Header() {
       <HeaderTop />
 
       <nav
-        className={`fixed left-0 right-0 transition-all duration-100 ease-in-out px-4 md:px-6 ${isScrolled
-          ? "top-0 py-3 bg-pmc-blue/90 backdrop-blur-xl border-b border-white/10 shadow-2xl"
-          : "top-0 md:top-9 py-2 bg-pmc-blue/90  md:bg-pmc-blue/80 backdrop-blur-sm border-b border-white/5 shadow-xl"
+        className={`fixed left-0 right-0 transition-all duration-300 ease-in-out px-4 md:px-6 z-[160] ${isScrolled
+          ? "top-0 py-0 md:py-2.5 bg-pmc-blue/95 backdrop-blur-xl border-b border-white/10 shadow-2xl"
+          : "top-0 md:top-9 py-0.5 md:py-4 bg-pmc-blue/90 backdrop-blur-sm border-b border-white/5 shadow-xl"
           }`}
       >
         <div className="max-w-7xl mx-auto flex items-center justify-between">
           {/* Logo Section - Always visible with breakout effect */}
-          <div className="relative w-32 md:w-52 h-10 flex items-center">
+          <div className="relative w-32 md:w-52 h-0 md:h-10 flex items-center">
             <div className="absolute top-1/2 -translate-y-1/2 left-0 z-50">
               <Link to="/" className="group">
                 <motion.div
                   animate={{
-                    scale: isScrolled ? 0.65 : 1,
+                    scale: isScrolled ? (typeof window !== 'undefined' && window.innerWidth < 768 ? 0.9 : 0.65) : 1,
                   }}
                   transition={{
-                    duration: 0.6,
-                    ease: [0.22, 1, 0.36, 1] // Custom cubic-bezier for luxury feel
+                    duration: 0.5,
+                    ease: [0.22, 1, 0.36, 1]
                   }}
                   whileHover={{ scale: isScrolled ? 0.7 : 1.05 }}
                   whileTap={{ scale: 0.98 }}
