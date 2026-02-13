@@ -43,9 +43,9 @@ export default function HeaderBottom() {
     // Normalize each media src
     const normalizedMedia = Array.isArray(input.media)
       ? input.media.map((m) => ({
-          ...m,
-          src: m?.src?.startsWith("http") ? m.src : SERVER_URL + m.src,
-        }))
+        ...m,
+        src: m?.src?.startsWith("http") ? m.src : SERVER_URL + m.src,
+      }))
       : [];
 
     return { ...input, media: normalizedMedia };
@@ -148,9 +148,8 @@ export default function HeaderBottom() {
                 {({ active }) => (
                   <Link
                     to={item.href}
-                    className={`block px-4 py-2 text-sm text-gray-700 ${
-                      active ? "bg-gray-100" : ""
-                    }`}
+                    className={`block px-4 py-2 text-sm text-gray-700 ${active ? "bg-gray-100" : ""
+                      }`}
                   >
                     {item.name}
                   </Link>
@@ -196,9 +195,8 @@ export default function HeaderBottom() {
                 {({ active }) => (
                   <Link
                     to={item.href}
-                    className={`block px-4 py-2 text-sm text-gray-700 ${
-                      active ? "bg-gray-100" : ""
-                    }`}
+                    className={`block px-4 py-2 text-sm text-gray-700 ${active ? "bg-gray-100" : ""
+                      }`}
                   >
                     {item.name}
                   </Link>
@@ -268,7 +266,7 @@ export default function HeaderBottom() {
 
                   return (
                     <Link
-                      to={`/product/${product.slug}`}
+                      to={`/produit/${product.slug}`}
                       key={product._id}
                       className="flex items-center gap-3 px-3 py-2 hover:bg-gray-100 transition"
                       onClick={() => setShowDropdown(false)}
@@ -284,7 +282,7 @@ export default function HeaderBottom() {
                         </span>
                         {product.Price && (
                           <span className="text-sm text-gray-500">
-                            {product.Price} DT
+                            {product.defaultDisplayedPriceFormatted || `${product.Price} DT`}
                           </span>
                         )}
                       </div>
@@ -334,18 +332,16 @@ export default function HeaderBottom() {
                         item.name === "Sign out" ? (
                           <button
                             onClick={handleSignOut}
-                            className={`w-full text-left px-4 py-2 text-sm text-gray-700 ${
-                              active ? "bg-gray-100" : ""
-                            }`}
+                            className={`w-full text-left px-4 py-2 text-sm text-gray-700 ${active ? "bg-gray-100" : ""
+                              }`}
                           >
                             {item.name}
                           </button>
                         ) : (
                           <Link
                             to={item.href}
-                            className={`block px-4 py-2 text-sm text-gray-700 ${
-                              active ? "bg-gray-100" : ""
-                            }`}
+                            className={`block px-4 py-2 text-sm text-gray-700 ${active ? "bg-gray-100" : ""
+                              }`}
                           >
                             {item.name}
                           </Link>

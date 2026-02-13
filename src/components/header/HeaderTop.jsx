@@ -34,63 +34,69 @@ export default function TopLuxuryBanner() {
   }, [paused, index]);
 
   return (
-    <div className="w-full bg-pmc-yellow text-white py-1.5 relative z-[60] overflow-hidden hidden md:block select-none">
-      <div className="max-w-7xl mx-auto px-6 flex items-center justify-center relative h-6">
-        {/* Loader - Left */}
-        <div className="absolute left-6 w-5 h-5 opacity-40 hover:opacity-100 transition-opacity">
-          <svg viewBox="0 0 36 36" className="w-full h-full rotate-[-90deg]">
-            <circle
-              cx="18"
-              cy="18"
-              r="16"
-              fill="none"
-              stroke="white"
-              strokeWidth="1.5"
-              strokeOpacity="0.2"
-            />
-            <circle
-              cx="18"
-              cy="18"
-              r="16"
-              fill="none"
-              stroke="white"
-              strokeWidth="1.5"
-              strokeDasharray="100"
-              strokeDashoffset={100 - progress}
-              strokeLinecap="round"
-              className="transition-[stroke-dashoffset] duration-75"
-            />
-          </svg>
-        </div>
+    <div className="w-full bg-pmc-yellow border-b border-white/10 text-white py-2 relative z-[0] overflow-hidden hidden md:block select-none">
+      <div className="absolute inset-0 " />
+      <div className="max-w-7xl mx-auto px-6 flex items-center justify-center relative h-5">
+        {/* Centered Content Group: Loader, Messages, Controls */}
+        <div className="flex items-center gap-10 md:gap-14 h-full">
+          {/* 1. Loader */}
+          <div className="w-5 h-5 opacity-80 hover:opacity-100 transition-opacity flex items-center">
+            <svg viewBox="0 0 36 36" className="w-full h-full rotate-[-90deg]">
+              <circle
+                cx="18"
+                cy="18"
+                r="16"
+                fill="none"
+                stroke="white"
+                strokeWidth="2"
+                strokeOpacity="0.2"
+              />
+              <circle
+                cx="18"
+                cy="18"
+                r="16"
+                fill="none"
+                stroke="white"
+                strokeWidth="2"
+                strokeDasharray="100"
+                strokeDashoffset={100 - progress}
+                strokeLinecap="round"
+                className="transition-[stroke-dashoffset] duration-300 ease-linear shadow-[0_0_8px_rgba(255,255,255,0.5)]"
+              />
+            </svg>
+          </div>
 
-        {/* Dynamic Messages */}
-        <div className="relative flex items-center justify-center h-full w-full max-w-lg overflow-hidden">
-          <AnimatePresence mode="wait">
-            <motion.p
-              key={index}
-              initial={{ y: 20, opacity: 0 }}
-              animate={{ y: 0, opacity: 1 }}
-              exit={{ y: -20, opacity: 0 }}
-              transition={{ duration: 0.5, ease: "circOut" }}
-              className="text-[10px] sm:text-[11px] font-bold tracking-[0.25em] uppercase text-center"
+          {/* 2. Dynamic Messages */}
+          <div className="relative flex items-center justify-center h-full w-full max-w-2xl overflow-hidden min-w-[300px] md:min-w-[450px]">
+            <AnimatePresence mode="wait">
+              <motion.p
+                key={index}
+                initial={{ y: 15, opacity: 0 }}
+                animate={{ y: 0, opacity: 1 }}
+                exit={{ y: -15, opacity: 0 }}
+                transition={{ duration: 0.6, ease: "circOut" }}
+                className="text-[13px] font-black font-heading tracking-[0.4em] uppercase text-center leading-none"
+              >
+                {MESSAGES[index]}
+              </motion.p>
+            </AnimatePresence>
+          </div>
+
+          {/* 3. Controls */}
+          <div className="flex items-center">
+            <button
+              onClick={() => setPaused((p) => !p)}
+              className="p-1.5 rounded-full bg-white/10 hover:bg-white/20 transition-all active:scale-90 flex items-center justify-center"
+              aria-label={paused ? "Play banner" : "Pause banner"}
             >
-              {MESSAGES[index]}
-            </motion.p>
-          </AnimatePresence>
+              {paused ? (
+                <PlayIcon className="w-4 h-4 text-white" />
+              ) : (
+                <PauseIcon className="w-4 h-4 text-white" />
+              )}
+            </button>
+          </div>
         </div>
-
-        {/* Controls - Right */}
-        <button
-          onClick={() => setPaused((p) => !p)}
-          className="absolute right-6 p-1 rounded-full hover:bg-white/10 transition-colors"
-          aria-label={paused ? "Play banner" : "Pause banner"}
-        >
-          {paused ? (
-            <PlayIcon className="w-3.5 h-3.5 text-white" />
-          ) : (
-            <PauseIcon className="w-3.5 h-3.5 text-white" />
-          )}
-        </button>
       </div>
     </div>
   );

@@ -17,14 +17,14 @@ import {
 
 export default function SignalisationCategory() {
   const categories = [
-    { title: "Panneaux routiers", icon: <PoliceSignsIcon />, link: "/shop#!/Voiture/c/124205277" },
-    { title: "Systèmes de guidage", icon: <DirectionalSignIcon />, link: "/categories/remorque" },
-    { title: "Signes et Autocollants", icon: <TemporaryConstructionSignIcon />, link: "/categories/camion" },
-    { title: "Système de barrières", icon: <MastIcon />, link: "/categories/pickup" },
-    { title: "Signalétique", icon: <SafetyWallIcon />, link: "/categories/tracteur" },
-    { title: "Balisage de chantier", icon: <BalisageIcon />, link: "/categories/moto" },
-    { title: "Contour de sécurité", icon: <ContouSecurityIcon />, link: "/categories/scooter" },
-    { title: "Tous les produits", icon: <AllIcon />, link: "/categories/tous" },
+    { title: "Panneaux routiers", Icon: PoliceSignsIcon, link: "/boutique/signalisation/panneaux-routiers" },
+    { title: "Systèmes de guidage", Icon: DirectionalSignIcon, link: "/boutique/signalisation/systemes-de-guidage" },
+    { title: "Signes et Autocollants", Icon: TemporaryConstructionSignIcon, link: "/boutique/signalisation/signes-et-autocollants" },
+    { title: "Système de barrières", Icon: MastIcon, link: "/boutique/signalisation/systeme-de-barrieres" },
+    { title: "Signalétique", Icon: SafetyWallIcon, link: "/boutique/signalisation/signaletique" },
+    { title: "Balisage de chantier", Icon: BalisageIcon, link: "/boutique/signalisation/balisage-de-chantier" },
+    { title: "Contour de sécurité", Icon: ContouSecurityIcon, link: "/boutique/signalisation/contour-de-securite" },
+    { title: "Tous les produits", Icon: AllIcon, link: "/boutique/signalisation" },
   ];
 
   return (
@@ -66,19 +66,27 @@ function CategoryCard({ cat, index }) {
     triggerOnce: true,
   });
 
+  const [isHovered, setIsHovered] = React.useState(false);
+
   return (
     <motion.div
       ref={ref}
       initial={{ opacity: 0, scale: 0.95 }}
       animate={inView ? { opacity: 1, scale: 1 } : {}}
       transition={{ duration: 0.5, delay: index * 0.05 }}
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
     >
       <Link
         to={cat.link}
-        className="group relative flex flex-col items-center justify-center p-8 bg-white rounded-2xl border border-neutral-200 transition-all duration-300 hover:border-pmc-yellow hover:shadow-xl group-hover:-translate-y-1"
+        className="group relative flex flex-col items-center justify-center p-8 bg-white rounded-2xl border border-neutral-200 transition-all duration-300 hover:border-pmc-yellow hover:shadow-xl hover:-translate-y-1"
       >
-        <div className="text-5xl text-neutral-700 mb-6 transition-colors duration-300 group-hover:text-pmc-yellow">
-          {cat.icon}
+        <div className="mb-6 transition-transform duration-300 group-hover:scale-110">
+          <cat.Icon
+            w={70}
+            h={70}
+            c={isHovered ? "#f2b823" : "#001233"}
+          />
         </div>
         <h3 className="text-center font-bold text-neutral-900 leading-tight">
           {cat.title}

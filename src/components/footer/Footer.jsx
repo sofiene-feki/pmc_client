@@ -1,7 +1,9 @@
 import React from "react";
-import instagram from "../ui/instagram.svg";
-import facebook from "../ui/facebook.svg";
-import tiktok from "../ui/tiktok.svg";
+
+import visa from "../../assets/footer/visa.png";
+import mastercard from "../../assets/footer/mastercard.png";
+import paypal from "../../assets/footer/paypal.png";
+import madeInLuxembourg from "../../assets/footer/made-in-luxembourg.png";
 import { FaFacebook, FaInstagram, FaTiktok } from "react-icons/fa";
 import { Link } from "react-router-dom";
 
@@ -15,18 +17,18 @@ export default function Footer() {
             <h4 className="text-[11px] font-black tracking-[0.25em] uppercase text-pmc-yellow">
               Contact & Siège
             </h4>
-            <div className="text-sm text-neutral-400 space-y-4 leading-relaxed font-light">
-              <p className="flex items-start gap-3 text-white/90">
+            <div className="text-[15px] text-neutral-300 space-y-4 leading-relaxed font-normal">
+              <p className="flex items-start gap-3 text-white">
                 <span className="font-bold text-pmc-yellow">Siège:</span>
                 30, rue Jos Kieffer<br />L-4146 Esch-sur-Alzette
               </p>
               <p className="flex items-center gap-3">
                 <span className="font-bold text-pmc-yellow">Tel:</span>
-                <a href="tel:+35226561197" className="hover:text-pmc-yellow transition-colors">+352 26 56 11 97</a>
+                <a href="tel:+35226561197" className="hover:text-pmc-yellow transition-colors text-white">+352 26 56 11 97</a>
               </p>
               <p className="flex items-center gap-3">
                 <span className="font-bold text-pmc-yellow">Email:</span>
-                <a href="mailto:info@pmc.lu" className="hover:text-pmc-yellow transition-colors">info@pmc.lu</a>
+                <a href="mailto:info@pmc.lu" className="hover:text-pmc-yellow transition-colors text-white">info@pmc.lu</a>
               </p>
             </div>
 
@@ -68,17 +70,17 @@ export default function Footer() {
             <h4 className="text-[11px] font-black tracking-[0.25em] uppercase text-pmc-yellow">
               Navigation
             </h4>
-            <ul className="space-y-3 text-sm font-light text-neutral-400">
+            <ul className="space-y-4 text-[15px] font-normal text-neutral-300">
               {[
                 { label: "Accueil", to: "/" },
-                { label: "Boutique", to: "/shop" },
-                { label: "Signalisation", to: "/categories/signalisation" },
+                { label: "Boutique", to: "/boutique" },
+                { label: "Signalisation", to: "/boutique/signalisation" },
                 { label: "Prestations", to: "/services" },
               ].map((item) => (
                 <li key={item.to}>
                   <Link
                     to={item.to}
-                    className="hover:text-white transition-colors duration-300 flex items-center gap-2 group"
+                    className="hover:text-pmc-yellow transition-colors duration-300 flex items-center gap-2 group"
                   >
                     <span className="w-0 h-px bg-pmc-yellow transition-all group-hover:w-4" />
                     {item.label}
@@ -93,7 +95,7 @@ export default function Footer() {
             <h4 className="text-[11px] font-black tracking-[0.25em] uppercase text-pmc-yellow">
               Information
             </h4>
-            <ul className="space-y-3 text-sm font-light text-neutral-400">
+            <ul className="space-y-4 text-[15px] font-normal text-neutral-300">
               {[
                 { label: "Nous contacter", to: "/contact" },
                 { label: "Mentions Légales", to: "/terms-of-service" },
@@ -103,7 +105,7 @@ export default function Footer() {
                 <li key={item.to}>
                   <Link
                     to={item.to}
-                    className="hover:text-white transition-colors duration-300"
+                    className="hover:text-pmc-yellow transition-colors duration-300"
                   >
                     {item.label}
                   </Link>
@@ -117,27 +119,31 @@ export default function Footer() {
             <h4 className="text-[11px] font-black tracking-[0.25em] uppercase text-pmc-yellow">
               Notre Mission
             </h4>
-            <p className="text-sm text-neutral-400 font-light leading-relaxed">
+            <p className="text-[15px] text-neutral-300 font-normal leading-relaxed">
               Leader au Luxembourg pour la signalisation et les plaques d'immatriculation homologuées. Qualité certifiée depuis plus de 20 ans.
             </p>
-            <div className="pt-4 border-t border-white/5">
-              <span className="text-[10px] text-neutral-500 uppercase tracking-widest font-bold">Paiement sécurisé</span>
-              <div className="flex gap-2 mt-2 opacity-50 grayscale hover:grayscale-0 transition-all">
-                {/* Payment Icons Placeholder */}
-                <div className="w-8 h-5 bg-white/20 rounded" />
-                <div className="w-8 h-5 bg-white/20 rounded" />
-                <div className="w-8 h-5 bg-white/20 rounded" />
+            <div className="pt-6 border-t border-white/5 space-y-6">
+              <div className="flex items-center gap-4">
+                <img src={madeInLuxembourg} alt="Made in Luxembourg" className="h-16 w-16 object-contain" />
+              </div>
+              <div>
+                <span className="text-[10px] text-neutral-400 uppercase tracking-widest font-black">Paiement sécurisé</span>
+                <div className="flex gap-4 mt-3 ">
+                  <img src={visa} alt="Visa" className="h-5 w-10 object-contain" />
+                  <img src={mastercard} alt="Mastercard" className="h-5 w-10 object-contain" />
+                  <img src={paypal} alt="Paypal" className="h-5 w-10 object-contain" />
+                </div>
               </div>
             </div>
           </div>
         </div>
 
         {/* ===== COPYRIGHT ===== */}
-        <div className="mt-20 border-t border-white/5 pt-8 flex flex-col md:flex-row items-center justify-between gap-4 text-[10px] text-neutral-500 uppercase tracking-widest font-bold">
+        <div className="mt-20 border-t border-white/5 pt-8 flex flex-col md:flex-row items-center justify-between gap-4 text-[11px] text-neutral-400 uppercase tracking-widest font-bold">
           <div>&copy; {new Date().getFullYear()} PMC Luxembourg. TOUS DROITS RÉSERVÉS.</div>
           <div className="flex items-center gap-6">
-            <span className="hover:text-pmc-yellow cursor-pointer">Luxembourg</span>
-            <span className="hover:text-pmc-yellow cursor-pointer">Français</span>
+            <span className="hover:text-pmc-yellow transition-colors cursor-pointer">Luxembourg</span>
+            <span className="hover:text-pmc-yellow transition-colors cursor-pointer">Français</span>
           </div>
         </div>
       </div>

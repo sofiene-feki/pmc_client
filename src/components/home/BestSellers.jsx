@@ -104,7 +104,7 @@ export default function BestSellers() {
             {/* ===== DISCOVER LINK ===== */}
             <div className="flex justify-center">
               <Link
-                to="/shop"
+                to="/boutique"
                 className="
                   font-heading
                   text-xs md:text-[10px]

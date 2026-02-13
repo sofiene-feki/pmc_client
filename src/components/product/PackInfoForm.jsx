@@ -64,6 +64,19 @@ export default function PackInfoForm({
           placeholder="Price"
           className="border w-full mb-4 p-1"
         />
+        <Input
+          label="Ecwid ID"
+          type="number"
+          value={pack.ecwidId || ""}
+          onChange={(e) =>
+            setPack({
+              ...pack,
+              ecwidId: e.target.value === "" ? "" : Number(e.target.value),
+            })
+          }
+          placeholder="Ecwid Numeric ID"
+          className="border w-full mb-4 p-1"
+        />
       </div>
 
       <div className="flex gap-2 "></div>
@@ -118,9 +131,8 @@ export default function PackInfoForm({
             <div className="relative">
               <ListboxButton className="relative w-full py-2 pl-3 pr-10 text-left transition duration-150 ease-in-out bg-white border border-gray-300 rounded-md cursor-default focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
                 <span
-                  className={`block truncate ${
-                    selectedTitles.length === 0 ? "text-gray-400" : ""
-                  }`}
+                  className={`block truncate ${selectedTitles.length === 0 ? "text-gray-400" : ""
+                    }`}
                 >
                   {selectedTitles.length === 0
                     ? "Please select an option"
@@ -141,29 +153,26 @@ export default function PackInfoForm({
                       <ListboxOption key={title._id} value={title}>
                         {({ selected, active }) => (
                           <div
-                            className={`${
-                              selected && active
+                            className={`${selected && active
                                 ? "bg-gray-700 text-white"
                                 : selected
-                                ? "bg-gray-200 text-gray-900"
-                                : active
-                                ? "bg-blue-600 text-white"
-                                : "text-gray-900"
-                            } cursor-default select-none relative py-2 pl-3 pr-9`}
+                                  ? "bg-gray-200 text-gray-900"
+                                  : active
+                                    ? "bg-blue-600 text-white"
+                                    : "text-gray-900"
+                              } cursor-default select-none relative py-2 pl-3 pr-9`}
                           >
                             <span
-                              className={`${
-                                selected ? "font-semibold" : "font-normal"
-                              } block truncate`}
+                              className={`${selected ? "font-semibold" : "font-normal"
+                                } block truncate`}
                             >
                               {title.Title || title.name}
                             </span>
 
                             {selected && (
                               <span
-                                className={`absolute inset-y-0 right-0 flex items-center pr-4 ${
-                                  active ? "text-white" : "text-indigo-600"
-                                }`}
+                                className={`absolute inset-y-0 right-0 flex items-center pr-4 ${active ? "text-white" : "text-indigo-600"
+                                  }`}
                               >
                                 <CheckIcon
                                   className="w-5 h-5"

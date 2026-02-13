@@ -23,18 +23,38 @@ const LazyPackDetails = lazy(() => import("./pages/PackDetails"));
 const LazyPrivacyPolicy = lazy(() => import("./pages/PrivacyPolicy"));
 const LazyReturnsRefunds = lazy(() => import("./pages/ReturnsRefunds"));
 const LazyTermsOfService = lazy(() => import("./pages/TermsOfService"));
+const LazyShopCustom = lazy(() => import("./pages/ShopEcwidCustom"));
+const LazyEcwidProductDetails = lazy(() => import("./pages/EcwidProductDetails"));
 
 function App() {
   const location = useLocation();
 
   // Pages where we DON'T want the header and headerBottom to show
   const hideHeaderPaths = ["/login"];
-  const shouldShowHeader = !hideHeaderPaths.includes(location.pathname);
+  const queryParams = new URLSearchParams(location.search);
+  const hideUI = queryParams.get("hideUI") === "true";
+
+  const shouldShowHeader = !hideHeaderPaths.includes(location.pathname) && !hideUI;
+  const shouldShowFooter = !hideUI;
+
   useEffect(() => {
     initFacebookPixel();
+
+    // Global Ecwid Script Loading
+    if (!window.__ecwidScriptLoaded) {
+      const script = document.createElement("script");
+      script.src = "https://app.ecwid.com/script.js?68968013&data_platform=code";
+      script.async = true;
+      script.charset = "utf-8";
+      document.body.appendChild(script);
+      script.onload = () => {
+        window.__ecwidScriptLoaded = true;
+        console.log("🚀 Ecwid Script Loaded");
+      };
+    }
   }, []);
   return (
-    <>
+    <div className="min-h-screen flex flex-col overflow-x-hidden">
       <Suspense
         fallback={
           <div
@@ -69,31 +89,43 @@ function App() {
           draggable
           pauseOnHover
           theme="light"
-          // transition={Bounce}
+        // transition={Bounce}
         />
         <Cart />
 
-        <Routes>
-          <Route path="/" element={<LazyHome />} />
-          <Route path="login" element={<LazyLogin />} />
-          <Route path="about" element={<LazyAbout />} />
-          <Route path="contact" element={<LazyContact />} />
-          <Route path="/terms-of-service" element={<LazyTermsOfService />} />
-          <Route path="/privacy-policy" element={<LazyPrivacyPolicy />} />
-          <Route path="/returns-refunds" element={<LazyReturnsRefunds />} />
-          <Route path="shop" element={<LazyShop />} />
-          <Route path="orders" element={<LazyOrders />} />
-          <Route path="category/:Category" element={<LazyCategory />} />
-          <Route path="Checkout" element={<LazyCheckoutPage />} />
-          <Route path="/product/:slug" element={<LazyProductDetails />} />
-          <Route path="/order/:id" element={<LazyOrderDetail />} />
-          <Route path="/pack/:slug" element={<LazyPackDetails />} />
-          <Route path="/*" element={"rawa7"} />
-        </Routes>
+        <main className="flex-grow">
+          <Routes>
+            <Route path="/" element={<LazyHome />} />
+            <Route path="login" element={<LazyLogin />} />
+            <Route path="about" element={<LazyAbout />} />
+            <Route path="contact" element={<LazyContact />} />
+            <Route path="/terms-of-service" element={<LazyTermsOfService />} />
+            <Route path="/privacy-policy" element={<LazyPrivacyPolicy />} />
+            <Route path="/returns-refunds" element={<LazyReturnsRefunds />} />
 
-        <Footer />
+            {/* Cleaner Shop Routes */}
+            <Route path="/boutique" element={<LazyShopCustom />} />
+            <Route path="/boutique/:categorySlug" element={<LazyShopCustom />} />
+            <Route path="/boutique/:categorySlug/:subcategorySlug" element={<LazyShopCustom />} />
+            <Route path="/boutique/produit/:slug" element={<LazyEcwidProductDetails />} />
+
+            <Route path="shop-widget" element={<LazyShop />} />
+            <Route path="orders" element={<LazyOrders />} />
+            <Route path="category/:Category" element={<LazyCategory />} />
+            <Route path="Checkout" element={<LazyCheckoutPage />} />
+
+            {/* Internal Product Routes */}
+            <Route path="/produit/:slug" element={<LazyProductDetails />} />
+            <Route path="/ecwid-product/:id" element={<LazyEcwidProductDetails />} /> {/* Fallback */}
+            <Route path="/order/:id" element={<LazyOrderDetail />} />
+            <Route path="/pack/:slug" element={<LazyPackDetails />} />
+            <Route path="/*" element={"rawa7"} />
+          </Routes>
+        </main>
+
+        {shouldShowFooter && <Footer />}
       </Suspense>
-    </>
+    </div>
   );
 }
 

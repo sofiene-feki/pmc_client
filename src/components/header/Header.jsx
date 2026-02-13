@@ -14,19 +14,21 @@ import { CiGlobe } from "react-icons/ci";
 import { signOut } from "firebase/auth";
 import { authLogout } from "../../redux/user/userSlice";
 import { auth } from "../../service/firebase";
-import { Dialog, Transition } from "@headlessui/react";
+import { Dialog, Transition, Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/react";
 import HeaderTop from "./HeaderTop";
 import Search from "./Search";
+import { openCart, openEcwidCart, closeEcwidCart } from "../../redux/ui/cartDrawer";
+import EcwidCartModal from "../ecwid/EcwidCartModal";
 import { useScroll, useSpring } from "framer-motion";
 
 const navigation = [
   {
     name: "Plaques d’immatriculation",
-    href: "/shop#!/Plaques-dimmatriculation/c/124206781",
+    href: "/boutique/plaques-dimmatriculation",
   },
-  { name: "Signalisation", href: "/categories/signalisation" },
+  { name: "Signalisation", href: "/boutique/signalisation" },
   { name: "Services", href: "/services" },
-  { name: "Accessoires", href: "/shop#!/Accessoires/c/124206782" },
+  { name: "Accessoires", href: "/boutique/accessoires" },
 ];
 
 export default function Header() {
@@ -34,11 +36,41 @@ export default function Header() {
   const dispatch = useDispatch();
   const { userInfo, isAuthenticated } = useSelector((state) => state.user);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [isOpen, setIsOpen] = useState(false);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
+  const isEcwidModalOpen = useSelector((state) => state.cartDrawer.isEcwidCartOpen);
+  const [ecwidCartCount, setEcwidCartCount] = useState(0);
+  const totalQuantity = useSelector((state) => state.cart.totalQuantity);
 
   const { scrollYProgress } = useScroll();
+
+  useEffect(() => {
+    // Sync with Ecwid Cart
+    const syncEcwidCart = () => {
+      if (window.Ecwid && window.Ecwid.Cart && typeof window.Ecwid.Cart.get === "function") {
+        window.Ecwid.Cart.get((cart) => {
+          const products = cart.products || cart.items || [];
+          const qty = products.reduce((acc, item) => acc + (item.quantity || 0), 0);
+          setEcwidCartCount(qty);
+        });
+      }
+    };
+
+    if (window.Ecwid) {
+      syncEcwidCart();
+      window.Ecwid.OnCartChanged.add(() => syncEcwidCart());
+    } else {
+      // Retry if not yet loaded
+      const interval = setInterval(() => {
+        if (window.Ecwid) {
+          syncEcwidCart();
+          window.Ecwid.OnCartChanged.add(() => syncEcwidCart());
+          clearInterval(interval);
+        }
+      }, 1000);
+      return () => clearInterval(interval);
+    }
+  }, []);
   const scaleX = useSpring(scrollYProgress, {
     stiffness: 100,
     damping: 30,
@@ -62,43 +94,53 @@ export default function Header() {
       <HeaderTop />
 
       <nav
-        className={`fixed left-0 right-0 transition-all duration-500 ease-in-out px-6 ${
-          isScrolled
-            ? "top-0 py-2 bg-pmc-blue/95 backdrop-blur-md border-b border-white/5 shadow-2xl"
-            : "md:top-9 py-5 bg-pmc-blue border-b border-white/10 shadow-xl"
-        }`}
+        className={`fixed left-0 right-0 transition-all duration-100 ease-in-out px-4 md:px-6 ${isScrolled
+          ? "top-0 py-3 bg-pmc-blue/90 backdrop-blur-xl border-b border-white/10 shadow-2xl"
+          : "top-0 md:top-9 py-2 bg-pmc-blue/90  md:bg-pmc-blue/80 backdrop-blur-sm border-b border-white/5 shadow-xl"
+          }`}
       >
         <div className="max-w-7xl mx-auto flex items-center justify-between">
-          {/* Logo Section */}
-          <Link to="/" className="group relative z-10">
-            <motion.div
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-              className="flex items-center bg-white px-5 py-2 rounded-xl shadow-lg shadow-black/20 transition-all"
-            >
-              <img
-                src={logoBlack}
-                alt="PMC Logo"
-                className="h-8 md:h-10 w-auto object-contain"
-              />
-            </motion.div>
-          </Link>
+          {/* Logo Section - Always visible with breakout effect */}
+          <div className="relative w-32 md:w-52 h-10 flex items-center">
+            <div className="absolute top-1/2 -translate-y-1/2 left-0 z-50">
+              <Link to="/" className="group">
+                <motion.div
+                  animate={{
+                    scale: isScrolled ? 0.65 : 1,
+                  }}
+                  transition={{
+                    duration: 0.6,
+                    ease: [0.22, 1, 0.36, 1] // Custom cubic-bezier for luxury feel
+                  }}
+                  whileHover={{ scale: isScrolled ? 0.7 : 1.05 }}
+                  whileTap={{ scale: 0.98 }}
+                  className="bg-white rounded-md shadow-[0_30px_70px_rgba(0,0,0,0.35)] border border-white/10 px-2 py-2 origin-left flex items-center justify-center"
+                >
+                  <img
+                    src={logoBlack}
+                    alt="PMC Logo"
+                    className="h-12 md:h-20 w-auto object-contain"
+                  />
+                </motion.div>
+              </Link>
+            </div>
+          </div>
 
           {/* Desktop Navigation - Refined & Clear */}
-          <ul className="hidden lg:flex items-center gap-12">
+          <ul className="hidden lg:flex items-center gap-10">
             {navigation.map((item) => {
               const isActive = location.pathname === item.href;
               return (
                 <li key={item.name} className="relative">
                   <Link
                     to={item.href}
-                    className={`relative text-xs font-black tracking-widest uppercase transition-all duration-300 group ${
-                      isActive ? "text-pmc-yellow" : "text-white"
-                    }`}
+                    className={`relative text-[11px] font-bold tracking-[0.25em] uppercase transition-all duration-500 group ${isActive ? "text-pmc-yellow" : "text-white/90 hover:text-pmc-yellow"
+                      }`}
                   >
                     {item.name}
-                    <span
-                      className={`absolute -bottom-2 left-0 h-0.5 bg-pmc-yellow transition-all duration-300 ${isActive ? "w-full" : "w-0 group-hover:w-full"}`}
+                    <motion.span
+                      layoutId="nav-underline"
+                      className={`absolute -bottom-3 left-0 h-[3px] bg-pmc-yellow rounded-full transition-all duration-500 ${isActive ? "w-full" : "w-0 group-hover:w-full"}`}
                     />
                   </Link>
                 </li>
@@ -107,7 +149,7 @@ export default function Header() {
           </ul>
 
           {/* Action Icons Section */}
-          <div className="flex items-center gap-2 sm:gap-4 font-ui">
+          <div className="flex items-center gap-2 sm:gap-6 font-ui">
             {/* Search (Desktop) */}
             <button
               onClick={() => setIsSearchOpen(true)}
@@ -116,34 +158,61 @@ export default function Header() {
               <MagnifyingGlassIcon className="w-6 h-6" />
             </button>
 
-            {/* User Profile / Login */}
+            {/* Language Switcher */}
             <div className="hidden sm:block">
-              {isAuthenticated ? (
-                <button className="p-2 text-white/70 hover:text-pmc-yellow transition-colors">
-                  <UserIcon className="w-6 h-6" />
-                </button>
-              ) : (
-                <Link
-                  to="/login"
-                  className="text-[10px] font-bold tracking-widest uppercase text-white/70 hover:text-pmc-yellow transition-colors px-4 py-2"
+              <Menu as="div" className="relative inline-block text-left">
+                <MenuButton className="p-2 text-white/70 hover:text-pmc-yellow transition-all active:scale-95 flex items-center gap-2 group">
+                  <CiGlobe className="w-7 h-7" />
+                </MenuButton>
+
+                {/* <Transition
+                  as={Fragment}
+                  enter="transition ease-out duration-200"
+                  enterFrom="transform opacity-0 scale-95 translate-y-2"
+                  enterTo="transform opacity-100 scale-100 translate-y-0"
+                  leave="transition ease-in duration-150"
+                  leaveFrom="transform opacity-100 scale-100 translate-y-0"
+                  leaveTo="transform opacity-0 scale-95 translate-y-2"
                 >
-                  Connexion
-                </Link>
-              )}
+                  <MenuItems className="absolute right-0 mt-4 w-28 origin-top-right rounded-2xl bg-pmc-blue/95 backdrop-blur-xl border border-white/10 shadow-2xl overflow-hidden py-1 z-[200]">
+                    {[
+                      { id: "fr", name: "Français", code: "FR" },
+                      { id: "en", name: "English", code: "EN" },
+                      { id: "de", name: "Deutsch", code: "GER" }
+                    ].map((lang) => (
+                      <MenuItem key={lang.id}>
+                        {({ active }) => (
+                          <button
+                            className={`${active ? "bg-white/10 text-pmc-yellow" : "text-white/80"
+                              } flex w-full items-center justify-center px-4 py-3 text-[10px] font-black tracking-widest uppercase transition-colors`}
+                          >
+                            {lang.code}
+                          </button>
+                        )}
+                      </MenuItem>
+                    ))}
+                  </MenuItems>
+                </Transition> */}
+              </Menu>
             </div>
 
             {/* Premium Cart Button */}
             <button
-              onClick={() => setIsOpen(true)}
-              className="group relative flex items-center gap-3 bg-white/10 hover:bg-white/20 border border-white/10 px-6 py-3 rounded-2xl text-white overflow-hidden shadow-xl transition-all active:scale-95"
+              onClick={() => dispatch(openEcwidCart())}
+              className="group relative flex items-center gap-4 bg-white/5 hover:bg-white/10 border border-white/10 px-8 py-3.5 rounded-2xl text-white overflow-hidden shadow-2xl transition-all active:scale-95"
             >
-              <div className="absolute inset-0 bg-gradient-to-tr from-pmc-yellow/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
+              <div className="absolute inset-0 bg-gradient-to-tr from-pmc-yellow/20 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
               <RiShoppingBasket2Line className="w-5 h-5 relative z-10 text-pmc-yellow" />
-              <span className="text-[10px] font-bold tracking-[0.2em] uppercase relative z-10 hidden md:block">
+              <span className="text-[10px] font-bold tracking-[0.3em] uppercase relative z-10 hidden md:block">
                 Panier
               </span>
 
               {/* Notification Badge */}
+              {ecwidCartCount > 0 && (
+                <span className="absolute -top-1 -right-1 flex h-6 w-6 items-center justify-center rounded-full bg-pmc-yellow text-[10px] font-black text-pmc-blue shadow-lg border-2 border-pmc-blue transition-transform animate-pulse-glow">
+                  {ecwidCartCount}
+                </span>
+              )}
             </button>
 
             {/* Mobile Menu Toggle */}
@@ -157,63 +226,7 @@ export default function Header() {
         </div>
       </nav>
 
-      {/* Cart Modal Refined */}
-      <Transition appear show={isOpen} as={Fragment}>
-        <Dialog
-          as="div"
-          className="relative z-[200]"
-          onClose={() => setIsOpen(false)}
-        >
-          <Transition.Child
-            as={Fragment}
-            enter="ease-out duration-500"
-            enterFrom="opacity-0"
-            enterTo="opacity-100"
-            leave="ease-in duration-300"
-          >
-            <div className="fixed inset-0 bg-pmc-blue/40 backdrop-blur-md" />
-          </Transition.Child>
-
-          <div className="fixed inset-0 overflow-y-auto">
-            <div className="flex min-h-full items-center justify-center p-6 text-center">
-              <Transition.Child
-                as={Fragment}
-                enter="ease-out duration-500"
-                enterFrom="opacity-0 scale-95 translate-y-8"
-                enterTo="opacity-100 scale-100 translate-y-0"
-                leave="ease-in duration-300"
-              >
-                <Dialog.Panel className="w-full max-w-2xl transform overflow-hidden rounded-[40px] bg-white p-10 text-left align-middle shadow-[0_24px_80px_rgba(0,18,51,0.2)] transition-all border border-white/50">
-                  <div className="flex items-center justify-between mb-10 border-b border-neutral-50 pb-6">
-                    <div>
-                      <h3 className="text-3xl font-black tracking-tight text-pmc-blue font-heading italic">
-                        Votre Sélection
-                      </h3>
-                      <p className="text-xs font-medium text-neutral-400 uppercase tracking-widest mt-1">
-                        PMC Luxembourg Boutique
-                      </p>
-                    </div>
-                    <button
-                      onClick={() => setIsOpen(false)}
-                      className="p-3 bg-neutral-50 border border-neutral-100 rounded-2xl hover:bg-neutral-100 hover:border-pmc-yellow transition-all text-neutral-400 hover:text-pmc-blue"
-                    >
-                      <XMarkIcon className="w-6 h-6" />
-                    </button>
-                  </div>
-
-                  <div className="h-[450px] overflow-auto custom-scrollbar pr-2">
-                    <iframe
-                      src="/shop#!/cart"
-                      title="Ecwid Cart"
-                      className="w-full h-full border-none"
-                    />
-                  </div>
-                </Dialog.Panel>
-              </Transition.Child>
-            </div>
-          </div>
-        </Dialog>
-      </Transition>
+      {/* Cart Modal Refined removed - now uses CartDrawer from App.jsx via Redux */}
 
       {/* Mobile Menu Slide-in Refined */}
       <AnimatePresence>
@@ -314,7 +327,7 @@ export default function Header() {
             enterTo="opacity-100"
             leave="ease-in duration-200"
           >
-            <div className="fixed inset-0 bg-pmc-blue/90 backdrop-blur-xl" />
+            <div className="fixed inset-0 bg-white/10 backdrop-blur-2xl" />
           </Transition.Child>
 
           <div className="fixed inset-0 overflow-y-auto">
@@ -334,6 +347,12 @@ export default function Header() {
           </div>
         </Dialog>
       </Transition>
+
+      <EcwidCartModal
+        isOpen={isEcwidModalOpen}
+        onClose={() => dispatch(closeEcwidCart())}
+        isEmpty={ecwidCartCount === 0}
+      />
     </header>
   );
 }

@@ -39,6 +39,7 @@ export default function Product({ product, loading, index }) {
   };
 
   const formatPrice = (price) => {
+    if (product.defaultDisplayedPriceFormatted) return product.defaultDisplayedPriceFormatted;
     return new Intl.NumberFormat("fr-LU", {
       style: "currency",
       currency: "EUR",
@@ -55,7 +56,7 @@ export default function Product({ product, loading, index }) {
       className="group"
     >
       <Link
-        to={`/product/${product.slug}`}
+        to={`/produit/${product.slug}`}
         className="flex flex-col bg-white rounded-[2rem] border border-neutral-100 transition-all duration-700 hover:shadow-[0_32px_64px_-16px_rgba(0,0,0,0.08)] hover:-translate-y-2 overflow-hidden"
       >
         {/* IMAGE CONTAINER */}

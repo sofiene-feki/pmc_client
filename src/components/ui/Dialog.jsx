@@ -49,7 +49,7 @@ export default function CustomDialog({
             leaveFrom="translate-x-0 translate-y-0"
             leaveTo={translateClasses[position]}
           >
-            <Dialog.Panel className="w-screen md:max-w-sm  max-w-md bg-white  pt-20 shadow-xl">
+            <Dialog.Panel className="w-full max-w-full md:max-w-sm bg-white pt-20 shadow-xl">
               {children}
             </Dialog.Panel>
           </Transition.Child>

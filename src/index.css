@@ -66,9 +66,10 @@ button:focus-visible {
     background-color: #f9f9f9;
   }
 } */
+@import "tailwindcss";
+
 @import url("https://fonts.googleapis.com/css2?family=Assistant:wght@300;400;500;600&family=Inter+Tight:wght@300;400;500;600&family=Playfair+Display:wght@400;500&family=Cairo:wght@300;400;500;600&display=swap");
 
-@import "tailwindcss";
 @font-face {
   font-family: "Castellar";
   src: url("/fonts/Castellar-Regular.ttf") format("truetype");
@@ -77,21 +78,54 @@ button:focus-visible {
 
 :root {
   /* Luxury fashion palette */
-  --font-heading: "Playfair Display", serif; /* Editorial / luxury titles */
-  --font-body: "Assistant", sans-serif; /* Clean premium body */
-  --font-ui: "Inter Tight", sans-serif; /* Buttons, UI, labels */
-  --font-arabic: "Cairo", sans-serif; /* Arabic content */
+  --font-heading: "Playfair Display", serif;
+  /* Editorial / luxury titles */
+  --font-body: "Assistant", sans-serif;
+  /* Clean premium body */
+  --font-ui: "Inter Tight", sans-serif;
+  /* Buttons, UI, labels */
+  --font-arabic: "Cairo", sans-serif;
+  /* Arabic content */
   --font-category: "Castellar", serif;
 }
 
-@import "tailwindcss";
+/* Base resets to prevent layout breaks */
+html,
+body {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  max-width: 100vw;
+  overflow-x: hidden;
+  position: relative;
+}
+
+/* Ensure images and iframes stay within bounds */
+img,
+iframe {
+  max-width: 100%;
+  height: auto;
+}
+
+/* Slick Slider Overflow Fix */
+.slick-list,
+.slick-track {
+  overflow: hidden !important;
+}
+
+.slick-slide>div {
+  display: flex !important;
+}
+
 @keyframes gradientMove {
   0% {
     background-position: 0% 50%;
   }
+
   50% {
     background-position: 100% 50%;
   }
+
   100% {
     background-position: 0% 50%;
   }
@@ -109,6 +143,7 @@ button:focus-visible {
   --color-pmc-yellow: #f2b823;
   --color-pmc-blue: #001233;
 }
+
 .font-category {
   font-family: var(--font-category);
   letter-spacing: 0.15em;
@@ -118,9 +153,11 @@ button:focus-visible {
   0% {
     box-shadow: 0 0 0px rgba(0, 0, 0, 0.09);
   }
+
   50% {
     box-shadow: 0 0 12px rgba(0, 0, 0, 0.1);
   }
+
   100% {
     box-shadow: 0 0 0px rgba(0, 0, 0, 0.09);
   }
@@ -129,8 +166,10 @@ button:focus-visible {
 .animate-pulse-glow {
   animation: pulse-glow 3.5s infinite ease-in-out;
 }
+
 .slick-dots li.slick-active div.custom-dot {
-  opacity: 1 !important; /* Full opacity for active */
+  opacity: 1 !important;
+  /* Full opacity for active */
 }
 
 /* Hide scrollbar for Chrome, Safari, and Edge */
@@ -140,14 +179,17 @@ button:focus-visible {
 
 /* Hide scrollbar for Firefox */
 .scrollbar-hide {
-  scrollbar-width: none; /* Firefox */
-  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none;
+  /* Firefox */
+  -ms-overflow-style: none;
+  /* IE and Edge */
 }
 
 @keyframes cinematicZoom {
   0% {
     transform: scale(1.2);
   }
+
   100% {
     transform: scale(1);
   }
@@ -189,10 +231,13 @@ button:focus-visible {
 
 .animate-scroll-push {
   overflow: hidden;
-  opacity: 0; /* 🔒 hidden initially */
-  max-height: 0; /* 🔒 no space initially */
+  opacity: 0;
+  /* 🔒 hidden initially */
+  max-height: 0;
+  /* 🔒 no space initially */
   animation: scrollPushUp 3.6s ease-in-out 2 forwards;
-  animation-delay: 3.5s; /* ⏱️ wait before appearing */
+  animation-delay: 3.5s;
+  /* ⏱️ wait before appearing */
 }
 
 /* ============================= */
@@ -245,13 +290,18 @@ button:focus-visible {
   letter-spacing: 0;
   direction: rtl;
 }
+
 .myZoom .iiz__btn {
-  border-radius: 8px; /* rounded corners */
-  padding: 6px 10px; /* button size */
+  border-radius: 8px;
+  /* rounded corners */
+  padding: 6px 10px;
+  /* button size */
   font-size: 16px;
-  opacity: 0.85; /* transparency */
+  opacity: 0.85;
+  /* transparency */
   transition: 0.2s;
 }
+
 .myZoom .iiz__close:hover {
   opacity: 1;
 }

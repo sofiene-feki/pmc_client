@@ -235,22 +235,30 @@ export default function SpecialOfferCard() {
               {loading ? (
                 <div className="mt-4 h-8 w-full bg-gray-200 rounded-lg animate-pulse"></div>
               ) : (
-                <div className="flex items-end gap-2">
-                  <div className="relative flex items-start">
-                    <h3 className="text-2xl md:text-4xl font-black text-pmc-blue leading-none">
-                      {discountedPrice}{" "}
+                <div className="flex items-end gap-2 text-pmc-blue">
+                  {product?.defaultDisplayedPriceFormatted ? (
+                    <h3 className="text-2xl md:text-4xl font-black leading-none">
+                      {product.defaultDisplayedPriceFormatted}
                     </h3>
-                    <span className="absolute -top-1 right-0 translate-x-full text-sm font-bold text-pmc-blue">
-                      €
-                    </span>
-                  </div>
+                  ) : (
+                    <div className="flex items-end gap-2">
+                      <div className="relative flex items-start">
+                        <h3 className="text-2xl md:text-4xl font-black text-pmc-blue leading-none">
+                          {discountedPrice}{" "}
+                        </h3>
+                        <span className="absolute -top-1 right-0 translate-x-full text-sm font-bold text-pmc-blue">
+                          €
+                        </span>
+                      </div>
 
-                  <span className="line-through text-neutral-300 text-xl md:ml-0 ml-3 mt-1">
-                    {originalPrice}{" "}
-                  </span>
-                  <span className="text-xs text-pmc-yellow font-bold uppercase tracking-widest ml-2">
-                    Économisez {savings} €
-                  </span>
+                      <span className="line-through text-neutral-300 text-xl md:ml-0 ml-3 mt-1">
+                        {originalPrice}{" "}
+                      </span>
+                      <span className="text-xs text-pmc-yellow font-bold uppercase tracking-widest ml-2">
+                        Économisez {savings} €
+                      </span>
+                    </div>
+                  )}
                 </div>
               )}
             </div>
@@ -314,7 +322,7 @@ export default function SpecialOfferCard() {
             ))}
           </select>
         ) : (
-          <Link to={`/product/${product?.slug}`} className="block w-full">
+          <Link to={`/produit/${product?.slug}`} className="block w-full">
             <button
               className="w-full flex items-center justify-center gap-3 md:mt-0 mt-2 px-8 py-4 text-white text-sm font-black rounded-full shadow-xl 
           bg-pmc-blue hover:bg-pmc-yellow hover:text-pmc-blue

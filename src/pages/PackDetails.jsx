@@ -11,7 +11,7 @@ import { FaShippingFast } from "react-icons/fa";
 import { createPack, getPack, removePack, updatePack } from "../functions/pack";
 import { useDispatch, useSelector } from "react-redux";
 import { addItem } from "../redux/cart/cartSlice";
-import { openCart } from "../redux/ui/cartDrawer";
+import { openCart, openEcwidCart } from "../redux/ui/cartDrawer";
 import { getAllProductTitles } from "../functions/product";
 import {
   CheckIcon,
@@ -222,12 +222,14 @@ export default function PackDetails() {
     }
   };
 
-  const formatPrice = (price) =>
-    new Intl.NumberFormat("fr-TN", {
+  const formatPrice = (price) => {
+    if (pack?.defaultDisplayedPriceFormatted) return pack.defaultDisplayedPriceFormatted;
+    return new Intl.NumberFormat("fr-TN", {
       style: "currency",
       currency: "TND",
       minimumFractionDigits: 3,
     }).format(price || 0);
+  };
 
   // selection helpers (VIEW mode)
 
@@ -271,6 +273,23 @@ export default function PackDetails() {
   const [error, setError] = useState("");
 
   const handleAddPackToCart = () => {
+    if (pack.ecwidId && window.Ecwid) {
+      const numericId = Number(pack.ecwidId);
+      window.Ecwid.Cart.addProduct({
+        id: numericId,
+        quantity: 1,
+        callback: (success, result, cart, error) => {
+          if (success) {
+            dispatch(openEcwidCart(numericId));
+          } else {
+            console.error("Main window pack add fail:", error);
+            dispatch(openEcwidCart(numericId));
+          }
+        },
+      });
+      return;
+    }
+
     const packSelections = selections[pack._id] || {};
 
     const selectedProducts = pack.products.map((p) => ({

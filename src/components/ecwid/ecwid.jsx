@@ -3,37 +3,64 @@ import { useLocation } from "react-router-dom";
 
 const EcwidStore = ({ setLoading }) => {
   const location = useLocation();
+  const STORE_ID = "68968013";
 
   useEffect(() => {
-    setLoading(true);
-
-    // Always clear the container before reloading Ecwid
-    const container = document.getElementById("my-store-68968013");
-    if (container) container.innerHTML = "";
+    if (setLoading) setLoading(true);
 
     const initStore = () => {
+      // Clear container before injection
+      const container = document.getElementById(`my-store-${STORE_ID}`);
+      if (container) container.innerHTML = "";
+
       if (window.xProductBrowser) {
         window.xProductBrowser(
           "categoriesPerRow=3",
           "views=grid(20,3) list(60) table(60)",
           "categoryView=grid",
           "searchView=list",
-          "id=my-store-68968013",
+          `id=my-store-${STORE_ID}`,
         );
       }
 
       if (window.Ecwid) {
         window.Ecwid.init();
+
+        // Check for addProduct query param
+        const params = new URLSearchParams(window.location.search);
+        const productIdToAdd = params.get("addProduct");
+        const plateNumber = params.get("plateNumber");
+        const quantity = parseInt(params.get("quantity")) || 1;
+
+        if (productIdToAdd && typeof window.Ecwid.Cart.addProduct === "function") {
+          console.log("🛠️ Proxy adding product inside iframe:", productIdToAdd);
+
+          const options = {};
+          if (plateNumber) {
+            options["Numéro de plaque"] = plateNumber;
+          }
+
+          window.Ecwid.Cart.addProduct({
+            id: Number(productIdToAdd),
+            quantity: quantity,
+            options: options,
+            callback: (success, product, cart, error) => {
+              if (success) {
+                console.log("✅ Product added successfully inside iframe");
+              } else {
+                console.error("❌ Failed to add product inside iframe:", error);
+              }
+            }
+          });
+        }
       }
 
-      setLoading(false); // 👈 IMPORTANT
+      if (setLoading) setLoading(false);
     };
 
-    // Load script only first time
     if (!window.__ecwidScriptLoaded) {
       const script = document.createElement("script");
-      script.src =
-        "https://app.ecwid.com/script.js?68968013&data_platform=code";
+      script.src = `https://app.ecwid.com/script.js?${STORE_ID}&data_platform=code`;
       script.async = true;
       script.charset = "utf-8";
       document.body.appendChild(script);
@@ -43,12 +70,21 @@ const EcwidStore = ({ setLoading }) => {
         initStore();
       };
     } else {
-      // Script already loaded → just re-init store
+      // Re-initialize for SPA navigation
       initStore();
     }
-  }, [location.pathname]);
 
-  return <div id="my-store-68968013"></div>;
+    return () => {
+      // Cleanup if necessary
+    };
+  }, [location.pathname, setLoading]);
+
+  return (
+    <div
+      id={`my-store-${STORE_ID}`}
+      className="ecwid-premium-container"
+    ></div>
+  );
 };
 
 export default EcwidStore;

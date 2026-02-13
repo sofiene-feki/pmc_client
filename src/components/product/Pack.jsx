@@ -145,7 +145,7 @@ export default function Pack({ product, productsPerPage, loading }) {
             {/* Price */}
             <div className="mb-4">
               <span className="inline-block px-4 py-1 rounded-full bg-gradient-to-r from-[#d4af37] to-[#f5d76e] text-[#0d1b2a] font-bold text-lg shadow-md">
-                {product.price} د.ت
+                {product.defaultDisplayedPriceFormatted || `${product.price} د.ت`}
               </span>
             </div>
 

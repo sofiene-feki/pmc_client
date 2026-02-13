@@ -107,9 +107,13 @@ export default function CartDrawer() {
                     <div className="ml-2 md:ml-4 flex flex-1 flex-col">
                       {/* Name & Delete */}
                       <div className="flex justify-between items-start gap-2">
-                        <h3 className="flex-1 text-sm md:text-base font-medium text-gray-900 break-words line-clamp-2">
+                        <Link
+                          to={item.isEcwid ? `/ecwid-product/${item.productId}` : `/produit/${item.slug || item.productId}`}
+                          onClick={() => dispatch(closeCart())}
+                          className="flex-1 text-sm md:text-base font-medium text-gray-900 break-words line-clamp-2 hover:text-pmc-yellow transition-colors"
+                        >
                           {item.name}
-                        </h3>
+                        </Link>
                         <button
                           onClick={() =>
                             dispatch(

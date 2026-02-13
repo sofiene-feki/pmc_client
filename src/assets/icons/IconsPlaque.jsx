@@ -1,16 +1,16 @@
 // src/components/icons/IconsPlaque.jsx
 import React from "react";
 
-export const CarIcon = () => (
+export const CarIcon = ({ w, h, c }) => (
   <svg
-    width="75"
-    height="42"
+    width={w}
+    height={h}
     viewBox="0 0 75 42"
     xmlns="http://www.w3.org/2000/svg"
   >
     <g
       transform="translate(8 11)"
-      stroke="#001233"
+      stroke={c}
       stroke-width="2"
       fill="none"
       fill-rule="evenodd"
@@ -27,17 +27,17 @@ export const CarIcon = () => (
   </svg>
 );
 
-export const TrailerIcon = () => (
+export const TrailerIcon = ({ w, h, c }) => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
-    width="75"
-    height="42"
+    width={w}
+    height={h}
     viewBox="0 0 75 42"
   >
     <g
       fill="none"
       fill-rule="evenodd"
-      stroke="#001233"
+      stroke={c}
       stroke-linecap="round"
       stroke-linejoin="round"
       stroke-width="2"
@@ -51,17 +51,17 @@ export const TrailerIcon = () => (
   </svg>
 );
 
-export const TruckIcon = () => (
+export const TruckIcon = ({ w, h, c }) => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
-    width="75"
-    height="42"
+    width={w}
+    height={h}
     viewBox="0 0 75 42"
   >
     <g
       fill="none"
       fill-rule="evenodd"
-      stroke="#001233"
+      stroke={c}
       stroke-linecap="round"
       stroke-linejoin="round"
       stroke-width="2"
@@ -78,17 +78,17 @@ export const TruckIcon = () => (
     </g>
   </svg>
 );
-export const PickupIcon = () => (
+export const PickupIcon = ({ w, h, c }) => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
-    width="75"
-    height="42"
+    width={w}
+    height={h}
     viewBox="0 0 75 42"
   >
     <g
       fill="none"
       fill-rule="evenodd"
-      stroke="#001233"
+      stroke={c}
       stroke-linecap="round"
       stroke-linejoin="round"
       stroke-width="2"
@@ -102,17 +102,17 @@ export const PickupIcon = () => (
   </svg>
 );
 
-export const TractorIcon = () => (
+export const TractorIcon = ({ w, h, c }) => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
-    width="75"
-    height="42"
+    width={w}
+    height={h}
     viewBox="0 0 75 42"
   >
     <g
       fill="none"
       fill-rule="evenodd"
-      stroke="#001233"
+      stroke={c}
       stroke-linecap="round"
       stroke-linejoin="round"
       stroke-width="2"
@@ -128,17 +128,17 @@ export const TractorIcon = () => (
   </svg>
 );
 
-export const MotorcycleIcon = () => (
+export const MotorcycleIcon = ({ w, h, c }) => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
-    width="75"
-    height="42"
+    width={w}
+    height={h}
     viewBox="0 0 75 42"
   >
     <g
       fill="none"
       fill-rule="evenodd"
-      stroke="#001233"
+      stroke={c}
       stroke-linecap="round"
       stroke-linejoin="round"
       stroke-width="2"
@@ -155,17 +155,17 @@ export const MotorcycleIcon = () => (
   </svg>
 );
 
-export const MopedIcon = () => (
+export const MopedIcon = ({ w, h, c }) => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
-    width="75"
-    height="42"
+    width={w}
+    height={h}
     viewBox="0 0 75 42"
   >
     <g
       fill="none"
       fill-rule="evenodd"
-      stroke="#001233"
+      stroke={c}
       stroke-linecap="round"
       stroke-linejoin="round"
       stroke-width="2"
@@ -180,11 +180,13 @@ export const MopedIcon = () => (
   </svg>
 );
 
-export const SafetyWallIcon = () => (
+export const SafetyWallIcon = ({ w, h, c }) => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
     viewBox="176.74 159.79 446.53 446.32"
-    className="w-14 h-14 fill-[#15192F]" // adjust size with w-32 h-32 and color
+    width={w}
+    height={h}
+    stroke={c}
   >
     <g>
       <path
@@ -227,12 +229,13 @@ export const SafetyWallIcon = () => (
   </svg>
 );
 
-export const BalisageIcon = () => (
+export const BalisageIcon = ({ w, h, c }) => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
     viewBox="173.79 159.8 452.42 452.42"
-    className="w-14 h-14 fill-[#15192F]" // adjust width/height and color
-  >
+    width={w}
+    height={h}
+    stroke={c}  >
     <g>
       <path
         d="M400.04,507.58c-38.52,0-77.04,0-115.55,0c-1.84,0-3.73,0.17-5.53-0.12c-4.89-0.81-8.22-3.34-7.7-8.77
@@ -260,12 +263,13 @@ export const BalisageIcon = () => (
   </svg>
 );
 
-export const ContouSecurityIcon = ({ className = "w-6 h-6" }) => (
+export const ContouSecurityIcon = ({ w, h, c }) => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
     viewBox="12.85 238.88 774.35 322.4"
-    className="w-14 h-14 fill-[#15192F]" // adjust size and color
-  >
+    width={w}
+    height={h}
+    stroke={c}  >
     <g>
       <path
         d="M787.2,479.9c0-13.5,0-13.5-13.3-15.6c-0.1-2.2-0.5-4.5-0.4-6.8c1.2-20.4-7.5-36.5-22.2-49.6
@@ -320,17 +324,17 @@ export const ContouSecurityIcon = ({ className = "w-6 h-6" }) => (
   </svg>
 );
 
-export const AllIcon = () => (
+export const AllIcon = ({ w, h, c }) => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
-    width="75"
-    height="42"
+    width={w}
+    height={h}
     viewBox="0 0 75 42"
   >
     <g
       fill="none"
       fill-rule="evenodd"
-      stroke="#001233"
+      stroke={c}
       stroke-width="2"
       transform="translate(15 15)"
     >
@@ -341,12 +345,12 @@ export const AllIcon = () => (
   </svg>
 );
 
-export const PoliceSignsIcon = ({ className = "w-14 h-14" }) => (
+export const PoliceSignsIcon = ({ w, h, c }) => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
     viewBox="186.3 158.3 451.3 453.2"
-    className={className}
-    fill="currentColor"
+    width={w}
+    height={h} stroke={c}
   >
     <g>
       <path
@@ -382,12 +386,13 @@ export const PoliceSignsIcon = ({ className = "w-14 h-14" }) => (
   </svg>
 );
 
-export const DirectionalSignIcon = ({ className = "w-14 h-14" }) => (
+export const DirectionalSignIcon = ({ w, h, c }) => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
     viewBox="126.92 127.2 546.14 545.59"
-    className={className}
-    fill="currentColor"
+    stroke={c}
+    width={w}
+    height={h}
   >
     <g>
       <path
@@ -419,12 +424,13 @@ export const DirectionalSignIcon = ({ className = "w-14 h-14" }) => (
   </svg>
 );
 
-export const TemporaryConstructionSignIcon = ({ className = "w-14 h-14" }) => (
+export const TemporaryConstructionSignIcon = ({ w, h, c }) => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
     viewBox="143.76 158.33 514.3 453.27"
-    className={className}
-    fill="currentColor"
+    width={w}
+    height={h}
+    stroke={c}
   >
     <g>
       <g>
@@ -452,12 +458,13 @@ export const TemporaryConstructionSignIcon = ({ className = "w-14 h-14" }) => (
   </svg>
 );
 
-export const MastIcon = ({ className = "w-14 h-14" }) => (
+export const MastIcon = ({ w, h, c }) => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
     viewBox="101.96 135.55 595.91 529.09"
-    className={className}
-    fill="#15192F"
+    width={w}
+    height={h}
+    stroke={c}
   >
     <path
       d="M697.5,355.2c-0.2-8.9-5.2-12.6-14.4-12.8c-8-0.1-16-0.3-24,0.1c-5.6,0.3-7.7-1.6-7.6-7.5

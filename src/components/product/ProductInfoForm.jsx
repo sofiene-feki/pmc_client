@@ -110,6 +110,19 @@ export default function ProductInfoForm({ product, setProduct }) {
           placeholder="Sold"
           className="border w-full mb-4 p-1"
         />
+        <Input
+          label="Ecwid ID"
+          type="number"
+          value={product.ecwidId || ""}
+          onChange={(e) =>
+            setProduct({
+              ...product,
+              ecwidId: e.target.value === "" ? "" : Number(e.target.value),
+            })
+          }
+          placeholder="Ecwid Numeric ID"
+          className="border w-full mb-4 p-1"
+        />
       </div>
 
       <Textarea

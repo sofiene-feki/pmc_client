@@ -106,7 +106,7 @@ export default function NewArrivals() {
             {/* ===== DISCOVER LINK ===== */}
             <div className="flex justify-center">
               <Link
-                to="/shop"
+                to="/boutique"
                 className="
               font-heading
               text-xs md:text-[10px]

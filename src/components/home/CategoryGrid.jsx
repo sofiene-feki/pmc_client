@@ -17,14 +17,14 @@ import {
 
 export default function CategoryGrid() {
   const categories = [
-    { title: "Voiture", icon: <CarIcon />, link: "/shop#!/Voiture/c/124205277" },
-    { title: "Remorque", icon: <TrailerIcon />, link: "/shop#!/Remorque/c/124202278" },
-    { title: "Camion", icon: <TruckIcon />, link: "/shop#!/Camion/c/124206787" },
-    { title: "Pick Up", icon: <PickupIcon />, link: "/shop#!/Pick-Up/c/124208287" },
-    { title: "Tracteur", icon: <TractorIcon />, link: "/shop#!/Tracteur/c/124205279" },
-    { title: "Moto", icon: <MotorcycleIcon />, link: "/shop#!/Moto/c/124208288" },
-    { title: "Scooter", icon: <MopedIcon />, link: "/shop#!/Scooter/c/124202279" },
-    { title: "Tous les produits", icon: <AllIcon />, link: "/shop#!/Plaques-dimmatriculation/c/124206781" },
+    { title: "Voiture", Icon: CarIcon, link: "/boutique/plaques-dimmatriculation/voiture" },
+    { title: "Remorque", Icon: TrailerIcon, link: "/boutique/plaques-dimmatriculation/remorque" },
+    { title: "Camion", Icon: TruckIcon, link: "/boutique/plaques-dimmatriculation/camion" },
+    { title: "Pick Up", Icon: PickupIcon, link: "/boutique/plaques-dimmatriculation/pick-up" },
+    { title: "Tracteur", Icon: TractorIcon, link: "/boutique/plaques-dimmatriculation/tracteur" },
+    { title: "Moto", Icon: MotorcycleIcon, link: "/boutique/plaques-dimmatriculation/moto" },
+    { title: "Scooter", Icon: MopedIcon, link: "/boutique/plaques-dimmatriculation/scooter" },
+    { title: "Plaques d’immatriculation", Icon: AllIcon, link: "/boutique/plaques-dimmatriculation" },
   ];
 
   return (
@@ -36,7 +36,7 @@ export default function CategoryGrid() {
               initial={{ opacity: 0, x: -20 }}
               whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true }}
-              className="text-12 font-black text-neutral-900 tracking-tight uppercase mb-4"
+              className="text-4xl md:text-7xl font-black text-neutral-900 tracking-tight uppercase mb-4"
             >
               Nos <span className="text-pmc-yellow">Catégories</span>
             </motion.h2>
@@ -50,7 +50,7 @@ export default function CategoryGrid() {
               Découvrez notre gamme complète de plaques et accessoires homologués pour tout type de véhicule au Luxembourg.
             </motion.p>
           </div>
-          <Link to="/shop" className="group flex items-center space-x-2 text-sm font-bold tracking-widest uppercase text-pmc-blue">
+          <Link to="/boutique" className="group flex items-center space-x-2 text-sm font-bold tracking-widest uppercase text-pmc-blue">
             <span>Voir tout le catalogue</span>
             <span className="w-8 h-px bg-pmc-blue group-hover:w-12 transition-all duration-300" />
           </Link>
@@ -72,12 +72,16 @@ function CategoryCard({ cat, index }) {
     triggerOnce: true,
   });
 
+  const [isHovered, setIsHovered] = React.useState(false);
+
   return (
     <motion.div
       ref={ref}
       initial={{ opacity: 0, y: 30 }}
       animate={inView ? { opacity: 1, y: 0 } : {}}
       transition={{ duration: 0.5, delay: index * 0.1 }}
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
     >
       <Link
         to={cat.link}
@@ -86,8 +90,12 @@ function CategoryCard({ cat, index }) {
         {/* Background Accent */}
         <div className="absolute top-0 right-0 -mr-8 -mt-8 w-24 h-24 bg-pmc-yellow/5 rounded-full blur-2xl group-hover:bg-pmc-yellow/10 transition-colors" />
 
-        <div className="relative text-6xl text-neutral-800 mb-6 transition-transform duration-500 group-hover:scale-110 group-hover:text-pmc-yellow">
-          {cat.icon}
+        <div className="relative mb-6 transition-transform duration-500 group-hover:scale-110">
+          <cat.Icon
+            w={80}
+            h={48}
+            c={isHovered ? "#f2b823" : "#001233"}
+          />
         </div>
 
         <h3 className="relative text-center font-bold text-neutral-900 text-lg">

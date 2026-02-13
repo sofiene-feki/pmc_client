@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from "react";
+import LicensePlateInput from "../components/product/LicensePlateInput";
 import { ShoppingCartIcon } from "@heroicons/react/24/solid";
 import { products } from "../constants/products";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { addItem } from "../redux/cart/cartSlice";
-import { openCart } from "../redux/ui/cartDrawer";
+import { openCart, openEcwidCart } from "../redux/ui/cartDrawer";
 import {
   HiOutlineX,
   HiOutlineCheck,
@@ -138,8 +139,8 @@ export default function ProductDetails() {
           setSelectedColor(normalizedProduct.colors?.[0] || null);
           setSelectedMedia(
             normalizedProduct.colors?.[0]?.src ||
-              normalizedProduct.media?.[0]?.src ||
-              "",
+            normalizedProduct.media?.[0]?.src ||
+            "",
           );
 
           console.log("✅ Product fetched:", normalizedProduct);
@@ -167,6 +168,45 @@ export default function ProductDetails() {
     }
   }, [product]);
 
+  const [plateNumber, setPlateNumber] = useState("");
+  const [quantity, setQuantity] = useState(1);
+
+  const isPlaque = product?.category === "124206781" ||
+    product?.Category?.id === 124206781 ||
+    product?.Title?.toLowerCase().includes("plaque");
+
+  const detectPlateType = (name = "") => {
+    const n = name.toUpperCase();
+
+    // Specific Luxembourg Codes
+    if (n.includes("ST-1")) return "ST1";
+    if (n.includes("ST-2")) return "ST2";
+    if (n.includes("MC-1")) return "MC1";
+    if (n.includes("MC-2")) return "MC2";
+    if (n.includes("CMA-1")) return "CMA1";
+    if (n.includes("CMA-2")) return "CMA2";
+
+    // VH Series
+    if (n.includes("VH-1-13") || n.includes("VH-1-3")) return "VH-1-13";
+    if (n.includes("VH-1-14")) return "VH-1-14";
+    if (n.includes("VH-1-5")) return "VH-1-5";
+    if (n.includes("VH-1-6")) return "VH-1-6";
+    if (n.includes("VH-2-6")) return "VH-2-6";
+
+    // France
+    if (n.includes("HYBRIDE") || n.includes("FRANCE")) return "HYBRIDE";
+    if (n.includes("MH-2-2")) return "MH-2-2";
+    if (n.includes("MH-2-7")) return "MH-2-7";
+
+    // Fallbacks
+    if (n.includes("STANDARD")) return "ST1";
+    if (n.includes("MOTO")) return "MC1";
+    if (n.includes("ANCIENNE") || n.includes("VH-")) return "VH-1-14";
+    if (n.includes("OLD TIMER")) return "VH-1-6";
+
+    return "ST1";
+  };
+
   const originalPrice = product?.Price;
   const promotion = product?.promotion || 0; // percentage
   const discountedPrice = +(
@@ -178,22 +218,49 @@ export default function ProductDetails() {
   const handleAddToCart = () => {
     const finalPrice = promotion > 0 ? discountedPrice : originalPrice;
 
-    // ✅ Update Redux cart
+    if (product.ecwidId && window.Ecwid) {
+      const numericId = Number(product.ecwidId);
+      const addOptions = {};
+      if (isPlaque && plateNumber) {
+        addOptions["Numéro de plaque"] = plateNumber;
+      }
+
+      window.Ecwid.Cart.addProduct({
+        id: numericId,
+        quantity: quantity,
+        options: addOptions,
+        callback: (success, result, cart, error) => {
+          if (success) {
+            dispatch(openEcwidCart({ id: numericId, plateNumber: isPlaque ? plateNumber : null, quantity: quantity }));
+            toast.success(`${product.Title} ajouté au panier Ecwid !`);
+          } else {
+            console.error("Main window add fail:", error);
+            dispatch(openEcwidCart({ id: numericId, plateNumber: isPlaque ? plateNumber : null, quantity: quantity }));
+          }
+        },
+      });
+      return;
+    }
+
+    // Fallback to internal cart if no Ecwid ID or Ecwid not loaded
     dispatch(
       addItem({
         productId: product._id,
         name: product.Title,
         price: finalPrice,
+        quantity: quantity,
         image: selectedMedia?.src,
         selectedSize: selectedSize?.name ?? null,
         selectedSizePrice: selectedSize?.price ?? null,
         selectedColor: selectedColor?.name ?? null,
+        plateNumber: isPlaque ? plateNumber : null,
         colors: product.colors,
         sizes: product.sizes,
       }),
     );
 
     dispatch(openCart());
+    toast.success(`${product.Title} ajouté au panier !`);
 
     // ✅ Client-side FB tracking
     trackAddToCart(product, finalPrice);
@@ -216,38 +283,47 @@ export default function ProductDetails() {
   const handleBuyNow = () => {
     const finalPrice = promotion > 0 ? discountedPrice : originalPrice;
 
+    if (product.ecwidId && window.Ecwid) {
+      const numericId = Number(product.ecwidId);
+      const addOptions = {};
+      if (isPlaque && plateNumber) {
+        addOptions["Numéro d'immatriculation"] = plateNumber;
+      }
+
+      window.Ecwid.Cart.addProduct({
+        id: numericId,
+        quantity: quantity,
+        options: addOptions,
+        callback: (success, result, cart, error) => {
+          if (success) {
+            dispatch(openEcwidCart(numericId));
+            toast.success(`Redirection vers le panier...`);
+          } else {
+            console.error("Main window buyNow add fail:", error);
+            dispatch(openEcwidCart(numericId));
+          }
+        },
+      });
+      return;
+    }
+
     // ✅ Update Redux cart
     dispatch(
       addItem({
         productId: product._id,
         name: product.Title,
         price: finalPrice,
+        quantity: quantity,
         image: selectedMedia?.src,
         selectedSize: selectedSize?.name ?? null,
         selectedSizePrice: selectedSize?.price ?? null,
         selectedColor: selectedColor?.name ?? null,
+        plateNumber: isPlaque ? plateNumber : null,
         colors: product.colors,
         sizes: product.sizes,
       }),
     );
     navigate("/checkout"); // Redirect to cart page
-
-    // ✅ Client-side FB tracking
-    // trackAddToCart(product, finalPrice);
-
-    // ✅ Server-side CAPI tracking
-    // sendServerEvent({
-    //   eventName: "AddToCart",
-    //   products: [
-    //     {
-    //       _id: product._id,
-    //       quantity: 1,
-    //       price: finalPrice,
-    //       category: product.Category?.name || "Unknown",
-    //     },
-    //   ],
-    //   total: finalPrice,
-    // });
   };
 
   // Media functions
@@ -487,6 +563,7 @@ export default function ProductDetails() {
   };
 
   const formatPrice = (price) => {
+    if (product?.defaultDisplayedPriceFormatted) return product.defaultDisplayedPriceFormatted;
     return new Intl.NumberFormat("fr-TN", {
       style: "currency",
       currency: "TND",
@@ -537,11 +614,10 @@ export default function ProductDetails() {
                     }
                   }}
                   className={`flex md:text-base text-xs items-center md:gap-2 gap-1 md:px-4 px-2 md:py-2 py-1 rounded-xl shadow-sm transition
-    ${
-      actionLoading
-        ? "bg-gray-200 text-gray-400 cursor-not-allowed"
-        : "bg-green-50 text-green-600 hover:bg-green-100 focus:ring-2 focus:ring-green-400"
-    }
+    ${actionLoading
+                      ? "bg-gray-200 text-gray-400 cursor-not-allowed"
+                      : "bg-green-50 text-green-600 hover:bg-green-100 focus:ring-2 focus:ring-green-400"
+                    }
   `}
                 >
                   {actionLoading ? (
@@ -579,21 +655,42 @@ export default function ProductDetails() {
         </div>
       )}
       <div className="max-w-5xl mx-auto lg:flex lg:gap-12">
-        {/* LEFT: Media gallery */}
+        {/* LEFT: Media gallery or License Plate */}
         {loading ? (
           <div className=" w-full h-[400px] lg:w-1/2 md:mb-6  lg:mb-0 bg-gray-200 rounded-lg animate-pulse"></div>
         ) : (
-          <div className={`w-full lg:w-1/2 ${isCreate ? "p-3 mt-2" : ""}`}>
-            <ProductMediaGallery
-              media={product?.media}
-              selectedMedia={selectedMedia}
-              onSelectMedia={setSelectedMedia}
-              onAddMedia={handleFileUpload}
-              onDeleteMedia={deleteMedia}
-              isEditable={isEdit || isCreate}
-              setSelectedMedia={setSelectedMedia}
-              galleryClassName="flex flex-col items-center justify-center w-full h-80 md:w-1/1 md:h-96 bg-gray-100 border-2 border-dashed border-gray-300 rounded-xl text-gray-400 text-center cursor-pointer hover:bg-gray-200 transition"
-            />
+          <div className={`w-full lg:w-1/2 flex items-center justify-center ${isCreate ? "p-3 mt-2" : "mt-4"}`}>
+            {isPlaque && !isEdit && !isCreate ? (
+              <LicensePlateInput
+                value={plateNumber}
+                onChange={setPlateNumber}
+                type={detectPlateType(product.Title)}
+                combinations={(() => {
+                  if (!product?.Description) return null;
+                  // Robust regex for splitting combinations section
+                  const startRegex = /(?:COMBINAISONS?\s+(?:DISPONIBLES|POSSIBLES)|POSSIBLE\s+COMBINATIONS?)\s*[:\-]?/i;
+                  const parts = product.Description.split(startRegex);
+
+                  if (parts.length > 1) {
+                    // End split at common warning headers
+                    const endRegex = /(?:AVANT DE PASSER|<u>AVANT DE PASSER|ATTENTION|PLEASE NOTE)/i;
+                    return parts[1].split(endRegex)[0].trim();
+                  }
+                  return null;
+                })()}
+              />
+            ) : (
+              <ProductMediaGallery
+                media={product?.media}
+                selectedMedia={selectedMedia}
+                onSelectMedia={setSelectedMedia}
+                onAddMedia={handleFileUpload}
+                onDeleteMedia={deleteMedia}
+                isEditable={isEdit || isCreate}
+                setSelectedMedia={setSelectedMedia}
+                galleryClassName="flex flex-col items-center justify-center w-full h-80 md:w-1/1 md:h-96 bg-gray-100 border-2 border-dashed border-gray-300 rounded-xl text-gray-400 text-center cursor-pointer hover:bg-gray-200 transition"
+              />
+            )}
           </div>
         )}
 
@@ -786,27 +883,62 @@ export default function ProductDetails() {
             </div>
           )}
 
+          {/* License Plate Input */}
+          {isPlaque && (
+            <LicensePlateInput value={plateNumber} onChange={setPlateNumber} />
+          )}
+
           {/* Add to Cart */}
           {isView && (
-            <div className="shadow-md my-5  md:bloc">
-              <button
-                onClick={handleAddToCart}
-                className="w-full border  mb-2 border-gray-400 flex items-center justify-center gap-3  
-       px-6 py-3 font-heading  font-semibold shadow-md 
-       hover:shadow-lg active:scale-95 transition"
-              >
-                <BsCartPlus className="h-6 w-6  animate-pulse" />
-                Ajouter au panier
-              </button>
-              <button
-                onClick={handleBuyNow}
-                className="w-full  border  border-gray-400 text-white bg-gray-900 flex items-center justify-center gap-3  
-       px-6 py-3 font-heading  font-semibold shadow-md 
-       hover:shadow-lg active:scale-95 transition"
-              >
-                <BsCartCheck className="h-6 w-6  animate-pulse" />
-                Acheter Maintenant
-              </button>
+            <div className="shadow-md my-5">
+              <div className="flex items-center gap-4 mb-4">
+                <div className="flex-1 flex flex-col gap-1">
+                  <label className="text-[10px] font-black uppercase tracking-[0.2em] text-neutral-400 ml-1">
+                    Quantité
+                  </label>
+                  <div className="flex items-center border border-neutral-200 rounded-xl overflow-hidden bg-neutral-50 h-[52px]">
+                    <button
+                      onClick={() => setQuantity(Math.max(1, quantity - 1))}
+                      className="w-12 h-full flex items-center justify-center hover:bg-neutral-100 transition-colors text-pmc-blue"
+                    >
+                      -
+                    </button>
+                    <input
+                      type="number"
+                      value={quantity}
+                      onChange={(e) => setQuantity(Math.max(1, parseInt(e.target.value) || 1))}
+                      className="w-full text-center bg-transparent border-none text-pmc-blue font-bold focus:ring-0"
+                    />
+                    <button
+                      onClick={() => setQuantity(quantity + 1)}
+                      className="w-12 h-full flex items-center justify-center hover:bg-neutral-100 transition-colors text-pmc-blue"
+                    >
+                      +
+                    </button>
+                  </div>
+                </div>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                <button
+                  onClick={handleAddToCart}
+                  className="w-full border border-pmc-blue/10 flex items-center justify-center gap-3  
+                        px-6 py-4 font-heading font-black tracking-widest uppercase text-[10px] bg-white text-pmc-blue rounded-2xl shadow-sm 
+                        hover:shadow-md hover:border-pmc-yellow transition-all duration-300 transform active:scale-[0.98]"
+                >
+                  <BsCartPlus className="h-5 w-5 text-pmc-yellow" />
+                  Ajouter au panier
+                </button>
+                <button
+                  onClick={handleBuyNow}
+                  className="w-full bg-pmc-blue text-white flex items-center justify-center gap-3  
+                        px-6 py-4 font-heading font-black tracking-widest uppercase text-[10px] rounded-2xl shadow-xl shadow-pmc-blue/20 
+                        hover:bg-pmc-blue/90 transition-all duration-300 transform active:scale-[0.98]"
+                >
+                  <BsCartCheck className="h-5 w-5 text-pmc-yellow" />
+                  Acheter Maintenant
+                </button>
+              </div>
             </div>
           )}
         </div>
