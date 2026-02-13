@@ -139,7 +139,7 @@ const EcwidCategoryList = ({
         <div
           ref={scrollRef}
           onScroll={updateArrows}
-          className="flex flex-nowrap gap-3 overflow-x-auto scrollbar-hide scroll-smooth py-2 px-6 items-center"
+          className="flex flex-nowrap gap-3 overflow-x-auto scrollbar-hide scroll-smooth py-2  items-center"
         >
           <motion.button
             whileTap={{ scale: 0.95 }}
