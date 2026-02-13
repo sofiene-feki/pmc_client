@@ -149,57 +149,28 @@ export default function Header() {
           </ul>
 
           {/* Action Icons Section */}
-          <div className="flex items-center gap-2 sm:gap-6 font-ui">
-            {/* Search (Desktop) */}
+          <div className="flex items-center gap-1 sm:gap-6 font-ui">
+            {/* Search */}
             <button
               onClick={() => setIsSearchOpen(true)}
-              className="hidden sm:flex p-2.5 text-white/70 hover:text-pmc-yellow hover:bg-white/5 rounded-full transition-all"
+              className="flex p-2 text-white/70 hover:text-pmc-yellow hover:bg-white/5 rounded-full transition-all"
             >
-              <MagnifyingGlassIcon className="w-6 h-6" />
+              <MagnifyingGlassIcon className="w-5 h-5 md:w-6 md:h-6" />
             </button>
 
             {/* Language Switcher */}
-            <div className="hidden sm:block">
+            <div className="block">
               <Menu as="div" className="relative inline-block text-left">
                 <MenuButton className="p-2 text-white/70 hover:text-pmc-yellow transition-all active:scale-95 flex items-center gap-2 group">
-                  <CiGlobe className="w-7 h-7" />
+                  <CiGlobe className="w-6 h-6 md:w-7 md:h-7" />
                 </MenuButton>
-
-                {/* <Transition
-                  as={Fragment}
-                  enter="transition ease-out duration-200"
-                  enterFrom="transform opacity-0 scale-95 translate-y-2"
-                  enterTo="transform opacity-100 scale-100 translate-y-0"
-                  leave="transition ease-in duration-150"
-                  leaveFrom="transform opacity-100 scale-100 translate-y-0"
-                  leaveTo="transform opacity-0 scale-95 translate-y-2"
-                >
-                  <MenuItems className="absolute right-0 mt-4 w-28 origin-top-right rounded-2xl bg-pmc-blue/95 backdrop-blur-xl border border-white/10 shadow-2xl overflow-hidden py-1 z-[200]">
-                    {[
-                      { id: "fr", name: "Français", code: "FR" },
-                      { id: "en", name: "English", code: "EN" },
-                      { id: "de", name: "Deutsch", code: "GER" }
-                    ].map((lang) => (
-                      <MenuItem key={lang.id}>
-                        {({ active }) => (
-                          <button
-                            className={`${active ? "bg-white/10 text-pmc-yellow" : "text-white/80"
-                              } flex w-full items-center justify-center px-4 py-3 text-[10px] font-black tracking-widest uppercase transition-colors`}
-                          >
-                            {lang.code}
-                          </button>
-                        )}
-                      </MenuItem>
-                    ))}
-                  </MenuItems>
-                </Transition> */}
               </Menu>
             </div>
 
             {/* Premium Cart Button */}
             <button
               onClick={() => dispatch(openEcwidCart())}
-              className="group relative flex items-center gap-4 bg-white/5 hover:bg-white/10 border border-white/10 px-8 py-3.5 rounded-2xl text-white overflow-hidden shadow-2xl transition-all active:scale-95"
+              className="group relative flex items-center gap-2 md:gap-4 bg-white/5 hover:bg-white/10 px-4 md:px-8 py-2.5 md:py-3.5 rounded-2xl text-white overflow-hidden transition-all active:scale-95"
             >
               <div className="absolute inset-0 bg-gradient-to-tr from-pmc-yellow/20 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
               <RiShoppingBasket2Line className="w-5 h-5 relative z-10 text-pmc-yellow" />
@@ -209,7 +180,7 @@ export default function Header() {
 
               {/* Notification Badge */}
               {ecwidCartCount > 0 && (
-                <span className="absolute -top-1 -right-1 flex h-6 w-6 items-center justify-center rounded-full bg-pmc-yellow text-[10px] font-black text-pmc-blue shadow-lg border-2 border-pmc-blue transition-transform animate-pulse-glow">
+                <span className="absolute -top-1 -right-1 flex h-6 w-6 items-center justify-center rounded-full bg-pmc-yellow text-[10px] font-black text-pmc-blue shadow-lg border-2 border-pmc-blue transition-transform animate-pulse-glow focus-visible:outline-none">
                   {ecwidCartCount}
                 </span>
               )}
@@ -218,9 +189,12 @@ export default function Header() {
             {/* Mobile Menu Toggle */}
             <button
               onClick={() => setMobileMenuOpen(true)}
-              className="lg:hidden p-2 text-white hover:bg-white/10 rounded-xl transition-colors"
+              className="lg:hidden flex flex-col items-center justify-center p-2 text-white hover:bg-white/10 rounded-xl transition-colors"
             >
-              <HiOutlineBars3BottomRight className="w-8 h-8" />
+              <HiOutlineBars3BottomRight className="w-7 h-7" />
+              <span className="text-[9px] font-black uppercase tracking-widest text-white/80 leading-none mt-1">
+                Menu
+              </span>
             </button>
           </div>
         </div>
