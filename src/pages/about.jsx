@@ -1,5 +1,4 @@
-import React from "react";
-// import { Helmet } from "react-helmet-async";
+import SEO from "../components/common/SEO";
 import {
   StarIcon,
   UserGroupIcon,
@@ -13,6 +12,11 @@ export default function About() {
 
   return (
     <>
+      <SEO
+        title="À propos"
+        description="Découvrez l'histoire de PMC Luxembourg, votre expert en plaques d'immatriculation et signalisation."
+        keywords="à propos, PMC Luxembourg, histoire, expertise"
+      />
       <section className="bg-white">
         {/* Hero Section */}
         <div className="relative font-heading shadow-lg text-gray-900">

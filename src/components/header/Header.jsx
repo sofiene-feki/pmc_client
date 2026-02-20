@@ -9,38 +9,36 @@ import { useDispatch, useSelector } from "react-redux";
 import { motion, AnimatePresence } from "framer-motion";
 import logoBlack from "../../assets/bragaouiBlack.png";
 import { RiShoppingBasket2Line } from "react-icons/ri";
-import { HiOutlineBars3BottomRight } from "react-icons/hi2";
+import { HiOutlineBars3BottomRight, HiOutlineUser, HiOutlineShieldCheck } from "react-icons/hi2";
 import { CiGlobe } from "react-icons/ci";
-import { signOut } from "firebase/auth";
-import { authLogout } from "../../redux/user/userSlice";
-import { auth } from "../../service/firebase";
-import { Dialog, Transition, Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/react";
+import { Dialog, Transition, Menu, MenuButton, MenuItems, MenuItem } from "@headlessui/react";
 import HeaderTop from "./HeaderTop";
 import Search from "./Search";
-import { openCart, openEcwidCart, closeEcwidCart } from "../../redux/ui/cartDrawer";
+import { openEcwidCart, closeEcwidCart } from "../../redux/ui/cartDrawer";
 import EcwidCartModal from "../ecwid/EcwidCartModal";
 import { useScroll, useSpring } from "framer-motion";
+import { logout } from "../../redux/slices/authSlice";
+import api from "../../api/axiosInstance";
+import { toast } from "react-toastify";
+import { HiOutlineLogout } from "react-icons/hi";
 
 const navigation = [
-  {
-    name: "Plaques d’immatriculation",
-    href: "/boutique/plaques-dimmatriculation",
-  },
+  { name: "Plaques d’immatriculation", href: "/boutique/plaques-dimmatriculation" },
   { name: "Signalisation", href: "/boutique/signalisation" },
-  { name: "Services", href: "/services" },
   { name: "Accessoires", href: "/boutique/accessoires" },
+  { name: "Services immatriculation", href: "/boutique/services" },
 ];
 
 export default function Header() {
   const location = useLocation();
   const dispatch = useDispatch();
-  const { userInfo, isAuthenticated } = useSelector((state) => state.user);
+  const navigate = useNavigate();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const isEcwidModalOpen = useSelector((state) => state.cartDrawer.isEcwidCartOpen);
+  const { user, isAuthenticated } = useSelector((state) => state.auth);
   const [ecwidCartCount, setEcwidCartCount] = useState(0);
-  const totalQuantity = useSelector((state) => state.cart.totalQuantity);
 
   const { scrollYProgress } = useScroll();
 
@@ -60,7 +58,6 @@ export default function Header() {
       syncEcwidCart();
       window.Ecwid.OnCartChanged.add(() => syncEcwidCart());
     } else {
-      // Retry if not yet loaded
       const interval = setInterval(() => {
         if (window.Ecwid) {
           syncEcwidCart();
@@ -71,6 +68,7 @@ export default function Header() {
       return () => clearInterval(interval);
     }
   }, []);
+
   const scaleX = useSpring(scrollYProgress, {
     stiffness: 100,
     damping: 30,
@@ -83,9 +81,20 @@ export default function Header() {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
+  const handleLogout = async () => {
+    try {
+      await api.get("/auth/logout");
+      dispatch(logout());
+      toast.info("Déconnexion réussie.");
+      navigate("/login");
+    } catch (err) {
+      dispatch(logout());
+      navigate("/login");
+    }
+  };
+
   return (
     <header className="relative z-[150]">
-      {/* Scroll Progress Indicator */}
       <motion.div
         className="fixed top-0 left-0 right-0 h-1 bg-pmc-yellow z-[200] origin-left"
         style={{ scaleX }}
@@ -99,8 +108,7 @@ export default function Header() {
           : "top-0 md:top-9 py-0.5 md:py-4 bg-pmc-blue/90 backdrop-blur-sm border-b border-white/5 shadow-xl"
           }`}
       >
-        <div className="max-w-7xl mx-auto flex items-center justify-between">
-          {/* Logo Section - Always visible with breakout effect */}
+        <div className="max-w-8xl mx-auto px-0 md:px-6 flex items-center justify-between">
           <div className="relative w-32 md:w-52 h-0 md:h-10 flex items-center">
             <div className="absolute top-1/2 -translate-y-1/2 left-0 z-50">
               <Link to="/" className="group">
@@ -114,7 +122,7 @@ export default function Header() {
                   }}
                   whileHover={{ scale: isScrolled ? 0.7 : 1.05 }}
                   whileTap={{ scale: 0.98 }}
-                  className="bg-white rounded-md shadow-[0_30px_70px_rgba(0,0,0,0.35)] border border-white/10 px-2 py-2 origin-left flex items-center justify-center"
+                  className="bg-white rounded-md shadow-[0_30px_70px_rgba(0,0,0,0.35)] border border-white/10 px-4 py-4 origin-left flex items-center justify-center"
                 >
                   <img
                     src={logoBlack}
@@ -126,8 +134,7 @@ export default function Header() {
             </div>
           </div>
 
-          {/* Desktop Navigation - Refined & Clear */}
-          <ul className="hidden lg:flex items-center gap-10">
+          <ul className="hidden lg:flex items-center gap-6">
             {navigation.map((item) => {
               const isActive = location.pathname === item.href;
               return (
@@ -148,9 +155,7 @@ export default function Header() {
             })}
           </ul>
 
-          {/* Action Icons Section */}
-          <div className="flex items-center gap-1 sm:gap-6 font-ui">
-            {/* Search */}
+          <div className="flex items-center gap-1 font-ui">
             <button
               onClick={() => setIsSearchOpen(true)}
               className="flex p-2 text-white/70 hover:text-pmc-yellow hover:bg-white/5 rounded-full transition-all"
@@ -158,7 +163,81 @@ export default function Header() {
               <MagnifyingGlassIcon className="w-5 h-5 md:w-6 md:h-6" />
             </button>
 
-            {/* Language Switcher */}
+            {/* Auth Menu */}
+            <div className="relative">
+              {!isAuthenticated ? (
+                <Link
+                  to="/login"
+                  className="flex p-2 text-white/70 hover:text-pmc-yellow hover:bg-white/5 rounded-full transition-all"
+                >
+                  <UserIcon className="w-5 h-5 md:w-6 md:h-6" />
+                </Link>
+              ) : (
+                <Menu as="div" className="relative inline-block text-left">
+                  <MenuButton className="flex items-center gap-2 p-1.5 md:p-2 text-white/70 hover:text-pmc-yellow hover:bg-white/5 rounded-full transition-all">
+                    <div className="w-7 h-7 md:w-8 md:h-8 bg-pmc-yellow rounded-full flex items-center justify-center text-[10px] md:text-xs font-black text-pmc-blue shadow-lg border border-white/10">
+                      {user?.fullName?.charAt(0).toUpperCase()}
+                    </div>
+                  </MenuButton>
+                  <Transition
+                    as={Fragment}
+                    enter="transition ease-out duration-100"
+                    enterFrom="transform opacity-0 scale-95"
+                    enterTo="transform opacity-100 scale-100"
+                    leave="transition ease-in duration-75"
+                    leaveFrom="transform opacity-100 scale-100"
+                    leaveTo="transform opacity-0 scale-95"
+                  >
+                    <MenuItems className="absolute right-0 mt-4 w-56 origin-top-right bg-pmc-blue/95 backdrop-blur-xl border border-white/10 rounded-2xl shadow-2xl py-2 focus:outline-none z-[200]">
+                      <div className="px-4 py-3 border-b border-white/5 mb-2">
+                        <p className="text-[10px] font-black text-pmc-yellow uppercase tracking-widest leading-none mb-1">Connecté en tant que</p>
+                        <p className="text-sm font-bold text-white truncate">{user?.fullName}</p>
+                      </div>
+                      <MenuItem>
+                        {({ active }) => (
+                          <Link
+                            to="/profile"
+                            className={`${active ? "bg-white/10 text-pmc-yellow" : "text-white/70"
+                              } group flex items-center gap-3 px-4 py-2.5 text-xs font-bold uppercase tracking-widest transition-colors`}
+                          >
+                            <HiOutlineUser className="w-4 h-4" />
+                            Mon Profil
+                          </Link>
+                        )}
+                      </MenuItem>
+                      {user?.role === "ADMIN" && (
+                        <MenuItem>
+                          {({ active }) => (
+                            <Link
+                              to="/admin"
+                              className={`${active ? "bg-white/10 text-pmc-yellow" : "text-white/70"
+                                } group flex items-center gap-3 px-4 py-2.5 text-xs font-bold uppercase tracking-widest transition-colors`}
+                            >
+                              <HiOutlineShieldCheck className="w-4 h-4" />
+                              Administration
+                            </Link>
+                          )}
+                        </MenuItem>
+                      )}
+                      <div className="h-px bg-white/5 my-2" />
+                      <MenuItem>
+                        {({ active }) => (
+                          <button
+                            onClick={handleLogout}
+                            className={`${active ? "bg-red-500/10 text-red-400" : "text-red-400/80"
+                              } group flex w-full items-center gap-3 px-4 py-2.5 text-xs font-bold uppercase tracking-widest transition-colors`}
+                          >
+                            <HiOutlineLogout className="w-4 h-4" />
+                            Déconnexion
+                          </button>
+                        )}
+                      </MenuItem>
+                    </MenuItems>
+                  </Transition>
+                </Menu>
+              )}
+            </div>
+
             <div className="block">
               <Menu as="div" className="relative inline-block text-left">
                 <MenuButton className="p-2 text-white/70 hover:text-pmc-yellow transition-all active:scale-95 flex items-center gap-2 group">
@@ -167,18 +246,16 @@ export default function Header() {
               </Menu>
             </div>
 
-            {/* Premium Cart Button */}
             <button
               onClick={() => dispatch(openEcwidCart())}
-              className="group relative flex items-center gap-2 md:gap-4 bg-white/5 hover:bg-white/10 px-4 md:px-8 py-2.5 md:py-3.5 rounded-2xl text-white overflow-hidden transition-all active:scale-95"
+              className="group relative flex items-center gap-2 md:gap-4 bg-white/5 hover:bg-white/10 px-4 md:px-6 py-2.5 md:py-3.5 rounded-2xl text-white overflow-hidden transition-all active:scale-95"
             >
               <div className="absolute inset-0 bg-gradient-to-tr from-pmc-yellow/20 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-              <RiShoppingBasket2Line className="w-5 h-5 relative z-10 text-pmc-yellow" />
+              <RiShoppingBasket2Line className="w-6 h-6 relative z-10 text-pmc-yellow" />
               <span className="text-[10px] font-bold tracking-[0.3em] uppercase relative z-10 hidden md:block">
                 Panier
               </span>
 
-              {/* Notification Badge */}
               {ecwidCartCount > 0 && (
                 <span className="absolute -top-1 -right-1 flex h-6 w-6 items-center justify-center rounded-full bg-pmc-yellow text-[10px] font-black text-pmc-blue shadow-lg border-2 border-pmc-blue transition-transform animate-pulse-glow focus-visible:outline-none">
                   {ecwidCartCount}
@@ -186,7 +263,6 @@ export default function Header() {
               )}
             </button>
 
-            {/* Mobile Menu Toggle */}
             <button
               onClick={() => setMobileMenuOpen(true)}
               className="lg:hidden flex flex-col items-center justify-center p-2 text-white hover:bg-white/10 rounded-xl transition-colors"
@@ -200,9 +276,6 @@ export default function Header() {
         </div>
       </nav>
 
-      {/* Cart Modal Refined removed - now uses CartDrawer from App.jsx via Redux */}
-
-      {/* Mobile Menu Slide-in Refined */}
       <AnimatePresence>
         {mobileMenuOpen && (
           <Dialog
@@ -259,6 +332,35 @@ export default function Header() {
                       </Link>
                     </motion.li>
                   ))}
+                  <motion.li
+                    initial={{ opacity: 0, x: 20 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ delay: navigation.length * 0.1 }}
+                  >
+                    {!isAuthenticated ? (
+                      <Link
+                        to="/login"
+                        onClick={() => setMobileMenuOpen(false)}
+                        className="group flex items-end gap-3 text-3xl font-black tracking-tight text-white/90 hover:text-pmc-yellow transition-all"
+                      >
+                        <span className="text-4xl text-white/5 group-hover:text-pmc-yellow/20 transition-colors uppercase italic leading-none">
+                          0{navigation.length + 1}
+                        </span>
+                        Connexion
+                      </Link>
+                    ) : (
+                      <Link
+                        to="/profile"
+                        onClick={() => setMobileMenuOpen(false)}
+                        className="group flex items-end gap-3 text-3xl font-black tracking-tight text-white/90 hover:text-pmc-yellow transition-all"
+                      >
+                        <span className="text-4xl text-white/5 group-hover:text-pmc-yellow/20 transition-colors uppercase italic leading-none">
+                          0{navigation.length + 1}
+                        </span>
+                        Mon Profil
+                      </Link>
+                    )}
+                  </motion.li>
                 </ul>
               </div>
 
@@ -287,7 +389,7 @@ export default function Header() {
           </Dialog>
         )}
       </AnimatePresence>
-      {/* Search Modal */}
+
       <Transition show={isSearchOpen} as={Fragment}>
         <Dialog
           as="div"

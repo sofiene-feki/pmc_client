@@ -64,9 +64,12 @@ const EcwidCategoryList = ({
     }, [categories, contextParent]);
 
     const subCategories = useMemo(() => {
-        if (contextParent) return [];
-        return categories.filter((cat) => cat.parentId === selectedCategory);
-    }, [categories, selectedCategory, contextParent]);
+        // If we have a selected category, check if it has children
+        if (selectedCategory) {
+            return categories.filter((cat) => cat.parentId === selectedCategory);
+        }
+        return [];
+    }, [categories, selectedCategory]);
 
     const handleAllClick = () => {
         onSelectCategory(contextParent ? contextParent.id : null);
@@ -145,8 +148,8 @@ const EcwidCategoryList = ({
                         whileTap={{ scale: 0.95 }}
                         onClick={handleAllClick}
                         className={`flex-none flex items-center justify-center gap-3 px-6 h-[44px] rounded-md text-sm font-bold transition-all duration-300 border ${isAllSelected
-                                ? "bg-pmc-blue border-pmc-blue text-white shadow-lg shadow-pmc-blue/30"
-                                : "bg-white border-pmc-blue/10 text-pmc-blue hover:border-pmc-blue hover:shadow-sm"
+                            ? "bg-pmc-blue border-pmc-blue text-white shadow-lg shadow-pmc-blue/30"
+                            : "bg-white border-pmc-blue/10 text-pmc-blue hover:border-pmc-blue hover:shadow-sm"
                             }`}
                     >
                         {contextParent ? (
@@ -167,8 +170,8 @@ const EcwidCategoryList = ({
                                 whileTap={{ scale: 0.95 }}
                                 onClick={() => onSelectCategory(category.id)}
                                 className={`flex-none flex items-center justify-center gap-3 px-6 h-[44px] rounded-md text-sm font-bold transition-all duration-300 border ${isSelected
-                                        ? "bg-pmc-blue border-pmc-blue text-white shadow-lg shadow-pmc-blue/30"
-                                        : "bg-white border-pmc-blue/10 text-pmc-blue hover:border-pmc-blue hover:shadow-sm"
+                                    ? "bg-pmc-blue border-pmc-blue text-white shadow-lg shadow-pmc-blue/30"
+                                    : "bg-white border-pmc-blue/10 text-pmc-blue hover:border-pmc-blue hover:shadow-sm"
                                     }`}
                             >
                                 {renderIcon(category.name, isSelected)}
@@ -219,8 +222,8 @@ const EcwidCategoryList = ({
                                         whileTap={{ scale: 0.95 }}
                                         onClick={() => onSelectCategory(sub.id)}
                                         className={`flex-none flex items-center gap-2 px-4 py-2 rounded-lg text-xs font-bold transition-all duration-200 border ${isSelected
-                                                ? "bg-pmc-blue border-pmc-blue text-white shadow-md font-extrabold"
-                                                : "bg-white border-gray-200 text-pmc-blue hover:border-pmc-blue"
+                                            ? "bg-pmc-blue border-pmc-blue text-white shadow-md font-extrabold"
+                                            : "bg-white border-gray-200 text-pmc-blue hover:border-pmc-blue"
                                             }`}
                                     >
                                         {renderIcon(sub.name, isSelected, "small")}

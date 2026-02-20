@@ -1,9 +1,14 @@
 import React from "react";
-// import { Helmet } from "react-helmet-async";
+import SEO from "../components/common/SEO";
 
 export default function ReturnsRefunds() {
   return (
     <>
+      <SEO
+        title="Livraison, Retours & Échanges"
+        description="Informations sur la livraison, les retours et les échanges chez PMC Luxembourg."
+        keywords="livraison, retours, échanges, PMC Luxembourg"
+      />
       <section className="bg-white">
         {/* Hero */}
         <div className="relative font-heading shadow-lg text-gray-900 py-12 md:py-16">

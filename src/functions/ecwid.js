@@ -59,8 +59,11 @@ export const getEcwidProfile = async () => {
  * Utility to slugify a string
  */
 export const slugify = (text) => {
+  if (!text) return "";
   return text
     .toString()
+    .normalize("NFD") // Split characters into their base letters and diacrical marks
+    .replace(/[\u0300-\u036f]/g, "") // Remove those marks
     .toLowerCase()
     .trim()
     .replace(/\s+/g, "-") // Replace spaces with -

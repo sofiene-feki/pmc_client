@@ -1,19 +1,17 @@
-import React, { useState, useEffect } from "react";
-import { useSelector, useDispatch } from "react-redux";
-import { setCurrentPage } from "../redux/shopFilters/pageOptions";
-import Filters from "../components/shop/filters";
-import Header from "../components/shop/header";
-import Product from "../components/product/Product";
-import Pagination from "../components/shop/Pagination";
-import { getProducts } from "../functions/product";
-import { LoadingProduct } from "../components/ui";
+import React, { useState } from "react";
 import EcwidStore from "../components/ecwid/ecwid";
+import SEO from "../components/common/SEO";
 
 export default function Shop() {
   const [loading, setLoading] = useState(true);
 
   return (
     <main className="bg-gray-50 min-h-screen">
+      <SEO
+        title="Boutique"
+        description="Parcourez notre collection complète de plaques d'immatriculation et signalisation sur la boutique PMC Luxembourg."
+        keywords="boutique, plaques immatriculation, signalisation, PMC Luxembourg"
+      />
       <div className="mx-auto max-w-7xl px-4 md:py-10 sm:px-6 lg:px-8">
         {loading && (
           <div className="flex items-center justify-center py-20">

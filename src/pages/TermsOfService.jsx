@@ -1,11 +1,16 @@
 import React from "react";
-// import { Helmet } from "react-helmet-async";
+import SEO from "../components/common/SEO";
 
 export default function TermsOfService() {
   const SITE_URL = "https://www.clindoeilstore.com";
 
   return (
     <>
+      <SEO
+        title="Conditions Générales d'Utilisation"
+        description="Consultez les conditions générales d'utilisation de PMC Luxembourg."
+        keywords="CGU, conditions d'utilisation, PMC Luxembourg"
+      />
       <section className="bg-white">
         {/* Hero */}
         <div className="relative font-heading shadow-lg text-gray-900 py-12 md:py-16">

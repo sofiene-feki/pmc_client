@@ -1,56 +1,27 @@
 import React, { useEffect, useState, useRef } from "react";
 import { MagnifyingGlassIcon } from "@heroicons/react/24/outline";
 import { Link } from "react-router-dom";
-import { searchProducts } from "../../functions/product";
 import { searchEcwidProducts, slugify } from "../../functions/ecwid";
 
 export default function Search({ onClose }) {
   const [query, setQuery] = useState("");
-  const [results, setResults] = useState([]);
   const [ecwidResults, setEcwidResults] = useState([]);
   const [loading, setLoading] = useState(false);
   const inputRef = useRef(null);
 
   useEffect(() => {
-    // Focus the input when the component mounts (modal opens)
     inputRef.current?.focus();
   }, []);
 
-  const API_BASE_URL_MEDIA = import.meta.env.VITE_API_BASE_URL_MEDIA;
-
-  const normalizeMediaSrc = (input) => {
-    if (!input) return input;
-    if (Array.isArray(input))
-      return input.map((item) => normalizeMediaSrc(item));
-    if (typeof input !== "object" || !input.media) return input;
-
-    const normalizedMedia = Array.isArray(input.media)
-      ? input.media.map((m) => ({
-        ...m,
-        src: m?.startsWith("http") ? m : API_BASE_URL_MEDIA + m,
-      }))
-      : [];
-
-    return { ...input, media: normalizedMedia };
-  };
-
   const handleSearch = async () => {
     if (query.trim().length < 3) {
-      setResults([]);
       setEcwidResults([]);
       return;
     }
     const trimmedQuery = query.trim();
     setLoading(true);
     try {
-      // Parallel fetch
-      const [internalRes, ecwidRes] = await Promise.all([
-        searchProducts({ query: trimmedQuery }).catch(() => ({ data: { products: [] } })),
-        searchEcwidProducts(trimmedQuery).catch(() => ({ items: [] }))
-      ]);
-
-      const normalizedInternal = normalizeMediaSrc(internalRes.data?.products || []);
-      setResults(normalizedInternal);
+      const ecwidRes = await searchEcwidProducts(trimmedQuery).catch(() => ({ items: [] }));
       setEcwidResults(ecwidRes.items || []);
     } catch (err) {
       console.error(err);
@@ -65,8 +36,7 @@ export default function Search({ onClose }) {
   }, [query]);
 
   return (
-    <div className="w-full bg-white/90 backdrop-blur-xl p-8 md:p-12 flex flex-col  min-h-[500px] max-h-[85vh] border border-white/20 relative">
-      {/* Search Header and Close Button */}
+    <div className="w-full bg-white/90 backdrop-blur-xl p-8 md:p-12 flex flex-col min-h-[500px] max-h-[85vh] border border-white/20 relative">
       <div className="flex items-center justify-between mb-8">
         <label className="text-[11px] font-black tracking-[0.4em] uppercase text-neutral-400 block ml-2">Recherche PMC Luxembourg</label>
         <button
@@ -80,7 +50,6 @@ export default function Search({ onClose }) {
         </button>
       </div>
 
-      {/* Search Input Box */}
       <div className="relative group mb-6">
         <div className="relative flex items-center">
           <input
@@ -101,8 +70,7 @@ export default function Search({ onClose }) {
           </div>
         </div>
 
-        {/* Helper Text - Visible only when NO results are showing */}
-        {results.length === 0 && ecwidResults.length === 0 && !loading && (
+        {ecwidResults.length === 0 && !loading && (
           <div className="mt-4 flex flex-wrap items-center gap-3 px-4">
             <span className="text-[9px] font-black uppercase tracking-widest text-neutral-300">Suggestions :</span>
             {["Moto", "Plaque immat", "Panneau", "Accessoires"].map((tag) => (
@@ -118,54 +86,13 @@ export default function Search({ onClose }) {
         )}
       </div>
 
-      {/* Results Section */}
       <div className="flex-1 overflow-y-auto custom-scrollbar">
-        {(results.length > 0 || ecwidResults.length > 0) ? (
+        {ecwidResults.length > 0 ? (
           <div className="grid grid-cols-1 gap-6">
             <h4 className="text-[11px] font-black tracking-widest uppercase text-pmc-blue/40 border-b border-neutral-50 pb-4 mb-4 font-heading italic">
-              Résultats de recherche ({results.length + ecwidResults.length})
+              Résultats de recherche ({ecwidResults.length})
             </h4>
 
-            {/* Internal Products */}
-            {results.map((product) => {
-              const imageMedia = product.media?.find((m) => m.type === "image");
-              const imageSrc = imageMedia ? imageMedia.src : "/placeholder.png";
-
-              return (
-                <Link
-                  to={`/produit/${product.slug}`}
-                  key={product._id}
-                  className="group flex items-center gap-6 p-4 rounded-[32px] bg-white border border-transparent hover:bg-neutral-50 hover:border-neutral-100 hover:shadow-xl hover:shadow-neutral-200/50 transition-all duration-500"
-                  onClick={onClose}
-                >
-                  <div className="relative h-24 w-24 rounded-2xl overflow-hidden bg-neutral-50 flex-shrink-0">
-                    <img
-                      src={imageSrc}
-                      alt={imageMedia?.alt || product.Title}
-                      className="h-full w-full object-cover group-hover:scale-110 transition-transform duration-700"
-                    />
-                  </div>
-                  <div className="flex flex-col flex-1">
-                    <div className="flex items-center justify-between">
-                      <h5 className="text-xl font-black text-pmc-blue group-hover:text-pmc-yellow transition-colors font-heading italic">
-                        {product.Title}
-                      </h5>
-                      <span className="text-sm font-bold text-pmc-blue bg-pmc-yellow/10 px-3 py-1 rounded-full">
-                        {product.defaultDisplayedPriceFormatted || `${product.Price} DT`}
-                      </span>
-                    </div>
-                    <p className="text-sm text-neutral-400 mt-2 line-clamp-1 max-w-sm">
-                      {product.Description || "Collection exclusive PMC Luxembourg"}
-                    </p>
-                    <div className="mt-4 opacity-0 group-hover:opacity-100 transition-all transform translate-x-[-10px] group-hover:translate-x-0">
-                      <span className="text-[9px] font-black uppercase tracking-widest text-pmc-yellow">Voir le produit —</span>
-                    </div>
-                  </div>
-                </Link>
-              );
-            })}
-
-            {/* Ecwid Products */}
             {ecwidResults.map((product) => (
               <Link
                 to={`/boutique/produit/${slugify(product.name)}--${product.id}`}
@@ -211,13 +138,8 @@ export default function Search({ onClose }) {
               <p className="text-sm text-neutral-400 mt-2">Essayez avec d'autres mots-clés comme "plaque" ou "moto".</p>
             </div>
           </div>
-        ) : (
-          <div className="grid grid-cols-2 gap-4">
-            {/* Suggestions or popular items can go here */}
-          </div>
-        )}
+        ) : null}
       </div>
     </div>
   );
 }
-

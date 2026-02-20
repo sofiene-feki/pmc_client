@@ -1,10 +1,16 @@
 import React from "react";
+import SEO from "../components/common/SEO";
 
 export default function PrivacyPolicy() {
   const SITE_URL = "https://www.clindoeilstore.com";
 
   return (
     <>
+      <SEO
+        title="Politique de Confidentialité"
+        description="Consultez la politique de confidentialité de PMC Luxembourg. Nous protégeons vos données personnelles."
+        keywords="politique de confidentialité, PMC Luxembourg, données personnelles"
+      />
       <section className="bg-white">
         {/* Hero */}
         <div className="relative font-heading shadow-lg text-gray-900 py-12 md:py-16">

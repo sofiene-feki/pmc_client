@@ -3,11 +3,11 @@ import LicensePlateInput from "../components/product/LicensePlateInput";
 import { useParams, useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { getEcwidProductById } from "../functions/ecwid";
-import { addItem } from "../redux/cart/cartSlice";
-import { openCart, openEcwidCart } from "../redux/ui/cartDrawer";
+import { openEcwidCart } from "../redux/ui/cartDrawer";
 import { motion } from "framer-motion";
 import { FaShippingFast, FaShoppingCart, FaArrowLeft } from "react-icons/fa";
 import { toast } from "react-toastify";
+import SEO from "../components/common/SEO";
 
 const EcwidProductDetails = () => {
     const { slug } = useParams();
@@ -127,6 +127,15 @@ const EcwidProductDetails = () => {
 
     return (
         <main className="bg-gray-50 min-h-screen pt-28 pb-20">
+            {product && (
+                <SEO
+                    title={product.name}
+                    description={product.description?.replace(/<[^>]*>?/gm, "").substring(0, 160)}
+                    ogImage={selectedImage}
+                    ogUrl={window.location.href}
+                    keywords={`${product.name}, PMC Luxembourg, Ecwid`}
+                />
+            )}
             <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
                 <button
                     onClick={() => navigate(-1)}

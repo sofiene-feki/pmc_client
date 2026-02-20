@@ -2,11 +2,19 @@ import React, { useRef } from "react";
 import { motion } from "framer-motion";
 import Banner from "../components/home/Banner";
 import CategoryGrid from "../components/home/CategoryGrid";
-import HomeVideoSection from "../components/home/HomeVideoSection";
+import LicencePlateBanner from "../components/home/LicencePlateBanner";
 import BrandStatement from "../components/home/BrandStatement";
 import AddressCards from "../components/home/AddressCards";
 import SignalisationCategory from "../components/home/SignalisationCategory";
 import BannerImg from "../components/home/BannerImg";
+import FancyPlatesBanner from "../components/home/FancyPlatesBanner";
+import FancyPlatesCategory from "../components/home/FancyPlatesCategory";
+import SEO from "../components/common/SEO";
+import banner from "../assets/banner.png"; // adjust path
+import digitalPrinting from "../assets/DigitalPrinting.png"; // adjust path
+import DigitalPrintingCategory from "../components/home/DigitalPrintingCategory";
+import Testimonials from "../components/home/Testimonials";
+
 
 const sectionVariants = {
   hidden: { opacity: 0, y: 50 },
@@ -22,13 +30,18 @@ export default function Home() {
 
   return (
     <div className="relative overflow-x-hidden bg-white selection:bg-pmc-yellow/30">
+      <SEO
+        title="Accueil"
+        description="Bienvenue chez PMC Luxembourg, votre expert en plaques d'immatriculation de luxe et signalisation professionnelle."
+        keywords="plaques immatriculation, Luxembourg, signalisation, PMC, luxe"
+      />
       <div className="relative">
         <Banner />
 
 
         <BrandStatement />
 
-        <HomeVideoSection
+        <LicencePlateBanner
           title="PMC Luxembourg"
           subtitle="L'excellence de la signalisation"
           triggerRef={newArrivalsRef}
@@ -71,8 +84,13 @@ export default function Home() {
         </div> */}
 
         <CategoryGrid />
-        <BannerImg />
+        <BannerImg imageSrc={banner} />
         <SignalisationCategory />
+        <FancyPlatesBanner />
+        <FancyPlatesCategory />
+        <BannerImg imageSrc={digitalPrinting} />
+        <DigitalPrintingCategory />
+        <Testimonials />
         <AddressCards />
 
       </div>

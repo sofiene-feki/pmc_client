@@ -1,5 +1,5 @@
 import React from "react";
-// import { Helmet } from "react-helmet-async";
+import SEO from "../components/common/SEO";
 import {
   MapPinIcon,
   PhoneIcon,
@@ -11,16 +11,11 @@ export default function Contact() {
 
   return (
     <>
-      {/* <Helmet>
-        <title>Contact | Clin d’Oeil Store – Boutique Mode en Tunisie</title>
-
-        <meta
-          name="description"
-          content="Contactez Clin d’Oeil Store pour toute question sur nos vêtements, collections mode, commandes ou livraisons en Tunisie et à l’international."
-        />
-
-        <link rel="canonical" href={`${SITE_URL}/contact`} />
-      </Helmet> */}
+      <SEO
+        title="Contact"
+        description="Contactez PMC Luxembourg pour toute question sur nos plaques d'immatriculation, nos collections ou nos services de signalisation."
+        keywords="contact, PMC Luxembourg, service client, Luxembourg"
+      />
 
       <section className="bg-white">
         {/* Hero Section */}
