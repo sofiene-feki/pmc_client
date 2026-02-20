@@ -197,17 +197,16 @@ export default function CustomToolbar({
             ${searchExpanded ? "hidden sm:inline-flex" : "inline-flex"}`}
           >
             <PlusIcon className="w-4 h-4 " />
-            Crée une commande
+            Crée
           </button>
           <button
             disabled={loadingSelectedRows}
             onClick={handleSendSelectedRows}
             className={`items-center gap-1 px-2 md:px-2 py-2 rounded-xl shadow-sm text-xs md:text-xs transition ml-2
-    ${
-      loadingSelectedRows
-        ? "bg-gray-200 text-gray-400 cursor-not-allowed"
-        : "bg-white text-blue-700 border border-blue-400 hover:bg-blue-100"
-    }
+    ${loadingSelectedRows
+                ? "bg-gray-200 text-gray-400 cursor-not-allowed"
+                : "bg-white text-blue-700 border border-blue-400 hover:bg-blue-100"
+              }
     ${searchExpanded ? "hidden sm:inline-flex" : "inline-flex"}
   `}
           >
@@ -218,9 +217,8 @@ export default function CustomToolbar({
 
         <div className="flex items-center px-1 md:px-2">
           <div
-            className={` ${
-              searchExpanded ? "hidden sm:inline-flex" : "inline-flex"
-            }`}
+            className={` ${searchExpanded ? "hidden sm:inline-flex" : "inline-flex"
+              }`}
           >
             <Tooltip title="Columns">
               <ColumnsPanelTrigger render={<ToolbarButton />}>
