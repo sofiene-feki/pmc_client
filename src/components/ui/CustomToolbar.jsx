@@ -143,7 +143,7 @@ export default function CustomToolbar({
     // 3. Calculate totals
     const subtotal = items.reduce(
       (sum, item) => sum + item.price * item.quantity,
-      0
+      0,
     );
     const shipping = 0; // Modify based on your rules
     const paymentMethod = "cod"; // Or dynamic
@@ -197,7 +197,7 @@ export default function CustomToolbar({
             ${searchExpanded ? "hidden sm:inline-flex" : "inline-flex"}`}
           >
             <PlusIcon className="w-4 h-4 " />
-            Crée
+            Crée une commande
           </button>
           <button
             disabled={loadingSelectedRows}
@@ -381,7 +381,7 @@ export default function CustomToolbar({
 
                 {order.products.map((item, index) => {
                   const selectedProduct = products.find(
-                    (p) => p._id === item.productId
+                    (p) => p._id === item.productId,
                   );
 
                   return (
