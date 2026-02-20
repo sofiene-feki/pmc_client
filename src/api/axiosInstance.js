@@ -31,7 +31,9 @@ api.interceptors.response.use(
         if (error.response.status === 401 && !originalRequest._retry) {
             originalRequest._retry = true;
             try {
-                const { data } = await axios.get("http://localhost:8000/api/auth/refresh", {
+                // Use the same baseURL as the axios instance for refresh
+                const refreshURL = `${api.defaults.baseURL}/auth/refresh`;
+                const { data } = await axios.get(refreshURL, {
                     withCredentials: true,
                 });
                 store.dispatch(setToken(data.accessToken));
