@@ -33,14 +33,14 @@ const UserSettingsContent = ({ setUserMenuOpen, handleSignOut }) => {
             {view === "main"
               ? "Paramètres"
               : view === "pixel"
-              ? "Configurer Facebook Pixel"
-              : view === "category"
-              ? "Configurer categorie"
-              : view === "sub category"
-              ? "Configurer sous category"
-              : view === "google"
-              ? "Configurer Google Search Console"
-              : "Configurer Google Analytics"}
+                ? "Configurer Facebook Pixel"
+                : view === "category"
+                  ? "Configurer categorie"
+                  : view === "sub category"
+                    ? "Configurer sous category"
+                    : view === "google"
+                      ? "Configurer Google Search Console"
+                      : "Configurer Google Analytics"}
           </h2>
 
           {/* Back button only if not main view */}
@@ -49,7 +49,7 @@ const UserSettingsContent = ({ setUserMenuOpen, handleSignOut }) => {
               onClick={goBack}
               className="text-sm text-blue-500 hover:underline"
             >
-              ← Retour
+              ←Retour
             </button>
           )}
         </div>
