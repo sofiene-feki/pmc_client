@@ -3,12 +3,16 @@ import Slider from "react-slick";
 import { TrashIcon } from "@heroicons/react/24/outline";
 import { TbCameraPlus } from "react-icons/tb";
 import { motion } from "framer-motion";
+import { useSelector } from "react-redux";
 import CustomModal from "../ui/Modal";
 import { Input } from "../ui";
 import { createBanner, getBanners, removeBanner } from "../../functions/banner";
 import { toast } from "react-toastify";
 
 export default function Banner() {
+  const { user, isAuthenticated } = useSelector((state) => state.auth);
+  const isAdmin = isAuthenticated && user?.role === "ADMIN";
+
   const [open, setOpen] = useState(false);
   const [fetching, setFetching] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -37,9 +41,18 @@ export default function Banner() {
   const normalizeBannerSrc = (input) => {
     if (!input) return input;
     if (Array.isArray(input)) return input.map((item) => normalizeBannerSrc(item));
+
+    // Ensure API_BASE_URL_MEDIA doesn't end with a slash and input.img starts with a slash
+    const baseUrl = API_BASE_URL_MEDIA.endsWith("/") ? API_BASE_URL_MEDIA.slice(0, -1) : API_BASE_URL_MEDIA;
+    let imgPath = input.img || "";
+    if (imgPath && !imgPath.startsWith("http")) {
+      if (!imgPath.startsWith("/")) imgPath = "/" + imgPath;
+      imgPath = baseUrl + imgPath;
+    }
+
     return {
       ...input,
-      img: input.img?.startsWith("http") ? input.img : API_BASE_URL_MEDIA + input.img,
+      img: imgPath,
     };
   };
 
@@ -47,14 +60,15 @@ export default function Banner() {
     try {
       setFetching(true);
       const { data } = await getBanners();
-      const normalizedSlides = normalizeBannerSrc(data).map((banner) => ({
+      const normalizedData = normalizeBannerSrc(data);
+      const formattedSlides = normalizedData.map((banner) => ({
         id: banner._id,
         title: banner.title,
         img: banner.img,
         button: banner.button,
         link: banner.link || "/",
       }));
-      setSlides(normalizedSlides);
+      setSlides(formattedSlides);
     } catch (err) {
       console.error("❌ Error fetching banners:", err);
     } finally {
@@ -82,7 +96,14 @@ export default function Banner() {
         success: `Slide "${newSlide.title}" saved!`,
         error: { render({ data }) { return data?.response?.data?.message || "Failed to save slide"; } },
       }).then(({ data }) => {
-        setSlides((prev) => [...prev, { title: data.title, img: API_BASE_URL_MEDIA + data.img, button: data.button, link: data.link }]);
+        const savedBanner = normalizeBannerSrc(data);
+        setSlides((prev) => [...prev, {
+          id: savedBanner._id,
+          title: savedBanner.title,
+          img: savedBanner.img,
+          button: savedBanner.button,
+          link: savedBanner.link || "/"
+        }]);
         setNewSlide({ title: "", img: "", button: "", link: "", preview: "", file: null });
       });
     } catch (err) {
@@ -124,18 +145,21 @@ export default function Banner() {
                 <img
                   src={slide.img}
                   alt={slide.title}
+                  crossOrigin="anonymous"
                   className="w-full object-cover object-right md:object-center"
                 />
               </div>
             ))}
         </Slider>
-        <button
-          onClick={() => setOpen(true)}
-          className="absolute bottom-4 right-8 z-10 flex gap-2 bg-white rounded-md px-4 py-1 border border-white hover:bg-white/50 transition shadow-lg"
-        >
-          <TbCameraPlus className="h-6 w-6" />
-          <span className="hidden sm:inline">Gérer les images</span>
-        </button>
+        {isAdmin && (
+          <button
+            onClick={() => setOpen(true)}
+            className="absolute bottom-4 right-8 z-10 flex gap-2 bg-white rounded-md px-4 py-1 border border-white hover:bg-white/50 transition shadow-lg"
+          >
+            <TbCameraPlus className="h-6 w-6" />
+            <span className="hidden sm:inline">Gérer les images</span>
+          </button>
+        )}
       </div>
 
       <CustomModal
@@ -178,7 +202,7 @@ export default function Banner() {
 
               {slides.map((slide, index) => (
                 <div key={index} className="relative group rounded-2xl overflow-hidden border border-gray-100 shadow-sm hover:shadow-xl transition-all h-[300px] flex flex-col">
-                  <img src={slide.img} alt={slide.title} className="w-full h-40 object-cover" />
+                  <img src={slide.img} alt={slide.title} crossOrigin="anonymous" className="w-full h-40 object-cover" />
                   <div className="p-4 flex-1 flex flex-col justify-between bg-white">
                     <div>
                       <p className="font-bold text-pmc-blue text-sm truncate">{slide.title}</p>

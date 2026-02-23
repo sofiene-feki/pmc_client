@@ -86,8 +86,8 @@ export default function Home() {
         <CategoryGrid />
         <BannerImg imageSrc={banner} />
         <SignalisationCategory />
-        <FancyPlatesBanner />
-        <FancyPlatesCategory />
+        {/* <FancyPlatesBanner />
+        <FancyPlatesCategory /> */}
         <BannerImg imageSrc={digitalPrinting} />
         <DigitalPrintingCategory />
         <Testimonials />

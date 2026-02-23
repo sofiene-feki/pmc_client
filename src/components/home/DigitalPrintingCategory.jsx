@@ -2,27 +2,18 @@ import React from "react";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import { useInView } from "react-intersection-observer";
-import {
-    HiOutlineColorSwatch,
-    HiOutlineScissors,
-    HiOutlineCollection,
-    HiOutlineLibrary,
-    HiOutlineTruck,
-    HiOutlineFlag,
-    HiOutlineDocumentText
-} from "react-icons/hi";
-import { AllIcon } from "../../assets/icons/IconsPlaque";
+import { AllIcon, BachesBanners, LettrageVehicule, PapierPeint, PapierPoster, Vinyle, VinyleDecoupe, VinyleTransparent } from "../../assets/icons/IconsPlaque";
 
 export default function DigitalPrintingCategory() {
     const categories = [
-        { title: "Vinyle", Icon: HiOutlineColorSwatch, link: "/boutique/digital-printing/vinyle" },
-        { title: "Vinyle découpé", Icon: HiOutlineScissors, link: "/boutique/digital-printing/vinyle-decoupe" },
-        { title: "Vinyle transparent", Icon: HiOutlineCollection, link: "/boutique/digital-printing/vinyle-transparent" },
-        { title: "Papier peint", Icon: HiOutlineLibrary, link: "/boutique/digital-printing/papier-peint" },
-        { title: "Lettrage véhicule", Icon: HiOutlineTruck, link: "/boutique/digital-printing/lettrage-vehicule" },
-        { title: "Bâches & Banners", Icon: HiOutlineFlag, link: "/boutique/digital-printing/baches-et-banners" },
-        { title: "Papier poster", Icon: HiOutlineDocumentText, link: "/boutique/digital-printing/papier-poster" },
-        { title: "all", Icon: AllIcon, link: "/boutique/digital-printing" },
+        { title: "Vinyle", Icon: Vinyle, link: "/boutique/impression-numerique/vinyle" },
+        { title: "Vinyle découpé", Icon: VinyleDecoupe, link: "/boutique/impression-numerique/vinyle-decoupe" },
+        { title: "Vinyle transparent", Icon: VinyleTransparent, link: "/boutique/impression-numerique/vinyle-transparent" },
+        { title: "Papier peint", Icon: PapierPeint, link: "/boutique/impression-numerique/papier-peint" },
+        { title: "Lettrage véhicule", Icon: LettrageVehicule, link: "/boutique/impression-numerique/lettrage-vehicule" },
+        { title: "Bâches & Banners", Icon: BachesBanners, link: "/boutique/impression-numerique/baches-et-banners" },
+        { title: "Papier poster", Icon: PapierPoster, link: "/boutique/impression-numerique/papier-poster" },
+        { title: "Tous", Icon: AllIcon, link: "/boutique/impression-numerique" },
     ];
 
     return (
@@ -50,27 +41,29 @@ function CategoryCard({ cat, index }) {
         <motion.div
             ref={ref}
             className="h-full"
-            initial={{ opacity: 0, scale: 0.95 }}
-            animate={inView ? { opacity: 1, scale: 1 } : {}}
+            initial={{ opacity: 0, y: 20 }}
+            animate={inView ? { opacity: 1, y: 0 } : {}}
             transition={{ duration: 0.5, delay: index * 0.05 }}
             onMouseEnter={() => setIsHovered(true)}
             onMouseLeave={() => setIsHovered(false)}
         >
             <Link
                 to={cat.link}
-                className="group relative flex flex-col items-center justify-center h-full min-h-[180px] p-6 bg-white rounded-2xl border border-neutral-200 transition-all duration-300 hover:border-pmc-yellow hover:shadow-xl hover:-translate-y-1"
+                className="group relative flex flex-col items-center justify-center h-full min-h-[160px] p-5 bg-white rounded-3xl border border-neutral-100 transition-all duration-500 hover:bg-white hover:shadow-2xl hover:shadow-neutral-200/50 hover:-translate-y-1.5 overflow-hidden"
             >
-                <div className="mb-4 transition-transform duration-300 group-hover:scale-110">
-                    <cat.Icon
-                        size={50}
-                        color={isHovered ? "#f2b823" : "#001233"}
-                        w={50} h={50} c={isHovered ? "#f2b823" : "#001233"}
-                    />
+                {/* Background Accent */}
+                <div className="absolute top-0 right-0 -mr-6 -mt-6 w-20 h-20 bg-pmc-yellow/5 rounded-full blur-2xl group-hover:bg-pmc-yellow/10 transition-colors" />
+
+                <div className="relative mb-4 transition-transform duration-500 group-hover:scale-110">
+                    <cat.Icon w={60} h={40} c={isHovered ? "#f2b823" : "#001233"} />
                 </div>
-                <h3 className="text-center font-bold text-neutral-900 leading-tight text-sm">
+
+                <h3 className="relative text-center font-bold text-neutral-900 text-base leading-tight">
                     {cat.title}
                 </h3>
-                <div className="mt-3 w-4 h-1 bg-neutral-200 group-hover:w-8 group-hover:bg-pmc-yellow transition-all duration-300" />
+
+                {/* Bottom Border Accent */}
+                <div className="absolute bottom-0 left-0 w-0 h-1 bg-pmc-yellow group-hover:w-full transition-all duration-500" />
             </Link>
         </motion.div>
     );

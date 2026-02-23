@@ -220,16 +220,6 @@ const ShopEcwidCustom = () => {
                     >
                         Notre Boutique <span className="text-pmc-yellow">Premium</span>
                     </motion.h1>
-                    {isAdmin && (
-                        <motion.button
-                            initial={{ opacity: 0, scale: 0.9 }}
-                            animate={{ opacity: 1, scale: 1 }}
-                            onClick={() => handleOpenModal()}
-                            className="mt-6 bg-pmc-blue text-white px-8 py-3 rounded-2xl font-black uppercase tracking-widest text-xs flex items-center gap-3 mx-auto shadow-xl shadow-pmc-blue/20 hover:bg-pmc-yellow hover:text-pmc-blue transition-all active:scale-95"
-                        >
-                            <HiOutlinePlus size={20} /> Nouveau Produit
-                        </motion.button>
-                    )}
                     <motion.p
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
@@ -249,12 +239,27 @@ const ShopEcwidCustom = () => {
                     categorySlug={categorySlug}
                 />
 
-                {/* Results Info */}
-                <div className="flex items-center justify-between mb-8">
-                    <p className="text-gray-600 font-medium">
-                        {products.length} produits trouvés
-                    </p>
-                    <div className="h-px flex-1 bg-gray-200 mx-8"></div>
+                {/* Results Info and Actions */}
+                <div className="flex flex-col md:flex-row items-center justify-between mb-12 gap-6">
+                    <div className="flex items-center gap-6 w-full md:w-auto">
+                        <p className="text-gray-600 font-bold text-lg whitespace-nowrap">
+                            {products.length} <span className="text-gray-400 font-medium italic ml-1">produits trouvés</span>
+                        </p>
+                        <div className="h-4 w-px bg-gray-200 hidden md:block"></div>
+                    </div>
+
+                    <div className="h-px hidden md:block flex-1 bg-gradient-to-r from-gray-200 to-transparent mx-8"></div>
+
+                    {isAdmin && (
+                        <motion.button
+                            initial={{ opacity: 0, x: 20 }}
+                            animate={{ opacity: 1, x: 0 }}
+                            onClick={() => handleOpenModal()}
+                            className="w-full md:w-auto bg-pmc-blue text-white px-6 py-3 rounded-xl font-black uppercase tracking-widest text-[10px] flex items-center justify-center gap-3 shadow-lg shadow-pmc-blue/20 hover:bg-pmc-yellow hover:text-pmc-blue hover:-translate-y-0.5 transition-all active:scale-95"
+                        >
+                            <HiOutlinePlus size={16} /> Nouveau Produit
+                        </motion.button>
+                    )}
                 </div>
 
                 {/* Products Grid */}

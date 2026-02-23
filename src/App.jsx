@@ -1,10 +1,12 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import React, { lazy, Suspense } from "react";
 import { Route, Routes, useLocation } from "react-router-dom";
 import "./App.css";
 import logoBlack from "./assets/bragaouiBlack.png";
 import Header from "./components/header/Header";
 import Footer from "./components/footer/Footer";
+import AdminTopBar from "./components/admin/AdminTopBar";
+import AdminSideNav from "./components/admin/AdminSideNav";
 import { ToastContainer, toast } from "react-toastify";
 import { initFacebookPixel } from "./service/fbPixel";
 import ProtectedRoute from "./components/auth/ProtectedRoute";
@@ -38,10 +40,12 @@ function App() {
   const { token, isAuthenticated } = useSelector((state) => state.auth);
   const queryParams = new URLSearchParams(location.search);
   const hideUI = queryParams.get("hideUI") === "true";
+  const [isAdminSidebarOpen, setIsAdminSidebarOpen] = useState(false);
 
-  const noHeaderFooterPages = ["/login", "/register", "/forgot-password", "/reset-password", "/verify-email"];
-  const shouldShowHeader = !hideUI && !noHeaderFooterPages.some(page => location.pathname.startsWith(page));
-  const shouldShowFooter = !hideUI && !noHeaderFooterPages.some(page => location.pathname.startsWith(page));
+  const noHeaderFooterPages = ["/login", "/register", "/forgot-password", "/reset-password", "/verify-email", "/admin"];
+  const isAdminRoute = location.pathname.startsWith("/admin");
+  const shouldShowHeader = !hideUI && !isAdminRoute && !noHeaderFooterPages.some(page => location.pathname === page || location.pathname.startsWith(page + "/"));
+  const shouldShowFooter = !hideUI && !isAdminRoute && !noHeaderFooterPages.some(page => location.pathname === page || location.pathname.startsWith(page + "/"));
 
   useEffect(() => {
     initFacebookPixel();
@@ -95,13 +99,21 @@ function App() {
         }
       >
         {shouldShowHeader && <Header />}
+
+        {isAdminRoute && (
+          <>
+            <AdminTopBar toggleMobileMenu={() => setIsAdminSidebarOpen(!isAdminSidebarOpen)} />
+            <AdminSideNav isOpen={isAdminSidebarOpen} toggle={() => setIsAdminSidebarOpen(!isAdminSidebarOpen)} />
+          </>
+        )}
+
         <ToastContainer
           position="top-right"
           autoClose={5000}
           theme="light"
         />
 
-        <main className="flex-grow">
+        <main className={`flex-grow ${isAdminRoute ? "lg:pl-72 pt-16" : ""}`}>
           <Routes>
             <Route path="/" element={<LazyHome />} />
             <Route path="/about" element={<LazyAbout />} />
@@ -130,7 +142,7 @@ function App() {
             } />
 
             {/* Protected Admin Routes */}
-            <Route path="/admin" element={
+            <Route path="/admin/*" element={
               <RoleRoute roles={["ADMIN"]}>
                 <LazyAdminDashboard />
               </RoleRoute>

@@ -24,7 +24,7 @@ export default function SignalisationCategory() {
     { title: "Signalétique", Icon: SafetyWallIcon, link: "/boutique/signalisation/signaletique" },
     { title: "Balisage de chantier", Icon: BalisageIcon, link: "/boutique/signalisation/balisage-de-chantier" },
     { title: "Contour de sécurité", Icon: ContouSecurityIcon, link: "/boutique/signalisation/contour-de-securite" },
-    { title: "Tous les produits", Icon: AllIcon, link: "/boutique/signalisation" },
+    { title: "Tous", Icon: AllIcon, link: "/boutique/signalisation" },
   ];
 
   return (
@@ -72,27 +72,29 @@ function CategoryCard({ cat, index }) {
     <motion.div
       ref={ref}
       className="h-full"
-      initial={{ opacity: 0, scale: 0.95 }}
-      animate={inView ? { opacity: 1, scale: 1 } : {}}
+      initial={{ opacity: 0, y: 20 }}
+      animate={inView ? { opacity: 1, y: 0 } : {}}
       transition={{ duration: 0.5, delay: index * 0.05 }}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
       <Link
         to={cat.link}
-        className="group relative flex flex-col items-center justify-center h-full min-h-[220px] p-8 bg-white rounded-2xl border border-neutral-200 transition-all duration-300 hover:border-pmc-yellow hover:shadow-xl hover:-translate-y-1"
+        className="group relative flex flex-col items-center justify-center h-full min-h-[160px] p-5 bg-white rounded-3xl border border-neutral-100 transition-all duration-500 hover:bg-white hover:shadow-2xl hover:shadow-neutral-200/50 hover:-translate-y-1.5 overflow-hidden"
       >
-        <div className="mb-6 transition-transform duration-300 group-hover:scale-110">
-          <cat.Icon
-            w={70}
-            h={70}
-            c={isHovered ? "#f2b823" : "#001233"}
-          />
+        {/* Background Accent */}
+        <div className="absolute top-0 right-0 -mr-6 -mt-6 w-20 h-20 bg-pmc-yellow/5 rounded-full blur-2xl group-hover:bg-pmc-yellow/10 transition-colors" />
+
+        <div className="relative mb-4 transition-transform duration-500 group-hover:scale-110">
+          <cat.Icon w={60} h={36} c={isHovered ? "#f2b823" : "#001233"} />
         </div>
-        <h3 className="text-center font-bold text-neutral-900 leading-tight">
+
+        <h3 className="relative text-center font-bold text-neutral-900 text-base leading-tight">
           {cat.title}
         </h3>
-        <div className="mt-4 w-6 h-1 bg-neutral-100 group-hover:w-10 group-hover:bg-pmc-yellow transition-all duration-300" />
+
+        {/* Bottom Border Accent */}
+        <div className="absolute bottom-0 left-0 w-0 h-1 bg-pmc-yellow group-hover:w-full transition-all duration-500" />
       </Link>
     </motion.div>
   );

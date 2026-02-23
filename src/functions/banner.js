@@ -5,7 +5,7 @@ const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 // CREATE Banner
 export const createBanner = async (formData) =>
   await axios.post(
-    `https://pmc-server.onrender.com/api/create/banner`,
+    `${API_BASE_URL}/create/banner`,
     formData,
     {
       headers: { "Content-Type": "multipart/form-data" },
@@ -14,16 +14,16 @@ export const createBanner = async (formData) =>
 
 // GET all Banners
 export const getBanners = async () =>
-  await axios.get(`https://pmc-server.onrender.com/api/banners`);
+  await axios.get(`${API_BASE_URL}/banners`);
 
 // GET one Banner by ID
 export const getBanner = async (id) =>
-  await axios.get(`https://pmc-server.onrender.com/api/banner/${id}`);
+  await axios.get(`${API_BASE_URL}/banner/${id}`);
 
 // UPDATE Banner
 export const updateBanner = async (id, formData) =>
   await axios.put(
-    `https://pmc-server.onrender.com/api/update/banner/${id}`,
+    `${API_BASE_URL}/update/banner/${id}`,
     formData,
     {
       headers: { "Content-Type": "multipart/form-data" },

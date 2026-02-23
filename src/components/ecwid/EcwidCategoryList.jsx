@@ -18,6 +18,13 @@ import {
     SafetyWallIcon,
     BalisageIcon,
     ContouSecurityIcon,
+    Vinyle,
+    VinyleDecoupe,
+    VinyleTransparent,
+    PapierPeint,
+    LettrageVehicule,
+    BachesBanners,
+    PapierPoster,
 } from "../../assets/icons/IconsPlaque";
 
 const iconComponentMap = {
@@ -29,7 +36,7 @@ const iconComponentMap = {
     moto: MotorcycleIcon,
     scooter: MopedIcon,
     "plaques-dimmatriculation": AllIcon,
-    signalisation: PoliceSignsIcon,
+    signalisation: AllIcon,
     "panneaux-routiers": PoliceSignsIcon,
     "systemes-de-guidage": DirectionalSignIcon,
     "signes-et-autocollants": TemporaryConstructionSignIcon,
@@ -37,6 +44,15 @@ const iconComponentMap = {
     signaletique: SafetyWallIcon,
     "balisage-de-chantier": BalisageIcon,
     "contour-de-securite": ContouSecurityIcon,
+    "impression-numerique": AllIcon,
+    vinyle: Vinyle,
+    "vinyle-decoupe": VinyleDecoupe,
+    "vinyle-transparent": VinyleTransparent,
+    "papier-peint": PapierPeint,
+    "lettrage-vehicule": LettrageVehicule,
+    "baches-banners": BachesBanners,
+    "papier-poster": PapierPoster,
+
 };
 
 const EcwidCategoryList = ({

@@ -5,20 +5,14 @@ import { Link } from "react-router-dom";
 
 export default function LicencePlateBanner({ title, subtitle, triggerRef }) {
   return (
-    <section className="relative w-full min-h-[80vh] flex flex-col md:flex-row overflow-hidden bg-pmc-blue/95">
+    <section className="relative w-full min-h-auto flex flex-col md:flex-row overflow-hidden bg-pmc-blue/95">
       {/* Visual Side */}
-      <div className="relative md:w-3/5 w-full h-[40vh] md:h-auto overflow-hidden">
-        <motion.img
-          initial={{ scale: 1.2, opacity: 0 }}
-          whileInView={{ scale: 1, opacity: 1 }}
-          transition={{ duration: 1.5, ease: "easeOut" }}
+      <div className="relative md:w-3/5 w-full h-auto overflow-hidden">
+        <img
           src={hero}
           alt="Plaque immatriculation Luxembourg"
           className="w-full h-full object-cover"
         />
-        {/* Gradient Overlay */}
-        <div className="absolute inset-0 bg-gradient-to-r from-neutral-900/60 via-transparent to-transparent md:block hidden" />
-        <div className="absolute inset-0 bg-gradient-to-t from-neutral-900 via-transparent to-transparent md:hidden block" />
       </div>
 
       {/* Content Side */}
@@ -64,7 +58,7 @@ export default function LicencePlateBanner({ title, subtitle, triggerRef }) {
             </button> */}
           </div>
 
-          <div className="mt-10 flex items-center space-x-4 ">
+          <div className="mt-4 flex items-center space-x-4 ">
             <div className="flex -space-x-2">
               {[1, 2, 3, 4].map((i) => (
                 <img
