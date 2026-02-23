@@ -14,6 +14,7 @@ import logoBlack from "../../assets/bragaouiBlack.png";
 
 const menuItems = [
     { name: "Tableau de Bord", href: "/admin", icon: <HiOutlineChartBar /> },
+    { name: "Commandes", href: "/admin/orders", icon: <HiOutlineShoppingBag /> },
     { name: "Produits Ecwid", href: "/boutique", icon: <HiOutlineShoppingBag /> },
     { name: "Banners Home", href: "/admin/banners", icon: <HiOutlinePhotograph /> },
     { name: "Utilisateurs", href: "/admin/users", icon: <HiOutlineUsers /> },

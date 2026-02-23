@@ -1,13 +1,11 @@
-import axios from "axios";
-
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+import api from "../api/axiosInstance";
 
 /**
  * Get all products from Ecwid via our backend
  */
 export const getEcwidProducts = async (params = {}) => {
   try {
-    const { data } = await axios.get(`${API_BASE_URL}/ecwid/products`, {
+    const { data } = await api.get("/ecwid/products", {
       params,
     });
     return data;
@@ -18,11 +16,63 @@ export const getEcwidProducts = async (params = {}) => {
 };
 
 /**
+ * Get all orders from Ecwid via our backend
+ */
+export const getEcwidOrders = async (params = {}) => {
+  try {
+    const { data } = await api.get("/ecwid/orders", { params });
+    return data;
+  } catch (error) {
+    console.error("Error fetching Ecwid orders:", error);
+    throw error;
+  }
+};
+
+/**
+ * Get a single order by ID
+ */
+export const getEcwidOrderById = async (id) => {
+  try {
+    const { data } = await api.get(`/ecwid/orders/${id}`);
+    return data;
+  } catch (error) {
+    console.error(`Error fetching Ecwid order ${id}:`, error);
+    throw error;
+  }
+};
+
+/**
+ * Update an order
+ */
+export const updateEcwidOrder = async (id, orderData) => {
+  try {
+    const { data } = await api.put(`/ecwid/orders/${id}`, orderData);
+    return data;
+  } catch (error) {
+    console.error(`Error updating Ecwid order ${id}:`, error);
+    throw error;
+  }
+};
+
+/**
+ * Delete an order
+ */
+export const deleteEcwidOrder = async (id) => {
+  try {
+    const { data } = await api.delete(`/ecwid/orders/${id}`);
+    return data;
+  } catch (error) {
+    console.error(`Error deleting Ecwid order ${id}:`, error);
+    throw error;
+  }
+};
+
+/**
  * Get a single product by ID
  */
 export const getEcwidProductById = async (id) => {
   try {
-    const { data } = await axios.get(`${API_BASE_URL}/ecwid/products/${id}`);
+    const { data } = await api.get(`/ecwid/products/${id}`);
     return data;
   } catch (error) {
     console.error(`Error fetching Ecwid product ${id}:`, error);
@@ -35,7 +85,7 @@ export const getEcwidProductById = async (id) => {
  */
 export const getEcwidCategories = async () => {
   try {
-    const { data } = await axios.get(`${API_BASE_URL}/ecwid/categories`);
+    const { data } = await api.get(`/ecwid/categories`);
     return data;
   } catch (error) {
     console.error("Error fetching Ecwid categories:", error);
@@ -48,7 +98,7 @@ export const getEcwidCategories = async () => {
  */
 export const getEcwidProfile = async () => {
   try {
-    const { data } = await axios.get(`${API_BASE_URL}/ecwid/profile`);
+    const { data } = await api.get(`/ecwid/profile`);
     return data;
   } catch (error) {
     console.error("Error fetching Ecwid profile:", error);
@@ -78,7 +128,7 @@ export const slugify = (text) => {
  */
 export const searchEcwidProducts = async (query) => {
   try {
-    const { data } = await axios.get(`${API_BASE_URL}/ecwid/products`, {
+    const { data } = await api.get(`/ecwid/products`, {
       params: { keyword: query },
     });
     return data;
