@@ -20,6 +20,7 @@ import {
 import { getEcwidOrders, updateEcwidOrder, deleteEcwidOrder } from "../../functions/ecwid";
 import { toast } from "react-toastify";
 import CustomModal from "../../components/ui/Modal";
+import DateRangePicker from "../../components/ui/DateRangePicker";
 
 const OrdersManagement = () => {
     const [orders, setOrders] = useState([]);
@@ -231,21 +232,10 @@ const OrdersManagement = () => {
                     <p className="text-sm text-gray-500 font-bold">Consultez et gérez les ventes Web et Boutique.</p>
                 </div>
                 <div className="flex flex-wrap items-center gap-3">
-                    <div className="flex items-center bg-white border border-gray-100 rounded-2xl px-4 py-2 shadow-sm gap-2">
-                        <input
-                            type="date"
-                            value={dateRange.startDate}
-                            onChange={(e) => setDateRange({ ...dateRange, startDate: e.target.value })}
-                            className="bg-transparent border-none text-[10px] font-black text-pmc-blue uppercase focus:ring-0 cursor-pointer"
-                        />
-                        <span className="text-gray-300 font-bold">→</span>
-                        <input
-                            type="date"
-                            value={dateRange.endDate}
-                            onChange={(e) => setDateRange({ ...dateRange, endDate: e.target.value })}
-                            className="bg-transparent border-none text-[10px] font-black text-pmc-blue uppercase focus:ring-0 cursor-pointer"
-                        />
-                    </div>
+                    <DateRangePicker
+                        dateRange={dateRange}
+                        onRangeChange={setDateRange}
+                    />
                     <button
                         onClick={() => fetchOrders()}
                         className="p-3 bg-white border border-gray-100 rounded-2xl hover:bg-gray-50 transition-all shadow-sm"

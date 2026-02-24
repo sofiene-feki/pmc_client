@@ -14,6 +14,7 @@ import { getEcwidOrders } from "../../functions/ecwid";
 import { getMarketingStats, saveMarketingSpend, getGoogleAdsStats } from "../../functions/marketing";
 import { toast } from "react-toastify";
 import CustomModal from "../../components/ui/Modal";
+import DateRangePicker from "../../components/ui/DateRangePicker";
 import { Input } from "../../components/ui";
 
 const KPIReporting = ({ user }) => {
@@ -128,21 +129,10 @@ const KPIReporting = ({ user }) => {
                     <p className="text-sm text-gray-500 font-bold mt-2">Vue d'ensemble de la performance commerciale et marketing.</p>
                 </div>
                 <div className="flex flex-wrap items-center gap-4">
-                    <div className="flex items-center bg-white border border-gray-100 rounded-2xl px-4 py-2 shadow-sm gap-2">
-                        <input
-                            type="date"
-                            value={dateRange.startDate}
-                            onChange={(e) => setDateRange({ ...dateRange, startDate: e.target.value })}
-                            className="bg-transparent border-none text-[10px] font-black text-pmc-blue uppercase focus:ring-0 cursor-pointer"
-                        />
-                        <span className="text-gray-300 font-bold">→</span>
-                        <input
-                            type="date"
-                            value={dateRange.endDate}
-                            onChange={(e) => setDateRange({ ...dateRange, endDate: e.target.value })}
-                            className="bg-transparent border-none text-[10px] font-black text-pmc-blue uppercase focus:ring-0 cursor-pointer"
-                        />
-                    </div>
+                    <DateRangePicker
+                        dateRange={dateRange}
+                        onRangeChange={setDateRange}
+                    />
                     <button
                         onClick={fetchData}
                         className="p-4 bg-white border border-gray-100 rounded-2xl hover:bg-gray-50 transition-all shadow-sm text-pmc-blue"
@@ -178,7 +168,7 @@ const KPIReporting = ({ user }) => {
                         </div>
                         <div>
                             <p className="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-1">{kpi.label}</p>
-                            <p className="text-3xl font-black text-pmc-blue tracking-tighter">{kpi.value}</p>
+                            <p className="text-2xl font-black text-pmc-blue tracking-tighter">{kpi.value}</p>
                         </div>
                     </motion.div>
                 ))}
@@ -186,7 +176,7 @@ const KPIReporting = ({ user }) => {
 
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
                 {/* Sales Breakdown */}
-                <div className="lg:col-span-2 bg-white p-10 rounded-[48px] shadow-sm border border-gray-100">
+                <div className="lg:col-span-2 bg-white p-6 rounded-[48px] shadow-sm border border-gray-100">
                     <div className="flex items-center justify-between mb-10">
                         <h3 className="text-xl font-black text-pmc-blue italic font-heading uppercase tracking-tight">Analyse des Ventes</h3>
                         <HiOutlineDocumentReport className="text-2xl text-gray-200" />
@@ -194,15 +184,15 @@ const KPIReporting = ({ user }) => {
                     <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-8">
                         <div className="p-6 bg-gray-50 rounded-3xl space-y-2">
                             <p className="text-[10px] font-black text-gray-400 uppercase tracking-widest">Commandes Totales</p>
-                            <p className="text-4xl font-black text-pmc-blue italic">{salesData.count}</p>
+                            <p className="text-2xl font-black text-pmc-blue italic">{salesData.count}</p>
                         </div>
                         <div className="p-6 bg-gray-50 rounded-3xl space-y-2">
                             <p className="text-[10px] font-black text-gray-400 uppercase tracking-widest">Panier Moyen (AOV)</p>
-                            <p className="text-4xl font-black text-pmc-blue italic">{salesData.aov.toFixed(2)} €</p>
+                            <p className="text-2xl font-black text-pmc-blue italic">{salesData.aov.toFixed(2)} €</p>
                         </div>
                         <div className="p-6 bg-amber-50 rounded-3xl border border-amber-100 space-y-2">
                             <p className="text-[10px] font-black text-amber-600 uppercase tracking-widest">Coût de Conversion (CPA)</p>
-                            <p className="text-4xl font-black text-pmc-blue italic">{(salesData.count > 0 ? totalSpendWithRealData / salesData.count : 0).toFixed(2)} €</p>
+                            <p className="text-2xl font-black text-pmc-blue italic">{(salesData.count > 0 ? totalSpendWithRealData / salesData.count : 0).toFixed(2)} €</p>
                         </div>
                         <div className="p-6 bg-pmc-blue rounded-3xl space-y-2 shadow-xl shadow-pmc-blue/20">
                             <p className="text-[10px] font-black text-white/50 uppercase tracking-widest">Taux de Conversion</p>
