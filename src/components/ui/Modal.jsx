@@ -5,43 +5,40 @@ import {
   DialogPanel,
   DialogTitle,
 } from "@headlessui/react";
-import { ExclamationTriangleIcon } from "@heroicons/react/24/outline";
+import { HiOutlineX } from "react-icons/hi";
 
 export default function CustomModal({
   open,
   setOpen,
   title,
   message,
-  handleSubmit,
 }) {
   return (
-    <Dialog open={open} onClose={setOpen} className="relative z-50">
-      <DialogBackdrop className="fixed inset-0 bg-gray-500/75" />
+    <Dialog open={open} onClose={() => setOpen(false)} className="relative z-[100]">
+      <DialogBackdrop className="fixed inset-0 bg-pmc-blue/40 backdrop-blur-sm transition-opacity duration-300" />
 
       <div className="fixed inset-0 z-10 w-screen overflow-y-auto">
-        <div className="flex min-h-full w-full px-4 items-center justify-center sm:p-0">
-          <DialogPanel className="relative transform overflow-hidden rounded-lg bg-white text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-4xl">
+        <div className="flex min-h-full items-center justify-center p-4 sm:p-6">
+          <DialogPanel className="relative w-full max-w-4xl transform overflow-hidden rounded-[32px] bg-white shadow-2xl transition-all border border-white/20">
             {/* Header */}
-            <div className="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
-              <div className="sm:flex sm:items-start">
-                <div className="mt-3  sm:mt-0 sm:ml-4 sm:text-left w-full">
-                  <DialogTitle
-                    as="h3"
-                    className="text-base font-semibold text-gray-900"
-                  >
-                    {title}
-                  </DialogTitle>
-
-                  {/* ✅ Scrollable gallery */}
-                  <div className="mt-4 max-h-[60vh] overflow-y-auto">
-                    {message}
-                  </div>
-                </div>
-              </div>
+            <div className="px-8 py-6 border-b border-gray-50 flex items-center justify-between">
+              <DialogTitle as="h3" className="text-xl font-black text-pmc-blue italic uppercase tracking-tight">
+                {title}
+              </DialogTitle>
+              <button
+                onClick={() => setOpen(false)}
+                className="p-2 text-gray-400 hover:text-pmc-blue hover:bg-gray-50 rounded-xl transition-all"
+              >
+                <HiOutlineX size={24} />
+              </button>
             </div>
 
-            {/* Footer */}
-        
+            {/* Content */}
+            <div className="px-8 py-6">
+              <div className="max-h-[75vh] overflow-y-auto pr-2 custom-scrollbar">
+                {message}
+              </div>
+            </div>
           </DialogPanel>
         </div>
       </div>

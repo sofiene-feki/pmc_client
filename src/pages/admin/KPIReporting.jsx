@@ -115,7 +115,7 @@ const KPIReporting = ({ user }) => {
         { label: "Chiffre d'Affaires", value: `${salesData.total.toLocaleString()} €`, icon: <HiOutlineCash />, color: "bg-green-500", trend: "+12%" },
         { label: "Dépenses Marketing", value: `${totalSpendWithRealData.toLocaleString()} €`, icon: <HiOutlineSpeakerphone />, color: "bg-red-500", trend: googleAdsRealData ? "Live (Google) + Meta" : "Meta + Google" },
         { label: "Bénéfice Net (Brut)", value: `${netRevenue.toLocaleString()} €`, icon: <HiOutlineTrendingUp />, color: "bg-indigo-500", trend: "Après pubs" },
-        { label: "ROAS Global", value: `${roas.toFixed(2)}x`, icon: <HiOutlinePresentationChartLine />, color: "bg-purple-500", trend: "Efficacité" },
+        { label: "ROAS Global", value: `${roas.toFixed(2)}`, icon: <HiOutlinePresentationChartLine />, color: "bg-purple-500", trend: "Efficacité" },
     ];
 
     return (
@@ -191,7 +191,7 @@ const KPIReporting = ({ user }) => {
                         <h3 className="text-xl font-black text-pmc-blue italic font-heading uppercase tracking-tight">Analyse des Ventes</h3>
                         <HiOutlineDocumentReport className="text-2xl text-gray-200" />
                     </div>
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-8">
                         <div className="p-6 bg-gray-50 rounded-3xl space-y-2">
                             <p className="text-[10px] font-black text-gray-400 uppercase tracking-widest">Commandes Totales</p>
                             <p className="text-4xl font-black text-pmc-blue italic">{salesData.count}</p>
@@ -199,6 +199,10 @@ const KPIReporting = ({ user }) => {
                         <div className="p-6 bg-gray-50 rounded-3xl space-y-2">
                             <p className="text-[10px] font-black text-gray-400 uppercase tracking-widest">Panier Moyen (AOV)</p>
                             <p className="text-4xl font-black text-pmc-blue italic">{salesData.aov.toFixed(2)} €</p>
+                        </div>
+                        <div className="p-6 bg-amber-50 rounded-3xl border border-amber-100 space-y-2">
+                            <p className="text-[10px] font-black text-amber-600 uppercase tracking-widest">Coût de Conversion (CPA)</p>
+                            <p className="text-4xl font-black text-pmc-blue italic">{(salesData.count > 0 ? totalSpendWithRealData / salesData.count : 0).toFixed(2)} €</p>
                         </div>
                         <div className="p-6 bg-pmc-blue rounded-3xl space-y-2 shadow-xl shadow-pmc-blue/20">
                             <p className="text-[10px] font-black text-white/50 uppercase tracking-widest">Taux de Conversion</p>
