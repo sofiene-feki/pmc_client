@@ -11,7 +11,7 @@ import {
     HiOutlineRefresh
 } from "react-icons/hi";
 import { getEcwidOrders } from "../../functions/ecwid";
-import { getMarketingStats, saveMarketingSpend } from "../../functions/marketing";
+import { getMarketingStats, saveMarketingSpend, getGoogleAdsStats } from "../../functions/marketing";
 import { toast } from "react-toastify";
 import CustomModal from "../../components/ui/Modal";
 import { Input } from "../../components/ui";
@@ -20,9 +20,15 @@ const KPIReporting = ({ user }) => {
     const [loading, setLoading] = useState(true);
     const [salesData, setSalesData] = useState({ total: 0, count: 0, aov: 0 });
     const [marketingData, setMarketingData] = useState({ totalMeta: 0, totalGoogle: 0, totalOther: 0, totalSpend: 0 });
+    const [googleAdsRealData, setGoogleAdsRealData] = useState(null);
+    const [dateRange, setDateRange] = useState({
+        startDate: new Date(new Date().setDate(new Date().getDate() - 30)).toISOString().split('T')[0],
+        endDate: new Date().toISOString().split('T')[0]
+    });
     const [isSpendModalOpen, setIsSpendModalOpen] = useState(false);
     const [spendForm, setSpendForm] = useState({
-        date: new Date().toISOString().split('T')[0],
+        startDate: new Date().toISOString().split('T')[0],
+        endDate: new Date().toISOString().split('T')[0],
         metaAdsSpend: 0,
         googleAdsSpend: 0,
         otherSpend: 0,
@@ -31,25 +37,52 @@ const KPIReporting = ({ user }) => {
 
     useEffect(() => {
         fetchData();
-    }, []);
+    }, [dateRange]);
 
     const fetchData = async () => {
         try {
             setLoading(true);
 
+            // Ecwid date format: YYYY-MM-DD HH:mm:ss
+            // But Ecwid can also take timestamp.
+            // Let's use simple dates.
+            const params = {
+                createdFrom: dateRange.startDate + " 00:00:00",
+                createdTo: dateRange.endDate + " 23:59:59",
+                fetchAll: true
+            };
+
             // Fetch Ecwid Orders
-            const ecwidResult = await getEcwidOrders({ limit: 100 });
+            const ecwidResult = await getEcwidOrders(params);
             const items = ecwidResult.items || [];
 
-            const totalSales = items.reduce((acc, order) => acc + (order.total || 0), 0);
-            const orderCount = items.length;
+            // Calculate total sales from ALL fetched items
+            const totalSales = items.reduce((acc, order) => acc + Number(order.total || 0), 0);
+            const orderCount = ecwidResult.total || items.length;
             const aov = orderCount > 0 ? totalSales / orderCount : 0;
 
             setSalesData({ total: totalSales, count: orderCount, aov });
 
             // Fetch Marketing Stats
-            const marketingResult = await getMarketingStats();
+            const marketingResult = await getMarketingStats({
+                startDate: dateRange.startDate,
+                endDate: dateRange.endDate
+            });
             setMarketingData(marketingResult.data);
+
+            // Fetch Real Google Ads Data
+            try {
+                const googleAdsResult = await getGoogleAdsStats({
+                    startDate: dateRange.startDate,
+                    endDate: dateRange.endDate
+                });
+                if (googleAdsResult.status === "success") {
+                    setGoogleAdsRealData(googleAdsResult.data);
+                }
+            } catch (err) {
+                console.warn("Real Google Ads data not available yet (check credentials)");
+                setGoogleAdsRealData(null);
+            }
 
         } catch (err) {
             console.error("Error fetching KPI data:", err);
@@ -71,12 +104,16 @@ const KPIReporting = ({ user }) => {
         }
     };
 
-    const netRevenue = salesData.total - marketingData.totalSpend;
-    const roas = marketingData.totalSpend > 0 ? salesData.total / marketingData.totalSpend : 0;
+    const totalSpendWithRealData = googleAdsRealData
+        ? marketingData.totalMeta + marketingData.totalOther + googleAdsRealData.totalSpend
+        : marketingData.totalSpend;
+
+    const netRevenue = salesData.total - totalSpendWithRealData;
+    const roas = totalSpendWithRealData > 0 ? salesData.total / totalSpendWithRealData : 0;
 
     const kpis = [
         { label: "Chiffre d'Affaires", value: `${salesData.total.toLocaleString()} €`, icon: <HiOutlineCash />, color: "bg-green-500", trend: "+12%" },
-        { label: "Dépenses Marketing", value: `${marketingData.totalSpend.toLocaleString()} €`, icon: <HiOutlineSpeakerphone />, color: "bg-red-500", trend: "Meta + Google" },
+        { label: "Dépenses Marketing", value: `${totalSpendWithRealData.toLocaleString()} €`, icon: <HiOutlineSpeakerphone />, color: "bg-red-500", trend: googleAdsRealData ? "Live (Google) + Meta" : "Meta + Google" },
         { label: "Bénéfice Net (Brut)", value: `${netRevenue.toLocaleString()} €`, icon: <HiOutlineTrendingUp />, color: "bg-indigo-500", trend: "Après pubs" },
         { label: "ROAS Global", value: `${roas.toFixed(2)}x`, icon: <HiOutlinePresentationChartLine />, color: "bg-purple-500", trend: "Efficacité" },
     ];
@@ -90,7 +127,22 @@ const KPIReporting = ({ user }) => {
                     </h1>
                     <p className="text-sm text-gray-500 font-bold mt-2">Vue d'ensemble de la performance commerciale et marketing.</p>
                 </div>
-                <div className="flex items-center gap-4">
+                <div className="flex flex-wrap items-center gap-4">
+                    <div className="flex items-center bg-white border border-gray-100 rounded-2xl px-4 py-2 shadow-sm gap-2">
+                        <input
+                            type="date"
+                            value={dateRange.startDate}
+                            onChange={(e) => setDateRange({ ...dateRange, startDate: e.target.value })}
+                            className="bg-transparent border-none text-[10px] font-black text-pmc-blue uppercase focus:ring-0 cursor-pointer"
+                        />
+                        <span className="text-gray-300 font-bold">→</span>
+                        <input
+                            type="date"
+                            value={dateRange.endDate}
+                            onChange={(e) => setDateRange({ ...dateRange, endDate: e.target.value })}
+                            className="bg-transparent border-none text-[10px] font-black text-pmc-blue uppercase focus:ring-0 cursor-pointer"
+                        />
+                    </div>
                     <button
                         onClick={fetchData}
                         className="p-4 bg-white border border-gray-100 rounded-2xl hover:bg-gray-50 transition-all shadow-sm text-pmc-blue"
@@ -175,16 +227,22 @@ const KPIReporting = ({ user }) => {
                         </div>
                         <div className="space-y-2">
                             <div className="flex justify-between text-[10px] font-black uppercase tracking-widest">
-                                <span className="text-gray-400">Google Ads</span>
-                                <span className="text-pmc-blue">{marketingData.totalGoogle.toLocaleString()} €</span>
+                                <span className="text-gray-400">Google Ads {googleAdsRealData && <span className="text-[8px] text-green-500 ml-1">(LIVE)</span>}</span>
+                                <span className="text-pmc-blue">{(googleAdsRealData ? googleAdsRealData.totalSpend : marketingData.totalGoogle).toLocaleString()} €</span>
                             </div>
                             <div className="h-3 bg-gray-50 rounded-full overflow-hidden">
                                 <motion.div
                                     initial={{ width: 0 }}
-                                    animate={{ width: `${(marketingData.totalGoogle / (marketingData.totalSpend || 1)) * 100}%` }}
+                                    animate={{ width: `${((googleAdsRealData ? googleAdsRealData.totalSpend : marketingData.totalGoogle) / (totalSpendWithRealData || 1)) * 100}%` }}
                                     className="h-full bg-red-500 rounded-full"
                                 />
                             </div>
+                            {googleAdsRealData && (
+                                <div className="flex justify-between text-[8px] font-bold text-gray-400 uppercase mt-1">
+                                    <span>{googleAdsRealData.totalImpressions.toLocaleString()} Impr.</span>
+                                    <span>{googleAdsRealData.totalClicks.toLocaleString()} Clics</span>
+                                </div>
+                            )}
                         </div>
                         <div className="space-y-2">
                             <div className="flex justify-between text-[10px] font-black uppercase tracking-widest">
@@ -211,14 +269,25 @@ const KPIReporting = ({ user }) => {
                 message={
                     <form onSubmit={handleSaveSpend} className="space-y-6 mt-4">
                         <div className="space-y-4">
-                            <div>
-                                <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-2 block">Date</label>
-                                <Input
-                                    type="date"
-                                    value={spendForm.date}
-                                    onChange={(e) => setSpendForm({ ...spendForm, date: e.target.value })}
-                                    required
-                                />
+                            <div className="grid grid-cols-2 gap-4">
+                                <div>
+                                    <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-2 block">Date Début</label>
+                                    <Input
+                                        type="date"
+                                        value={spendForm.startDate}
+                                        onChange={(e) => setSpendForm({ ...spendForm, startDate: e.target.value, endDate: spendForm.endDate < e.target.value ? e.target.value : spendForm.endDate })}
+                                        required
+                                    />
+                                </div>
+                                <div>
+                                    <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-2 block">Date Fin</label>
+                                    <Input
+                                        type="date"
+                                        value={spendForm.endDate}
+                                        onChange={(e) => setSpendForm({ ...spendForm, endDate: e.target.value })}
+                                        required
+                                    />
+                                </div>
                             </div>
                             <div className="grid grid-cols-2 gap-4">
                                 <div>

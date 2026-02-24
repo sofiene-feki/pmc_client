@@ -10,7 +10,12 @@ export const saveMarketingSpend = async (spendData) => {
     return data;
 };
 
-export const getMarketingStats = async () => {
-    const { data } = await api.get("/marketing/stats");
+export const getMarketingStats = async (params = {}) => {
+    const { data } = await api.get("/marketing/stats", { params });
+    return data;
+};
+
+export const getGoogleAdsStats = async (params = {}) => {
+    const { data } = await api.get("/marketing/google-ads-stats", { params });
     return data;
 };

@@ -11,7 +11,9 @@ import {
     HiOutlineX,
     HiOutlinePhone,
     HiOutlineClock,
-    HiOutlineStatusOnline
+    HiOutlineStatusOnline,
+    HiOutlineUsers,
+    HiOutlineRefresh
 } from "react-icons/hi";
 import { getAllUsers, createUser, updateUser, deleteUser } from "../../functions/user";
 import { toast } from "react-toastify";

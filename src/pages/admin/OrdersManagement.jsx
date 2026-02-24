@@ -11,7 +11,8 @@ import {
     HiOutlineCalendar,
     HiOutlineUser,
     HiOutlineCreditCard,
-    HiOutlineTruck
+    HiOutlineTruck,
+    HiOutlineRefresh
 } from "react-icons/hi";
 import { getEcwidOrders, updateEcwidOrder, deleteEcwidOrder } from "../../functions/ecwid";
 import { toast } from "react-toastify";
@@ -24,16 +25,37 @@ const OrdersManagement = () => {
     const [filterSource, setFilterSource] = useState("all"); // all, web, shop
     const [selectedOrder, setSelectedOrder] = useState(null);
     const [isDetailsOpen, setIsDetailsOpen] = useState(false);
+    const [dateRange, setDateRange] = useState({
+        startDate: new Date(new Date().setDate(new Date().getDate() - 30)).toISOString().split('T')[0],
+        endDate: new Date().toISOString().split('T')[0]
+    });
+    const [offset, setOffset] = useState(0);
+    const [totalItems, setTotalItems] = useState(0);
+    const limit = 50;
+
+    useEffect(() => {
+        setOffset(0);
+    }, [dateRange, searchTerm, filterSource]);
 
     useEffect(() => {
         fetchOrders();
-    }, []);
+    }, [dateRange, offset]);
 
     const fetchOrders = async () => {
         try {
             setLoading(true);
-            const data = await getEcwidOrders({ limit: 100 });
+            const params = {
+                createdFrom: dateRange.startDate + " 00:00:00",
+                createdTo: dateRange.endDate + " 23:59:59",
+                offset: offset,
+                limit: limit,
+                // We don't use fetchAll here to allow proper UI pagination
+            };
+            if (searchTerm) params.keywords = searchTerm;
+
+            const data = await getEcwidOrders(params);
             setOrders(data.items || []);
+            setTotalItems(data.total || 0);
         } catch (err) {
             toast.error("Erreur lors de la récupération des commandes");
         } finally {
@@ -91,14 +113,27 @@ const OrdersManagement = () => {
                     <h2 className="text-2xl font-black text-pmc-blue italic uppercase tracking-tight">Gestion des Commandes</h2>
                     <p className="text-sm text-gray-500 font-bold">Consultez et gérez les ventes Web et Boutique.</p>
                 </div>
-                <div className="flex items-center gap-3">
+                <div className="flex flex-wrap items-center gap-3">
+                    <div className="flex items-center bg-white border border-gray-100 rounded-2xl px-4 py-2 shadow-sm gap-2">
+                        <input
+                            type="date"
+                            value={dateRange.startDate}
+                            onChange={(e) => setDateRange({ ...dateRange, startDate: e.target.value })}
+                            className="bg-transparent border-none text-[10px] font-black text-pmc-blue uppercase focus:ring-0 cursor-pointer"
+                        />
+                        <span className="text-gray-300 font-bold">→</span>
+                        <input
+                            type="date"
+                            value={dateRange.endDate}
+                            onChange={(e) => setDateRange({ ...dateRange, endDate: e.target.value })}
+                            className="bg-transparent border-none text-[10px] font-black text-pmc-blue uppercase focus:ring-0 cursor-pointer"
+                        />
+                    </div>
                     <button
                         onClick={() => fetchOrders()}
                         className="p-3 bg-white border border-gray-100 rounded-2xl hover:bg-gray-50 transition-all shadow-sm"
                     >
-                        <motion.div animate={loading ? { rotate: 360 } : {}} transition={{ repeat: Infinity, duration: 1 }}>
-                            <HiOutlineCalendar size={20} className="text-pmc-blue" />
-                        </motion.div>
+                        <HiOutlineRefresh size={20} className={`text-pmc-blue ${loading ? 'animate-spin' : ''}`} />
                     </button>
                     <div className="flex bg-white p-1 border border-gray-100 rounded-2xl shadow-sm">
                         {['all', 'web', 'shop'].map((s) => (
@@ -208,6 +243,46 @@ const OrdersManagement = () => {
                         </tbody>
                     </table>
                 </div>
+
+                {/* Pagination Controls */}
+                {!loading && totalItems > limit && (
+                    <div className="px-8 py-6 bg-gray-50/30 border-t border-gray-50 flex items-center justify-between">
+                        <p className="text-[10px] font-black text-gray-400 uppercase tracking-widest">
+                            Affichage de {offset + 1} à {Math.min(offset + limit, totalItems)} sur {totalItems} commandes
+                        </p>
+                        <div className="flex items-center gap-2">
+                            <button
+                                onClick={() => setOffset(Math.max(0, offset - limit))}
+                                disabled={offset === 0}
+                                className="p-2 bg-white border border-gray-100 rounded-xl text-pmc-blue disabled:opacity-30 disabled:cursor-not-allowed hover:bg-gray-50 transition-all shadow-sm"
+                            >
+                                <HiOutlineChevronRight className="rotate-180" size={18} />
+                            </button>
+                            <div className="flex items-center gap-1">
+                                {Array.from({ length: Math.min(5, Math.ceil(totalItems / limit)) }).map((_, i) => {
+                                    const pageOffset = i * limit;
+                                    const isCurrent = offset === pageOffset;
+                                    return (
+                                        <button
+                                            key={i}
+                                            onClick={() => setOffset(pageOffset)}
+                                            className={`w-8 h-8 rounded-xl text-[10px] font-black transition-all ${isCurrent ? 'bg-pmc-blue text-white shadow-lg' : 'text-gray-400 hover:text-pmc-blue hover:bg-white border border-transparent hover:border-gray-100'}`}
+                                        >
+                                            {i + 1}
+                                        </button>
+                                    );
+                                })}
+                            </div>
+                            <button
+                                onClick={() => setOffset(offset + limit)}
+                                disabled={offset + limit >= totalItems}
+                                className="p-2 bg-white border border-gray-100 rounded-xl text-pmc-blue disabled:opacity-30 disabled:cursor-not-allowed hover:bg-gray-50 transition-all shadow-sm"
+                            >
+                                <HiOutlineChevronRight size={18} />
+                            </button>
+                        </div>
+                    </div>
+                )}
             </div>
 
             {/* Order Details Modal */}
