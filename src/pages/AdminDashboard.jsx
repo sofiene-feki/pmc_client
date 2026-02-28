@@ -7,6 +7,7 @@ import { Routes, Route, Link } from "react-router-dom";
 import UsersManagement from "./admin/UsersManagement";
 import OrdersManagement from "./admin/OrdersManagement";
 import KPIReporting from "./admin/KPIReporting";
+import QrCodeTool from "./admin/QrCodeTool";
 
 const AdminDashboard = () => {
     const { user } = useSelector((state) => state.auth);
@@ -19,6 +20,7 @@ const AdminDashboard = () => {
                     <Route index element={<KPIReporting user={user} />} />
                     <Route path="users" element={<UsersManagement />} />
                     <Route path="orders" element={<OrdersManagement />} />
+                    <Route path="qr-code" element={<QrCodeTool />} />
                     <Route path="*" element={<KPIReporting user={user} />} />
                 </Routes>
             </div>
